@@ -10,7 +10,7 @@ The style guide is built using [mdBook](https://github.com/rust-lang/mdBook), an
 
 ```bash
 # Install tooling
-cargo install mdbook mdbook-toc
+cargo install mdbook mdbook-toc mdbook-open-on-gh
 
 # Edit book and view through local browser
 mdbook serve

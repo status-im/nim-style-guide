@@ -9,3 +9,13 @@ title = "The Status Nim style guide"
 command = "mdbook-toc"
 renderer = ["html"]
 max-level = 2
+
+[preprocessor.open-on-gh]
+command = "mdbook-open-on-gh"
+renderer = ["html"]
+
+[output.html]
+git-repository-url = "https://github.com/status-im/nim-style-guide/"
+git-branch = "main"
+additional-css = ["open-in.css"]
+
