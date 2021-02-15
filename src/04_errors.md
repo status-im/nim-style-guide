@@ -29,8 +29,8 @@ Handle errors at each abstraction level, avoiding spurious abstraction leakage.
 Isolate legacy code with explicit exception handling, converting the errors to `Result` or handling them locally, as appropriate.
 
 ```nim
-# Annotate all modules with a top-level `{.push raises: [Defect].}`
-{.push raises: [Defect].}
+# Enable exception tracking for all functions in this module
+`{.push raises: [Defect].}` # Always at start of module
 
 import stew/results
 export results # Re-export modules used in public symbols
@@ -53,13 +53,12 @@ In general, prefer [explicit error handling mechanisms](#general).
 
 Annotate each module with a top-level `{.push raises: [Defect].}`.
 
-Use explicit `{.raises.}` annotation for each function in public API.
-
-When using exceptions, use `raises` annotations (checked exceptions).
+Use explicit `{.raises.}` annotation for each public (`*`) function.
 
 Raise `Defect` to signal panics and situations that the code is not prepared to handle.
 
 ```nim
+# Enable exception tracking for all functions in this module
 `{.push raises: [Defect].}` # Always at start of module
 
 # Inherit from CatchableError and name XxxError
@@ -72,7 +71,8 @@ type SomeDefect = object of Defect
 # Use hierarchy for more specific errors
 type MySpecificError = object of MyLibraryError
 
-# Explicitly annotate functions with raises
+# Explicitly annotate functions with raises - this replaces the more strict
+# module-level push declaration on top
 func f() {.raises: [Defect, MySpecificError]} = discard
 
 # Isolate code that may generate exceptions using expression-based try:
