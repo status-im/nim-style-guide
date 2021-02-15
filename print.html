@@ -248,7 +248,7 @@
 <li>For small ideas, use a PR</li>
 <li>For big ideas, use an RFC issue</li>
 </ul>
-<h1><a class="header" href="#formatting" id="formatting">Formatting</a></h1>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/01_introduction.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#formatting" id="formatting">Formatting</a></h1>
 <ul>
 <li><a href="02_formatting.html#style">Style</a></li>
 <li><a href="02_formatting.html#naming-conventions">Naming conventions</a></li>
@@ -290,7 +290,7 @@
 </li>
 <li>We do not make use of Nim's &quot;flexible&quot; identifier names - all uses of an identifier should match the declaration in capitalization and underscores</li>
 </ul>
-<h1><a class="header" href="#language-features" id="language-features">Language features</a></h1>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/02_formatting.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#language-features" id="language-features">Language features</a></h1>
 <p>Nim is a language that organically has grown to contain many advanced features and constructs. These features allow you to express your intent with great creativity, but often come with significant stability, simplicity and correctness caveats when combined.</p>
 <ul>
 <li><a href="03_language.html#import-export">Import, export</a></li>
@@ -721,7 +721,7 @@ type Callback = proc(...) {.raises: [Defect], gcsafe.}
 </ul>
 </li>
 </ul>
-<h1><a class="header" href="#error-handling" id="error-handling">Error handling</a></h1>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/03_language.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#error-handling" id="error-handling">Error handling</a></h1>
 <p>Error handling in Nim is a subject under constant re-evaluation - similar to C++, several paradigms are supported leading to confusion as to which one to choose.</p>
 <p>In part, the confusion stems from the various contexts in which nim can be used: when executed as small, one-off scripts that can easily be restarted, exceptions allow low visual overhead and ease of use.</p>
 <p>When faced with more complex and long-running programs where errors must be dealt with as part of control flow, the use of exceptions can directly be linked to issues like resource leaks, security bugs and crashes.</p>
@@ -901,7 +901,7 @@ func f(output: var Type): StatusCode
 <p>Unlike &quot;Error Enums&quot; used with <code>Result</code>, status codes mix &quot;success&quot; and &quot;error&quot; returns in a single enum, making it hard to detect &quot;successful&quot; completion of a function in a generic way.</p>
 <h2><a class="header" href="#callbacks" id="callbacks">Callbacks</a></h2>
 <p>See <a href="03_language.html#callbacks-closures-and-forward-declarations">language section on callbacks</a></p>
-<h1><a class="header" href="#libraries" id="libraries">Libraries</a></h1>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/04_errors.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#libraries" id="libraries">Libraries</a></h1>
 <p>The libraries section contains guidelines for libraries and modules frequently used in the codebase.</p>
 <ul>
 <li><a href="05_libraries.html#results">Results</a></li>
@@ -1060,7 +1060,7 @@ func f3(): Result[int, ref SomeError] = ...
 </ul>
 <h3><a class="header" href="#practical-notes-20" id="practical-notes-20">Practical notes</a></h3>
 <p><code>nim-stew</code> exists as a staging area for code that could be considered for future inclusion in the standard library or, preferably, a separate package, but that has not yet been fully fleshed out as a separate and complete library.</p>
-<h1><a class="header" href="#tooling" id="tooling">Tooling</a></h1>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/05_libraries.md">Edit this file on GitHub.</a></footer><h1><a class="header" href="#tooling" id="tooling">Tooling</a></h1>
 <ul>
 <li><a href="06_tooling.html#build-system">Build system</a></li>
 <li><a href="06_tooling.html#dependency-management">Dependency management</a></li>
@@ -1170,7 +1170,7 @@ func f3(): Result[int, ref SomeError] = ...
 <ul>
 <li>Find out where a function is used: temporarily mark it <code>{.deprecated.}</code></li>
 </ul>
-
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/06_tooling.md">Edit this file on GitHub.</a></footer>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
