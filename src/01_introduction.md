@@ -59,6 +59,16 @@ While this book covers Nim at Status in general, there are other resources avail
 
 ## Workflow
 
+### Pull requests
+
+* One PR, one feature or fix
+  * Avoid mixing refactoring with features and bugfixes
+  * Post refactoring PR:s early, while working on feature that benefits from them
+* Rebase on top of target branch
+* Squash-merge the PR branch for easy rollback
+  * Since branches contain only _one_ logical change, there's usually no need for more than one target branch commit
+* Revert work that causes breakage and investigate in new PR
+
 ### Contributing
 
 We welcome code contributions and welcome our code being used in other projects.
