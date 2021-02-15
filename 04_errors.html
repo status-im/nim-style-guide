@@ -164,6 +164,185 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#error-handling" id="error-handling">Error handling</a></h1>
+<p>Error handling in Nim is a subject under constant re-evaluation - similar to C++, several paradigms are supported leading to confusion as to which one to choose.</p>
+<p>In part, the confusion stems from the various contexts in which nim can be used: when executed as small, one-off scripts that can easily be restarted, exceptions allow low visual overhead and ease of use.</p>
+<p>When faced with more complex and long-running programs where errors must be dealt with as part of control flow, the use of exceptions can directly be linked to issues like resource leaks, security bugs and crashes.</p>
+<p>Likewise, when preparing code for refactoring, the compiler offers little help in exception-based code: although raising a new exception breaks ABI, there is no corresponding change in the API: this means that changes deep inside dependencies silently break dependent code until the issue becomes apparent at runtime (often under exceptional circumstances).</p>
+<p>A final note is that although exceptions may have been used sucessfully in some languages, these languages typically offer complementary features that help manage the complexities introduced by exceptions - RAII, mandatory checking of exceptions etc - these have yet to be developed for Nim.</p>
+<p>Because of the controversies and changing landscape, the preference for Status projects is to avoid the use of exceptions unless specially motivated, if only to maintain consistency and simplicity.</p>
+<ul>
+<li><a href="#general">General</a></li>
+<li><a href="#exceptions">Exceptions</a></li>
+<li><a href="#status-codes">Status codes</a></li>
+<li><a href="#practical-notes-1">Practical notes</a></li>
+<li><a href="#callbacks">Callbacks</a></li>
+</ul>
+<h2><a class="header" href="#general" id="general">General</a></h2>
+<p>Prefer <code>bool</code>, <code>Opt</code> or <code>Result</code> to signal failure outcomes explicitly.</p>
+<p>Prefer the use of <code>Result</code> when multiple failure paths exist and the calling code might need to differentiate between them.</p>
+<p>Raise <code>Defect</code> to signal panics such as logic errors or preconditions being violated.</p>
+<p>Make error handling explicit and visible at call site using explicit control flow (<code>if</code>, <code>try</code>, <code>results.?</code>).</p>
+<p>Handle errors at each abstraction level, avoiding spurious abstraction leakage.</p>
+<p>Isolate legacy code with explicit exception handling, converting the errors to <code>Result</code> or handling them locally, as appropriate.</p>
+<pre><code class="language-nim"># Enable exception tracking for all functions in this module
+`{.push raises: [Defect].}` # Always at start of module
+
+import stew/results
+export results # Re-export modules used in public symbols
+
+# Use `Result` to propagate additional information expected errors
+# See `Result` section for specific guidlines for errror type
+func f*(): Result[void, cstring]
+
+# In special cases that warrant the use of exceptions, list these explicitly using the `raises` pragma.
+func parse(): Type {.raises: [Defect, ParseError]}
+</code></pre>
+<p>See also <a href="04_libraries.html#result">Result</a> for more recommendations about <code>Result</code>.</p>
+<p>See also <a href="https://github.com/status-im/nim-stew/pull/26">Error handling helpers</a> in stew that may change some of these guidelines.</p>
+<h2><a class="header" href="#exceptions" id="exceptions">Exceptions</a></h2>
+<p>In general, prefer <a href="#general">explicit error handling mechanisms</a>.</p>
+<p>Annotate each module with a top-level <code>{.push raises: [Defect].}</code>.</p>
+<p>Use explicit <code>{.raises.}</code> annotation for each public (<code>*</code>) function.</p>
+<p>Raise <code>Defect</code> to signal panics and situations that the code is not prepared to handle.</p>
+<pre><code class="language-nim"># Enable exception tracking for all functions in this module
+`{.push raises: [Defect].}` # Always at start of module
+
+# Inherit from CatchableError and name XxxError
+type MyLibraryError = object of CatchableError
+
+# Raise Defect when panicking - this crashes the application (in different ways
+# depending on Nim version and compiler flags) - name `XxxDefect`
+type SomeDefect = object of Defect
+
+# Use hierarchy for more specific errors
+type MySpecificError = object of MyLibraryError
+
+# Explicitly annotate functions with raises - this replaces the more strict
+# module-level push declaration on top
+func f() {.raises: [Defect, MySpecificError]} = discard
+
+# Isolate code that may generate exceptions using expression-based try:
+let x =
+  try: ...
+  except MyError as exc: ... # use the most specific error kind possible
+
+# Be careful to catch excpetions inside loops, to avoid partial loop evaluations:
+for x in y:
+  try: ..
+  except MyError: ..
+
+# Provide contextual data when raising specific errors
+raise (ref MyError)(msg: &quot;description&quot;, data: value)
+</code></pre>
+<h3><a class="header" href="#pros" id="pros">Pros</a></h3>
+<ul>
+<li>Used by <code>Nim</code> standard library</li>
+<li>Good for quick prototyping without error handling</li>
+<li>Good performance on happy path without <code>try</code>
+<ul>
+<li>Compatible with RVO</li>
+</ul>
+</li>
+</ul>
+<h3><a class="header" href="#cons" id="cons">Cons</a></h3>
+<ul>
+<li>Poor readability - exceptions not part of API / signatures by default
+<ul>
+<li>Have to assume every line may fail</li>
+</ul>
+</li>
+<li>Poor maintenance / refactoring support - compiler can't help detect affected code because they're not part of API</li>
+<li>Nim exception hierarchy unclear and changes between versions
+<ul>
+<li>The distinction between <code>Exception</code>, <code>CatchableError</code> and <code>Defect</code> is inconsistently implemented
+<ul>
+<li><a href="https://github.com/nim-lang/Nim/issues/11776">Exception hierarchy RFC not being implemented</a></li>
+</ul>
+</li>
+<li><code>Defect</code> is <a href="(https://github.com/nim-lang/Nim/issues/12862)">not correctly tracked</a></li>
+<li>Nim 1.4 further weakens compiler analysis around <code>Defect</code>(https://github.com/nim-lang/Nim/pull/13626)</li>
+</ul>
+</li>
+<li>Without translation, exceptions leak information between abstraction layers</li>
+<li>Writing exception-safe code in Nim impractical due to missing critical features present in C++
+<ul>
+<li>No RAII - resources often leak in the presence of exceptions</li>
+<li>Destructors incomplete / unstable and thus not usable for safe EH
+<ul>
+<li>No constructors, thus no way to force particular object states at construction</li>
+</ul>
+</li>
+<li><code>ref</code> types incompatible with destructors, even if they worked</li>
+</ul>
+</li>
+<li>Poor performance of error path
+<ul>
+<li>Several heap allocations for each Exception (exception, stack trace, string)</li>
+<li>Expensive stack trace</li>
+</ul>
+</li>
+<li>Poor performance on happy path
+<ul>
+<li>Every <code>try</code> and <code>defer</code> has significant performance overhead due to <code>setjmp</code> exception handling implementation</li>
+</ul>
+</li>
+</ul>
+<h3><a class="header" href="#practical-notes" id="practical-notes">Practical notes</a></h3>
+<p>The use of exceptions in some modules has significantly contributed to resource leaks, deadlocks and other difficult bugs. The various exception handling proposals aim to alleviate some of the issues but have not found sufficient grounding in the Nim community to warrant the language changes necessary to proceed.</p>
+<p>A notable exception to the guideline is <code>chronos</code> and <code>async</code>/<code>await</code> transformations that lack support for propagating checked exception information. Several bugs and implementation issues exist in the exception handling transformation employed by <code>async</code>.</p>
+<h3><a class="header" href="#open-questions" id="open-questions">Open questions</a></h3>
+<ul>
+<li>Should a hierarchy be used?
+<ul>
+<li>Why? It's rare that calling code differentiates between errors</li>
+<li>What to start the hierarchy with? Unclear whether it should be a global type (like <code>CatchableError</code> or <code>ValueError</code>, or a module-local type</li>
+</ul>
+</li>
+<li>Should exceptions be translated?
+<ul>
+<li>Leaking exception types between layers means no isolation, joining all modules in one big spaghetti bowl</li>
+<li>Translating exceptions has high visual overhead, specially when hierachy is used - not practical, all advantages lost</li>
+</ul>
+</li>
+<li>Should <code>raises</code> be used?
+<ul>
+<li>Equivalent to <code>Result[T, SomeError]</code> but lacks generics</li>
+<li>Additive - asymptotically tends towards <code>raises: [CatchableError]</code>, losing value unless exceptions are translated locally</li>
+<li>No way to transport accurate raises type information across Future/async/generic code boundaries - no <code>raisesof</code> equivalent of <code>typeof</code></li>
+</ul>
+</li>
+</ul>
+<h3><a class="header" href="#background" id="background">Background</a></h3>
+<ul>
+<li><a href="https://github.com/status-im/nim-stew/pull/26">Stew EH helpers</a> - Helpers that make working with checked exceptions easier</li>
+<li><a href="https://github.com/nim-lang/Nim/issues/8363">Nim Exception RFC</a> - seeks to differentiate between recoverable and unrecoverable errors</li>
+<li><a href="https://gist.github.com/zah/d2d729b39d95a1dfedf8183ca35043b3">Zahary's handling proposal</a> - seeks to handle any kind of error-generating API</li>
+<li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0709r0.pdf">C++ proposal</a> - After 25 years of encouragement, half the polled C++ developers continue avoiding exceptions and Herb Sutter argues about the consequences of doing so</li>
+<li><a href="https://google.github.io/styleguide/cppguide.html#Exceptions">Google</a> and <a href="https://llvm.org/docs/CodingStandards.html#id22">llvm</a> style guides on exceptions</li>
+</ul>
+<h2><a class="header" href="#status-codes" id="status-codes">Status codes</a></h2>
+<p>Avoid status codes.</p>
+<pre><code class="language-nim">
+type StatusCode = enum
+  Success
+  Error1
+  ...
+
+func f(output: var Type): StatusCode
+</code></pre>
+<h3><a class="header" href="#pros-1" id="pros-1">Pros</a></h3>
+<ul>
+<li>Interop with <code>C</code></li>
+</ul>
+<h3><a class="header" href="#cons-1" id="cons-1">Cons</a></h3>
+<ul>
+<li><code>output</code> undefined in case of error</li>
+<li>Verbose to use, must first declare mutable variable then call function and check result - mutable variable remains in scope even in &quot;error&quot; branch leading to bugs</li>
+</ul>
+<h2><a class="header" href="#practical-notes-1" id="practical-notes-1">Practical notes</a></h2>
+<p>Unlike &quot;Error Enums&quot; used with <code>Result</code>, status codes mix &quot;success&quot; and &quot;error&quot; returns in a single enum, making it hard to detect &quot;successful&quot; completion of a function in a generic way.</p>
+<h2><a class="header" href="#callbacks" id="callbacks">Callbacks</a></h2>
+<p>See <a href="03_language.html#callbacks-closures-and-forward-declarations">language section on callbacks</a></p>
 
                     </main>
 

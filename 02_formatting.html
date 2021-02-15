@@ -164,6 +164,47 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#formatting" id="formatting">Formatting</a></h1>
+<ul>
+<li><a href="#style">Style</a></li>
+<li><a href="#naming-conventions">Naming conventions</a></li>
+<li><a href="#practical-notes">Practical notes</a></li>
+</ul>
+<h2><a class="header" href="#style" id="style">Style</a></h2>
+<p>We strive to follow <a href="https://nim-lang.org/docs/nep1.html">NEP-1</a> for style matters - naming, capitalization, 80-character limit etc. Common places where deviations happen include:</p>
+<ul>
+<li>Code based on external projects
+<ul>
+<li>Wrappers / FFI</li>
+<li>Implementations of specs that have their own naming convention</li>
+<li>Ports from other languages</li>
+</ul>
+</li>
+<li>Small differences due to manual formatting</li>
+<li>Aligned block / parameter / comment indents that require reformatting many lines to accomodate a small change - these are tedious to maintain, thus fixed indents (instead of indents based on identifiers) are allowed / common</li>
+</ul>
+<h2><a class="header" href="#naming-conventions" id="naming-conventions">Naming conventions</a></h2>
+<ul>
+<li><code>Ref</code> for <code>ref object</code> types, which have surprising semantics
+<ul>
+<li><code>type XxxRef = ref Xxx</code></li>
+<li><code>type XxxRef = ref object ...</code></li>
+</ul>
+</li>
+<li><code>func init(T: type Xxx, params...): T</code> for &quot;constructors&quot;</li>
+<li><code>func new(T: type XxxRef, params...): T</code> for &quot;constructors&quot; of <code>ref object</code> types</li>
+<li><code>XxxError</code> for exceptions inheriting from <code>CatchableError</code></li>
+<li><code>XxxDefect</code> for exceptions inheriting from <code>Defect</code></li>
+</ul>
+<h2><a class="header" href="#practical-notes" id="practical-notes">Practical notes</a></h2>
+<ul>
+<li>We do not use <code>nimpretty</code> - as of writing (nim 1.2), it is not stable enough for daily use:
+<ul>
+<li>Can break working code</li>
+<li>Naive formatting algorithm</li>
+</ul>
+</li>
+<li>We do not make use of Nim's &quot;flexible&quot; identifier names - all uses of an identifier should match the declaration in capitalization and underscores</li>
+</ul>
 
                     </main>
 

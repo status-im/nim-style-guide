@@ -164,6 +164,164 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#libraries" id="libraries">Libraries</a></h1>
+<p>The libraries section contains guidelines for libraries and modules frequently used in the codebase.</p>
+<ul>
+<li><a href="#results">Results</a></li>
+<li><a href="#hex-output">Hex output</a></li>
+<li><a href="#wrappers">Wrappers</a></li>
+<li><a href="#standard-library-usage">Standard library usage</a></li>
+<li><a href="#nim-stew">nim-stew</a></li>
+</ul>
+<h2><a class="header" href="#results" id="results">Results</a></h2>
+<p><a href="https://github.com/status-im/nim-stew/blob/master/stew/results.nim#L19">Manual</a></p>
+<p>Use <code>Result</code> to document all outcomes of functions.</p>
+<p>Use <code>cstring</code> errors to provide diagnostics without expectation of error differentiation.</p>
+<p>Use <code>enum</code> errors when error kind matters.</p>
+<p>Use complex types when additional error information needs to be included.</p>
+<p>Use <code>Opt</code> (<code>Result</code>-based <code>Option</code>) for simple functions that fail only in trivial ways.</p>
+<pre><code># Stringly errors - the cstring is just for information and
+# should not be used for comparisons! The expectation is that
+# the caller doesn't have to differentiate between different
+# kinds of errors and uses the string as a print-only diagnostic.
+func f(): Result[int, cstring] = ...
+
+# Calling code acts on error specifics - use an enum
+func f2(): Result[int, SomeEnum] = ...
+if f2.isErr and f2.error == SomeEnum.value: ...
+
+# Transport exceptions - Result has special support for this case
+func f3(): Result[int, ref SomeError] = ...
+</code></pre>
+<h3><a class="header" href="#pros" id="pros">Pros</a></h3>
+<ul>
+<li>Give equal consideration to normal and error case</li>
+<li>Easier control flow vulnerability analysis</li>
+<li>Good for &quot;binary&quot; cases that either fail or not</li>
+<li>No heap allocations for simple errors</li>
+</ul>
+<h3><a class="header" href="#cons" id="cons">Cons</a></h3>
+<ul>
+<li>Visual overhead and poor language integration in <code>Nim</code> - ugly <code>if</code> trees grow</li>
+<li>Nim compiler generates ineffient code for complex types due to how return values are 0-intialized</li>
+<li>Lack of pattern matching makes for inconvenient code</li>
+<li>Standard library raises many exceptions, hard to use cleanly</li>
+</ul>
+<h3><a class="header" href="#practical-notes" id="practical-notes">Practical notes</a></h3>
+<ul>
+<li>When converting modules, isolate errors from legacy code with <code>try/except</code>
+<ul>
+<li>Common helpers may be added at some point to deal with third-party dependencies that are hard to change - see <code>stew/shims</code></li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#hex-output" id="hex-output">Hex output</a></h2>
+<p>Print hex output in lowercase. Accept upper and lower case.</p>
+<h3><a class="header" href="#pros-1" id="pros-1">Pros</a></h3>
+<ul>
+<li>Single case helps tooling</li>
+<li>Arbitrary choice, aim for consistency</li>
+</ul>
+<h3><a class="header" href="#cons-1" id="cons-1">Cons</a></h3>
+<ul>
+<li>No community consensus - some examples in the wild use upper case</li>
+</ul>
+<h3><a class="header" href="#practical-notes-1" id="practical-notes-1">Practical notes</a></h3>
+<p><a href="https://github.com/status-im/nim-stew/blob/76beeb769e30adc912d648c014fd95bf748fef24/stew/byteutils.nim#L129">byteutils</a> contains a convenient hex printer.</p>
+<h2><a class="header" href="#wrappers" id="wrappers">Wrappers</a></h2>
+<p>Prefer native <code>Nim</code> code when available.</p>
+<p><code>C</code> libraries and libraries that expose a <code>C</code> API may be used (including <code>rust</code>, <code>C++</code>).</p>
+<p>Avoid <code>C++</code> libraries.</p>
+<p>Prefer building the library on-the-fly from source using <code>{.compile.}</code>. Pin the library code using a submodule or amalgamation.</p>
+<h3><a class="header" href="#pros-2" id="pros-2">Pros</a></h3>
+<ul>
+<li>Wrapping existing code can improve time-to-market for certain features</li>
+<li>Maintenance is shared with upstream</li>
+<li>Build simplicity is maintained when <code>{.compile.}</code> is used</li>
+</ul>
+<h3><a class="header" href="#cons-2" id="cons-2">Cons</a></h3>
+<ul>
+<li>Often leads to unnatural API for <code>Nim</code></li>
+<li>Constrains platform support</li>
+<li>Nim and <code>nimble</code> tooling poorly supports 3rd-party build systems making installation difficult</li>
+<li>Nim <code>C++</code> support incomplete
+<ul>
+<li>Less test suite coverage - most of <code>Nim</code> test suite uses <code>C</code> backend</li>
+<li>Many core <code>C++</code> features like <code>const</code>, <code>&amp;</code> and <code>&amp;&amp;</code> difficult to express - in particular post-<code>C++11</code> code has a large semantic gap compared to Nim</li>
+<li>Different semantics for exceptions and temporaries compared to <code>C</code> backend</li>
+<li>All-or-nothing - can't use <code>C++</code> codegen selectively for <code>C++</code> libraries</li>
+</ul>
+</li>
+<li>Using <code>{.compile.}</code> increases build times, specially for multi-binary projects - use judiciously for large dependencies</li>
+</ul>
+<h3><a class="header" href="#practical-notes-2" id="practical-notes-2">Practical notes</a></h3>
+<ul>
+<li>Consider tooling like <code>c2nim</code> and <code>nimterop</code> to create initial wrapper</li>
+<li>Generate a <code>.nim</code> file corresponding to the <code>.h</code> file of the C project
+<ul>
+<li>preferably avoid the dependency on the <code>.h</code> file (avoid <code>{.header.}</code> directives unless necessary)</li>
+</ul>
+</li>
+<li>Write a separate &quot;raw&quot; interface that only imports <code>C</code> names and types as they're declared in <code>C</code>, then do convenience accessors on the Nim side
+<ul>
+<li>Name it <code>xxx_abi.nim</code></li>
+</ul>
+</li>
+<li>To use a <code>C++</code> library, write a <code>C</code> wrapper first
+<ul>
+<li>See <code>llvm</code> for example</li>
+</ul>
+</li>
+<li>When wrapping a <code>C</code> library, consider ABI, struct layout etc</li>
+</ul>
+<h3><a class="header" href="#examples" id="examples">Examples</a></h3>
+<ul>
+<li><a href="https://github.com/status-im/nim-secp256k1">nim-secp256k1</a></li>
+<li><a href="https://github.com/arnetheduck/nim-sqlite3-abi">nim-sqlite</a></li>
+<li><a href="https://github.com/status-im/nim-bearssl/">nim-bearssl</a></li>
+<li><a href="https://github.com/status-im/nim-blscurve/">nim-blscurve</a></li>
+</ul>
+<h2><a class="header" href="#standard-library-usage" id="standard-library-usage">Standard library usage</a></h2>
+<p>Use the Nim standard library judiciously. Prefer smaller, separate packages that implement similar functionality, where available.</p>
+<h3><a class="header" href="#pros-3" id="pros-3">Pros</a></h3>
+<ul>
+<li>Using components from the standard library increases compatibility with other Nim projects</li>
+<li>Fewer dependencies in general</li>
+</ul>
+<h3><a class="header" href="#cons-3" id="cons-3">Cons</a></h3>
+<ul>
+<li>Large, monolithic releases make upgrading difficult - bugs, fixes and improvements are released together causing upgrade churn</li>
+<li>Many modules in the standard library are unmaintained and don't use state-of-the-art features of Nim</li>
+<li>Long lead times for getting fixes and improvements to market</li>
+<li>Often not tailored for specific use cases</li>
+<li>Stability and backwards compatibility requirements prevent fixing poor and unsafe API</li>
+</ul>
+<h3><a class="header" href="#practical-notes-3" id="practical-notes-3">Practical notes</a></h3>
+<p>Use the following stdlib replacements that offer safer API (allowing more issues to be detected at compile time):</p>
+<ul>
+<li>async -&gt; chronos</li>
+<li>bitops -&gt; stew/bitops2</li>
+<li>endians -&gt; stew/endians2</li>
+<li>exceptions -&gt; stew/results</li>
+<li>io -&gt; stew/io2</li>
+<li>sqlite -&gt; nim-sqlite3-abi</li>
+<li>streams -&gt; nim-faststreams</li>
+</ul>
+<h2><a class="header" href="#nim-stew" id="nim-stew">nim-stew</a></h2>
+<p>If similar libraries exist in nim stdlib and stew, prefer <a href="https://github.com/status-im/nim-stew">stew</a></p>
+<h3><a class="header" href="#pros-4" id="pros-4">Pros</a></h3>
+<ul>
+<li><code>stew</code> solves bugs and practical API design issues in stdlib without having to wait for nim release</li>
+<li>Fast development cycle</li>
+<li>Allows battle-testing API before stdlib consideration (think boost)</li>
+<li>Encourages not growing nim stdlib further, which helps upstream maintenance</li>
+</ul>
+<h3><a class="header" href="#cons-4" id="cons-4">Cons</a></h3>
+<ul>
+<li>Less code reuse across community</li>
+<li>More dependencies that are not part of nim standard distribution</li>
+</ul>
+<h3><a class="header" href="#practical-notes-4" id="practical-notes-4">Practical notes</a></h3>
+<p><code>nim-stew</code> exists as a staging area for code that could be considered for future inclusion in the standard library or, preferably, a separate package, but that has not yet been fully fleshed out as a separate and complete library.</p>
 
                     </main>
 

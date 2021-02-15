@@ -164,6 +164,115 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#tooling" id="tooling">Tooling</a></h1>
+<ul>
+<li><a href="#build-system">Build system</a></li>
+<li><a href="#dependency-management">Dependency management</a></li>
+<li><a href="#nim-version">Nim version</a></li>
+<li><a href="#editors">Editors</a></li>
+<li><a href="#debugging">Debugging</a></li>
+<li><a href="#profiling">Profiling</a></li>
+<li><a href="#code-tricks">Code tricks</a></li>
+</ul>
+<h2><a class="header" href="#build-system" id="build-system">Build system</a></h2>
+<p>We use a build system with <code>make</code> and <code>git</code> submodules. The long term plan is to move to a dedicated package and build manager once one becomes available.</p>
+<h3><a class="header" href="#pros" id="pros">Pros</a></h3>
+<ul>
+<li>Reproducible build environment</li>
+<li>Fewer disruptions due to mismatching versions of compiler and dependencies</li>
+</ul>
+<h3><a class="header" href="#cons" id="cons">Cons</a></h3>
+<ul>
+<li>Increased build system complexity with tools that may not be familiar to <code>nim</code> developers</li>
+<li>Build system dependencies hard to use on Windows and constrained environments</li>
+</ul>
+<h3><a class="header" href="#nimble" id="nimble">nimble</a></h3>
+<p>We do not use <code>nimble</code>, due to the lack of build reproducibility and other team-oriented features. We sometimes provide <code>.nimble</code> packages but these may be out of date and/or incomplete.</p>
+<h2><a class="header" href="#dependency-management" id="dependency-management">Dependency management</a></h2>
+<p>We track dependencies using <code>git</code> submodules to ensure a consistent build environment for all development. This includes the Nim compiler, which is treated like just another dependency - when checking out a top-level project, it comes with an <code>env.sh</code> file that allows you to enter the build environment, similar to python <code>venv</code>.</p>
+<p>When working with upstream projects, it's sometimes convenient to <em>fork</em> the project and submodule the fork, in case urgent fixes / patches are needed. These patches should be passed on to the relevant upstream.</p>
+<h3><a class="header" href="#pros-1" id="pros-1">Pros</a></h3>
+<ul>
+<li>Reproducible build environment ensures that developers and users talk about the same code
+<ul>
+<li>dependencies must be audited for security issues</li>
+</ul>
+</li>
+<li>Easier for community to understand exact set of dependencies</li>
+<li>Fork enables escape hatch for critical issues</li>
+</ul>
+<h3><a class="header" href="#cons-1" id="cons-1">Cons</a></h3>
+<ul>
+<li>Forking incurs overhead when upgrading</li>
+<li>Transitive dependencies are difficult to coordinate</li>
+<li>Cross-project commits hard to orchestrate</li>
+</ul>
+<h3><a class="header" href="#practical-notes" id="practical-notes">Practical notes</a></h3>
+<ul>
+<li>All continuous integration tools build using the same Nim compiler and dependencies</li>
+<li>When a <code>Nim</code> or other upstream issue is encountered, consider project priorities:
+<ul>
+<li>Use a work-around, report issue upstream and leave a note in code so that the work-around can be removed when a fix is available</li>
+<li>Patch our branch after achieving team consensus</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#nim-version" id="nim-version">Nim version</a></h2>
+<p>We support a single Nim version that is upgraded between release cycles of our own projects. Individual projects and libraries may choose to support multiple Nim versions, though this involves significant overhead.</p>
+<h3><a class="header" href="#pros-2" id="pros-2">Pros</a></h3>
+<ul>
+<li>Nim <code>devel</code> branch, as well as feature and bugfix releases often break the codebase due to subtle changes in the language and code generation which are hard to diagnose - each upgrade requires extensive testing</li>
+<li>Easier for community to understand exact set of dependencies</li>
+<li>Balance between cutting edge and stability</li>
+<li>Own branch enables escape hatch for critical issues</li>
+</ul>
+<h3><a class="header" href="#cons-2" id="cons-2">Cons</a></h3>
+<ul>
+<li>Work-arounds in our code for <code>Nim</code> issues add technical debt</li>
+<li>Compiler is rebuilt in every clone</li>
+</ul>
+<h3><a class="header" href="#practical-notes-1" id="practical-notes-1">Practical notes</a></h3>
+<ul>
+<li>Following Nim <code>devel</code>, from experience, leads to frequent disruptions as &quot;mysterious&quot; issues appear</li>
+<li>To support multiple Nim versions in a project, the project should be set up to run CI with all supported versions</li>
+</ul>
+<h2><a class="header" href="#editors" id="editors">Editors</a></h2>
+<ul>
+<li>Most developers use <code>vscode</code>
+<ul>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=nimsaem.nimvscode">Nim Extension</a> gets you syntax highlighting, goto definition and other modernities
+<ul>
+<li>The older, but less maintained <a href="https://marketplace.visualstudio.com/items?itemName=kosz78.nim">Nim plugin</a> is an alternative</li>
+</ul>
+</li>
+<li>To start <code>vscode</code> with the correct Nim compiler, run it with <code>./env.sh code</code></li>
+<li>Run nim files with <code>F6</code></li>
+<li>Suggestions, goto and similar features mostly work, but sometimes hang
+<ul>
+<li>You might need to <code>killall nimsuggest</code> occasionally</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Sublime text and <code>vim</code> are other popular choices</li>
+</ul>
+<h2><a class="header" href="#debugging" id="debugging">Debugging</a></h2>
+<ul>
+<li>Debugging can be done with <code>gdb</code>
+<ul>
+<li>Follow the <a href="https://code.visualstudio.com/docs/cpp/config-linux">C/C++ guide</a> for setting it up in <code>vscode</code></li>
+<li>Pass <code>--opt:none --debugger:native</code> to disable optimizations and enable debug symbols</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#profiling" id="profiling">Profiling</a></h2>
+<ul>
+<li>Linux: <code>perf</code></li>
+<li>Anywhere: <a href="https://software.intel.com/content/www/us/en/develop/tools/oneapi/components/vtune-profiler.html">vtune</a></li>
+</ul>
+<h2><a class="header" href="#code-tricks" id="code-tricks">Code tricks</a></h2>
+<ul>
+<li>Find out where a function is used: temporarily mark it <code>{.deprecated.}</code></li>
+</ul>
 
                     </main>
 

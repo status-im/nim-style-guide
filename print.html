@@ -166,11 +166,1004 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<blockquote>
+<p>&quot;With great power comes great responsibility&quot; - Spiderman (or Voltaire, for the so culturally inclined)</p>
+</blockquote>
+<p>This text is an ever evolving collection of conventions, idioms and tricks that reflects the experience of developing a production-grade application in Nim with a small team of developers.</p>
+<p>The guide is a living document to help manage the complexities of using an off-the-beaten-track language and environment to produce a stable product ready for an adverserial internet.</p>
+<p>Each guideline starts with a general recommendation to use or not use a particular feature, this recommendation represents a safe &quot;default&quot; choice. It is followed by a rationale to help you decide when and how to apply the guideline with nuance - it will not be right for every situation out there but all other things being equal, following the guideline will make life easier for others, your future self included.</p>
+<p>Following the principles and defaults set out here helps newcomers to familiarise themselves with the codebase more quickly, while experienced developers will appreciate the consistency when deciphering the intent behind a specific passage of code -- above all when trying to debug production issues under pressure.</p>
+<p>The <code>pros</code> and <code>cons</code> sections are based on bugs, confusions and security issues that have been found in real-life code and that could easily have been avoided with.. a bit of style. The objective of this section is to pass the experience on to you, dear reader!</p>
+<p>In particular when coming from a different language, experience with features like exception handling, generics and compile-time guarantees may not carry over due to subtle, and sometimes surprising, differences in semantics.</p>
+<p>Much Nim code &quot;out there&quot; hails from past times when certain language features were not yet developed and best practices not yet established - this also applies to this guide, which will change over time as the practice and language evolves.</p>
+<p>When in doubt:</p>
+<ul>
+<li>Read your code</li>
+<li>Deal with errors</li>
+<li>Favour simplicity</li>
+<li>Default to safety</li>
+<li>Consider the adversary</li>
+<li>Pay back your debt regularly</li>
+<li>Correct, readable, elegant, efficient, in that order</li>
+</ul>
+<p>The latest version of this book can be found <a href="https://status-im.github.io/nim-style-guide/">online</a> or on <a href="https://github.com/status-im/nim-style-guide/">GitHub</a>.</p>
+<ul>
+<li><a href="01_introduction.html#practical-notes">Practical notes</a></li>
+<li><a href="01_introduction.html#updates-to-this-guide">Updates to this guide</a></li>
+<li><a href="01_introduction.html#useful-resources">Useful resources</a></li>
+<li><a href="01_introduction.html#workflow">Workflow</a></li>
+</ul>
+<h2><a class="header" href="#practical-notes" id="practical-notes">Practical notes</a></h2>
+<ul>
+<li>When deviating from the guide, document the rationale in the module, allowing the next developer to understand the motivation behind the deviation</li>
+<li>When encountering code that does not follow this guide, follow its local conventions or refactor it</li>
+<li>When refactoring code, ensure good test coverage first to avoid regressions</li>
+<li>Strive towards the guidelines where practical</li>
+<li>Consider backwards compatibility when changing code</li>
+<li>Good code usually happens after several rewrites: on the first pass, the focus is on the problem, not the code - when the problem is well understood, the code can be rewritten</li>
+</ul>
+<h2><a class="header" href="#updates-to-this-guide" id="updates-to-this-guide">Updates to this guide</a></h2>
+<p>Updates to this guide go through review as usual for code - ultimately, some choices in style guides come down to personal preference and contributions of that nature may end up being rejected.</p>
+<p>In general, the guide will aim to prioritise:</p>
+<ul>
+<li>safe defaults - avoid footguns and code that is easily abused</li>
+<li>secure practices - assume code is run in an untrusted environment</li>
+<li>compile-time strictness - get the most out of the compiler and language before it hits the user</li>
+<li>readers over writers - only others can judge the quality of your code</li>
+</ul>
+<h2><a class="header" href="#useful-resources" id="useful-resources">Useful resources</a></h2>
+<p>While this book covers Nim at Status in general, there are other resources available that partially may overlap with this guide:</p>
+<ul>
+<li><a href="https://nim-lang.org/docs/manual.html">Nim manual</a> - the authorative source for understanding the features of the language</li>
+<li><a href="https://nimbus.guide/auditors-book/">The Nimbus auditor book</a> - covers the security details of Nimbus itself and how it relates to the features of Nim</li>
+</ul>
+<h2><a class="header" href="#workflow" id="workflow">Workflow</a></h2>
+<h3><a class="header" href="#pull-requests" id="pull-requests">Pull requests</a></h3>
+<ul>
+<li>One PR, one feature or fix
+<ul>
+<li>Avoid mixing refactoring with features and bugfixes</li>
+<li>Post refactoring PR:s early, while working on feature that benefits from them</li>
+</ul>
+</li>
+<li>Rebase on top of target branch</li>
+<li>Squash-merge the PR branch for easy rollback
+<ul>
+<li>Since branches contain only <em>one</em> logical change, there's usually no need for more than one target branch commit</li>
+</ul>
+</li>
+<li>Revert work that causes breakage and investigate in new PR</li>
+</ul>
+<h3><a class="header" href="#contributing" id="contributing">Contributing</a></h3>
+<p>We welcome code contributions and welcome our code being used in other projects.</p>
+<p>Generally, all significant code changes are reviewed by at least one team member and must pass CI.</p>
+<ul>
+<li>For style and other trivial fixes, no review is needed (passing CI is sufficent)</li>
+<li>For small ideas, use a PR</li>
+<li>For big ideas, use an RFC issue</li>
+</ul>
 <h1><a class="header" href="#formatting" id="formatting">Formatting</a></h1>
-<h1><a class="header" href="#language" id="language">Language</a></h1>
+<ul>
+<li><a href="02_formatting.html#style">Style</a></li>
+<li><a href="02_formatting.html#naming-conventions">Naming conventions</a></li>
+<li><a href="02_formatting.html#practical-notes">Practical notes</a></li>
+</ul>
+<h2><a class="header" href="#style" id="style">Style</a></h2>
+<p>We strive to follow <a href="https://nim-lang.org/docs/nep1.html">NEP-1</a> for style matters - naming, capitalization, 80-character limit etc. Common places where deviations happen include:</p>
+<ul>
+<li>Code based on external projects
+<ul>
+<li>Wrappers / FFI</li>
+<li>Implementations of specs that have their own naming convention</li>
+<li>Ports from other languages</li>
+</ul>
+</li>
+<li>Small differences due to manual formatting</li>
+<li>Aligned block / parameter / comment indents that require reformatting many lines to accomodate a small change - these are tedious to maintain, thus fixed indents (instead of indents based on identifiers) are allowed / common</li>
+</ul>
+<h2><a class="header" href="#naming-conventions" id="naming-conventions">Naming conventions</a></h2>
+<ul>
+<li><code>Ref</code> for <code>ref object</code> types, which have surprising semantics
+<ul>
+<li><code>type XxxRef = ref Xxx</code></li>
+<li><code>type XxxRef = ref object ...</code></li>
+</ul>
+</li>
+<li><code>func init(T: type Xxx, params...): T</code> for &quot;constructors&quot;</li>
+<li><code>func new(T: type XxxRef, params...): T</code> for &quot;constructors&quot; of <code>ref object</code> types</li>
+<li><code>XxxError</code> for exceptions inheriting from <code>CatchableError</code></li>
+<li><code>XxxDefect</code> for exceptions inheriting from <code>Defect</code></li>
+</ul>
+<h2><a class="header" href="#practical-notes-1" id="practical-notes-1">Practical notes</a></h2>
+<ul>
+<li>We do not use <code>nimpretty</code> - as of writing (nim 1.2), it is not stable enough for daily use:
+<ul>
+<li>Can break working code</li>
+<li>Naive formatting algorithm</li>
+</ul>
+</li>
+<li>We do not make use of Nim's &quot;flexible&quot; identifier names - all uses of an identifier should match the declaration in capitalization and underscores</li>
+</ul>
+<h1><a class="header" href="#language-features" id="language-features">Language features</a></h1>
+<p>Nim is a language that organically has grown to contain many advanced features and constructs. These features allow you to express your intent with great creativity, but often come with significant stability, simplicity and correctness caveats when combined.</p>
+<ul>
+<li><a href="03_language.html#import-export">Import, export</a></li>
+<li><a href="03_language.html#macros">Macros</a></li>
+<li><a href="03_language.html#ref-object-types"><code>ref object</code> types</a></li>
+<li><a href="03_language.html#heap--garbage-collected-memory">Heap / garbage collected memory</a></li>
+<li><a href="03_language.html#finalizers">Finalizers</a></li>
+<li><a href="03_language.html#inline-functions">Inline functions</a></li>
+<li><a href="03_language.html#converters">Converters</a></li>
+<li><a href="03_language.html#object-initialization">Object initialization</a></li>
+<li><a href="03_language.html#result-return"><code>result</code> return</a></li>
+<li><a href="03_language.html#variable-declarations">Variable declarations</a></li>
+<li><a href="03_language.html#variable-initialization">Variable initialization</a></li>
+<li><a href="03_language.html#functions-and-procedures">Functions and procedures</a></li>
+<li><a href="03_language.html#methods">Methods</a></li>
+<li><a href="03_language.html#callbacks-closures-and-forward-declarations">Callbacks, closures and forward declarations</a></li>
+<li><a href="03_language.html#binary-data">Binary data</a></li>
+<li><a href="03_language.html#integers">Integers</a></li>
+<li><a href="03_language.html#range"><code>range</code></a></li>
+</ul>
+<h2><a class="header" href="#import-export" id="import-export">Import, export</a></h2>
+<p><a href="https://nim-lang.org/docs/manual.html#modules-import-statement">Manual</a></p>
+<p><code>import</code> a minimal set of modules using explicit paths.</p>
+<p><code>export</code> all modules whose types appear in public symbols of the current module.</p>
+<p>Prefer specific imports. Avoid <code>include</code>.</p>
+<pre><code class="language-nim"># Group by std, external then internal imports
+import
+  # Standard library imports are prefixed with `std/`
+  std/[options, sets],
+  # use full name for &quot;external&quot; dependencies (those from other packages)
+  package/[a, b],
+  # use relative path for &quot;local&quot; dependencies
+  ./c, ../d
+
+# export modules whose types are used in public symbols in the current module
+export options
+</code></pre>
+<h3><a class="header" href="#practical-notes-2" id="practical-notes-2">Practical notes</a></h3>
+<p>Modules in Nim share a global namespace, both for the module name itself and for all symbols contained therein - because of this, your code might break because a dependency introduces a module or symbol with the same name - using prefixed imports (relative or package) helps mitigate some of these conflicts.</p>
+<p>Because of overloading and generic catch-alls, the same code can behave differently depending on which modules have been imported and in which order - reexporting modules that are used in public symbols helps avoid some of these differences.</p>
+<p>See also: <a href="https://github.com/nim-lang/Nim/issues/11225">sandwich problem</a></p>
+<h2><a class="header" href="#macros" id="macros">Macros</a></h2>
+<p><a href="https://nim-lang.org/docs/manual.html#macros">Manual</a></p>
+<p>Be judicious in macro usage - prefer more simple constructs.
+Avoid generating public API functions with macros.</p>
+<h3><a class="header" href="#pros" id="pros">Pros</a></h3>
+<ul>
+<li>Concise domain-specific languages precisely convey the central idea while hiding underlying details</li>
+<li>Suitable for cross-cutting libraries such as logging and serialization, that have a simple public API</li>
+<li>Prevent repetition, sometimes</li>
+<li>Encode domain-specific knowledge that otherwise would be hard to express</li>
+</ul>
+<h3><a class="header" href="#cons" id="cons">Cons</a></h3>
+<ul>
+<li>Easy to write, hard to understand
+<ul>
+<li>Require extensive knowledge of the <code>Nim</code> AST</li>
+<li>Code-about-code requires tooling to turn macro into final execution form, for audit and debugging</li>
+<li>Unintended macro expansion costs can surprise even experienced developers</li>
+</ul>
+</li>
+<li>Unsuitable for public API
+<ul>
+<li>Nowhere to put per-function documentation</li>
+<li>Tooling needed to discover API - return types, parameters, error handling</li>
+</ul>
+</li>
+<li>Obfuscated data and control flow</li>
+<li>Poor debugging support</li>
+<li>Surprising scope effects on identifier names</li>
+</ul>
+<h3><a class="header" href="#practical-notes-3" id="practical-notes-3">Practical notes</a></h3>
+<ul>
+<li>Consider a more specific, non-macro version first</li>
+<li>Use a difficulty multiplier to weigh introduction of macros:
+<ul>
+<li>Templates are 10x harder to understand than plain code</li>
+<li>Macros are 10x harder than templates, thus 100x harder than plain code</li>
+</ul>
+</li>
+<li>Write as much code as possible in templates, and glue together using macros</li>
+</ul>
+<p>See also: <a href="https://github.com/status-im/nimbus-eth2/wiki/The-macro-skeptics-guide-to-the-p2pProtocol-macro">macro defense</a></p>
+<h2><a class="header" href="#ref-object-types" id="ref-object-types"><code>ref object</code> types</a></h2>
+<p>Avoid <code>ref object</code> types, except:</p>
+<ul>
+<li>for &quot;handle&quot; types that manage a resource and thus break under value semantics</li>
+<li>where shared ownership is intended</li>
+<li>in reference-based data structures (trees, linked lists)</li>
+<li>where a stable pointer is needed for 3rd-party compatibility</li>
+</ul>
+<p>Prefer explicit <code>ref MyType</code> where reference semantics are needed, allowing the caller to choose where possible.</p>
+<pre><code class="language-nim"># prefer explicit ref modifiers at usage site
+func f(v: ref Xxx) = discard
+let x: ref Xxx = new Xxx
+
+# Consider using Hungarian naming convention with `ref object` - this makes it clear at usage sites that the type follows the unusual `ref` semantics
+type XxxRef = ref object
+  # ...
+</code></pre>
+<h3><a class="header" href="#pros-1" id="pros-1">Pros</a></h3>
+<ul>
+<li><code>ref object</code> types useful to prevent unintended copies</li>
+<li>Limits risk of accidental stack allocation for large types
+<ul>
+<li>This commonly may lead to stack overflow, specially when RVO is missed</li>
+</ul>
+</li>
+<li>Garbage collector simplifies some algorithms</li>
+</ul>
+<h3><a class="header" href="#cons-1" id="cons-1">Cons</a></h3>
+<ul>
+<li><code>ref object</code> types have surprising semantics - the meaning of basic operations like <code>=</code> changes</li>
+<li>Shared ownership leads to resource leaks and data races</li>
+<li><code>nil</code> references cause runtime crashes</li>
+<li>Semantic differences not visible at usage site</li>
+<li>Always mutable - no way to express immutability</li>
+<li>Cannot be stack-allocated</li>
+<li>Hard to emulate value semantics</li>
+</ul>
+<h3><a class="header" href="#notes" id="notes">Notes</a></h3>
+<p><code>XxxRef = ref object</code> is a syntactic shortcut that hides the more explicit <code>ref Xxx</code> where the type is used - by explicitly spelling out <code>ref</code>, readers of the code become aware of the alternative reference / shared ownership semantics, which generally allows a deeper understanding of the code without having to look up the type declaration.</p>
+<h2><a class="header" href="#heap--garbage-collected-memory" id="heap--garbage-collected-memory">Heap / garbage collected memory</a></h2>
+<p>Prefer to use stack-based and statically sized data types in core/low-level libraries.
+Use heap allocation in glue layers.</p>
+<p>Avoid <code>alloca</code>.</p>
+<pre><code>func init(T: type Yyy, a, b: int): T = ...
+
+# Heap allocation as a local decision
+let x = (ref Xxx)(
+  field: Yyy.init(a, b) # In-place initialization using RVO
+)
+</code></pre>
+<h3><a class="header" href="#pros-2" id="pros-2">Pros</a></h3>
+<ul>
+<li>RVO can be used for &quot;in-place&quot; initialization of value types</li>
+<li>Better chance of reuse on embedded systems
+<ul>
+<li>https://barrgroup.com/Embedded-Systems/How-To/Malloc-Free-Dynamic-Memory-Allocation</li>
+<li>http://www.drdobbs.com/embedded-systems/embedded-memory-allocation/240169150</li>
+<li>https://www.quora.com/Why-is-malloc-harmful-in-embedded-systems</li>
+</ul>
+</li>
+<li>Allows consumer of library to decide on memory handling strategy
+<ul>
+<li>It's always possible to turn plain type into <code>ref</code>, but not the other way around</li>
+</ul>
+</li>
+</ul>
+<h3><a class="header" href="#cons-2" id="cons-2">Cons</a></h3>
+<ul>
+<li>Stack space limited - large types on stack cause hard-to-diagnose crashes</li>
+<li>Hard to deal with variable-sized data correctly</li>
+</ul>
+<h3><a class="header" href="#practical-notes-4" id="practical-notes-4">Practical notes</a></h3>
+<p><code>alloca</code> has confusing semantics that easily cause stack overflows - in particular, memory is released when function ends which means that in a loop, each iteration will add to the stack usage. Several <code>C</code> compilers implement <code>alloca</code> incorrectly, specially when inlining.</p>
+<h2><a class="header" href="#finalizers" id="finalizers">Finalizers</a></h2>
+<p><a href="https://nim-lang.org/docs/system.html#new%2Cref.T%2Cproc%28ref.T%29">Manual</a></p>
+<p>Don't use finalizers.</p>
+<h3><a class="header" href="#pros-3" id="pros-3">Pros</a></h3>
+<ul>
+<li>Work around missing manual cleanup</li>
+</ul>
+<h3><a class="header" href="#cons-3" id="cons-3">Cons</a></h3>
+<ul>
+<li><a href="https://github.com/nim-lang/Nim/issues/4851">Buggy</a>, cause random GC crashes</li>
+<li>Calling <code>new</code> with finalizer for one instance infects all instances with same finalizer</li>
+<li>Newer Nim versions migrating new implementation of finalizers that are sometimes deterministic (aka destructors)</li>
+</ul>
+<h2><a class="header" href="#inline-functions" id="inline-functions">Inline functions</a></h2>
+<p>Avoid using explicit <code>{.inline.}</code> functions.</p>
+<h3><a class="header" href="#pros-4" id="pros-4">Pros</a></h3>
+<ul>
+<li>Sometimes give performance advantages</li>
+</ul>
+<h3><a class="header" href="#cons-4" id="cons-4">Cons</a></h3>
+<ul>
+<li>Adds clutter to function definitions</li>
+<li>Larger code size, longer compile times</li>
+<li>Prevent certain LTO optimizations</li>
+</ul>
+<h3><a class="header" href="#practical-notes-5" id="practical-notes-5">Practical notes</a></h3>
+<ul>
+<li><code>{.inline.}</code> does not inline code - rather it copies the function definition into every <code>C</code> module making it available for the <code>C</code> compiler to inline</li>
+<li>Compilers can use contextual information to balance inlining</li>
+<li>LTO achieves the same end result without the cons</li>
+</ul>
+<h2><a class="header" href="#converters" id="converters">Converters</a></h2>
+<p><a href="https://nim-lang.org/docs/manual.html#converters">Manual</a></p>
+<p>Avoid using converters.</p>
+<h3><a class="header" href="#pros-5" id="pros-5">Pros</a></h3>
+<ul>
+<li>Implicit conversions lead to low visual overhead of converting types</li>
+</ul>
+<h3><a class="header" href="#cons-5" id="cons-5">Cons</a></h3>
+<ul>
+<li>Surprising conversions lead to ambiguous calls:
+<pre><code class="language-nim">converter toInt256*(a: int{lit}): Int256 = a.i256
+if stringValue.len &gt; 32:
+  ...
+</code></pre>
+<pre><code>Error: ambiguous call; both constants.&gt;(a: Int256, b: int)[declared in constants.nim(76, 5)] and constants.&gt;(a: UInt256, b: int)[declared in constants.nim(82, 5)] match for: (int, int literal(32))
+</code></pre>
+</li>
+</ul>
+<h2><a class="header" href="#object-initialization" id="object-initialization">Object initialization</a></h2>
+<p>Use <code>Xxx(x: 42, y: Yyy(z: 54))</code> style, or if type has an <code>init</code> function, <code>Type.init(a, b, c)</code>.</p>
+<p>Make the default 0-initialization a valid state for the type.</p>
+<pre><code class="language-nim"># `init` functions are a convention for constructors - they are not enforced by the language
+func init(T: type Xxx, a, b: int): T = T(
+  x: a,
+  y: OtherType(s: b) # Prefer Type(field: value)-style initialization
+)
+
+let m = Xxx.init(1, 2)
+
+# For ref types, name the constructor `new`:
+func new(T: type XxxRef): T = ...
+</code></pre>
+<h3><a class="header" href="#pros-6" id="pros-6">Pros</a></h3>
+<ul>
+<li>Correct order of initialization enforced by compiler / code structure</li>
+<li>Dedicated syntax constructs a clean instance resetting all fields</li>
+<li>Possible to build static analysis tools to detect uninitialized fields</li>
+<li>Works for both <code>ref</code> and non-<code>ref</code> types</li>
+</ul>
+<h3><a class="header" href="#cons-6" id="cons-6">Cons</a></h3>
+<ul>
+<li>Sometimes inefficient compared to updating an existing <code>var</code> instance, since all fields must be re-initialized</li>
+</ul>
+<h3><a class="header" href="#practical-notes-6" id="practical-notes-6">Practical notes</a></h3>
+<ul>
+<li>The default, 0-initialized state of the object often gets constructed in the language - avoiding a requirement that a magic <code>init</code> function be called makes the type more ergonomic to use</li>
+<li>Avoid using <code>result</code> (see below) or <code>var instance: Type</code> which disable several compiler diagnostics</li>
+</ul>
+<h2><a class="header" href="#result-return" id="result-return"><code>result</code> return</a></h2>
+<p>Avoid using <code>result</code> for returning values.</p>
+<p>Use expression-based return or explicit <code>return</code> keyword with a value</p>
+<h3><a class="header" href="#pros-7" id="pros-7">Pros</a></h3>
+<ul>
+<li>Recommended by NEP-1</li>
+<li>Used in standard library</li>
+<li>Saves a line of code avoiding an explicit <code>var</code> declaration</li>
+<li>Accumulation-style functions that gradually build up a return value gain consistency</li>
+</ul>
+<h3><a class="header" href="#cons-7" id="cons-7">Cons</a></h3>
+<ul>
+<li>No visual (or compiler) help when a branch is missing a value, or overwrites a previous value</li>
+<li>Disables compiler diagnostics for code branches that forget to set result</li>
+<li>Risk of using partially initialized instances due to <code>result</code> being default-initialized
+<ul>
+<li>For <code>ref</code> types, <code>result</code> starts out as <code>nil</code> which accidentally might be returned</li>
+<li>Helpers may accidentally use <code>result</code> before it was fully initialized</li>
+<li>Async/await using result prematurely due to out-of-order execution</li>
+</ul>
+</li>
+<li>Partially initialized instances lead to exception-unsafe code where resource leaks happen
+<ul>
+<li>RVO causes observable stores in the left-hand side of assignments when exceptions are raised after partially modifying <code>result</code></li>
+</ul>
+</li>
+<li>Confusing to people coming from other languages</li>
+<li>Confusing semantics in templates and macros</li>
+</ul>
+<h3><a class="header" href="#practical-notes-7" id="practical-notes-7">Practical notes</a></h3>
+<p>Nim has 3 ways to assign a return value to a function: <code>result</code>, <code>return</code> and &quot;expressions&quot;.</p>
+<p>Of the three:</p>
+<ul>
+<li>&quot;expression&quot; returns guarantee that all code branches produce one (and only one) value to be returned
+<ul>
+<li>Used mainly when exit points are balanced and not deeply nested</li>
+</ul>
+</li>
+<li>Explict <code>return</code> with a value make explicit what value is being returned in each branch
+<ul>
+<li>Used to avoid deep nesting and early exit, above all when returning early due to errors</li>
+</ul>
+</li>
+<li><code>result</code> is used to accumulate / build up return value, allowing it to take on invalid values in the interim</li>
+</ul>
+<p>Multiple security issues, <code>nil</code> reference crashes and wrong-init-order issues have been linked to the use of <code>result</code> and lack of assignment in branches.</p>
+<p>In general, the use of accumulation-style initialization is discouraged unless made necessary by the data type - see <a href="03_language.html#variable-initialization">Variable initialization</a></p>
+<h2><a class="header" href="#variable-declarations" id="variable-declarations">Variable declarations</a></h2>
+<p>Use the most restrictive of <code>const</code>, <code>let</code> and <code>var</code> that the situation allows.</p>
+<pre><code class="language-nim"># Group related variables
+const
+  a = 10
+  b = 20
+</code></pre>
+<h3><a class="header" href="#practical-notes-8" id="practical-notes-8">Practical notes</a></h3>
+<p><code>const</code> and <code>let</code> each introduce compile-time constraints that help limit the scope of bugs that must be considered when reading and debugging code.</p>
+<h2><a class="header" href="#variable-initialization" id="variable-initialization">Variable initialization</a></h2>
+<p>Prefer expressions to initialize variables and return values</p>
+<pre><code>let x =
+  if a &gt; 4: 5
+  else: 6
+
+func f(b: bool): int =
+  if b: 1
+  else: 2
+
+# Avoid - `x` is not guaranteed to be initialized by all branches and in correct order (for composite types)
+var x: int
+if a &gt; 4: x = 5
+else: x = 6
+</code></pre>
+<h3><a class="header" href="#pros-8" id="pros-8">Pros</a></h3>
+<ul>
+<li>Stronger compile-time checks</li>
+<li>Lower risk of uninitialized variables even after refactoring</li>
+</ul>
+<h3><a class="header" href="#cons-8" id="cons-8">Cons</a></h3>
+<ul>
+<li>Becomes hard to read when deeply nested</li>
+</ul>
+<h2><a class="header" href="#functions-and-procedures" id="functions-and-procedures">Functions and procedures</a></h2>
+<p>Prefer <code>func</code> - use <code>proc</code> when side effects cannot conveniently be avoided.</p>
+<p>Avoid public functions and variables (<code>*</code>) that don't make up an intended part of public API.</p>
+<h3><a class="header" href="#practical-notes-9" id="practical-notes-9">Practical notes</a></h3>
+<ul>
+<li>Public functions are not covered by dead-code warnings and contribute to overload resolution in the the global namespace</li>
+<li>Prefer <code>openArray</code> as argument type over <code>seq</code> for traversals</li>
+</ul>
+<h2><a class="header" href="#methods" id="methods">Methods</a></h2>
+<p><a href="https://nim-lang.org/docs/manual.html#methods">Manual</a></p>
+<p>Use <code>method</code> sparingly - consider a &quot;manual&quot; vtable with <code>proc</code> closures instead.</p>
+<h3><a class="header" href="#pros-9" id="pros-9">Pros</a></h3>
+<ul>
+<li>Compiler-implemented way of doing dynamic dispatch</li>
+</ul>
+<h3><a class="header" href="#cons-9" id="cons-9">Cons</a></h3>
+<ul>
+<li>Poor implementation
+<ul>
+<li>Implemented using <code>if</code> tree</li>
+<li>Require full program view to &quot;find&quot; all implementations</li>
+</ul>
+</li>
+<li>Poor discoverability - hard to tell which <code>method</code>'s belong together and form a virtual interface for a type
+<ul>
+<li>All implementations must be public (<code>*</code>)!</li>
+</ul>
+</li>
+</ul>
+<h3><a class="header" href="#practical-notes-10" id="practical-notes-10">Practical notes</a></h3>
+<ul>
+<li>Does not work with generics</li>
+<li>No longer does multi-dispatch</li>
+</ul>
+<h2><a class="header" href="#callbacks-closures-and-forward-declarations" id="callbacks-closures-and-forward-declarations">Callbacks, closures and forward declarations</a></h2>
+<p>Annotate <code>proc</code> type definitions and forward declarations with <code>{.raises [Defect], gcsafe.}</code> or specific exception types.</p>
+<pre><code class="language-nim"># By default, Nim assumes closures may raise any exception and are not gcsafe
+# By annotating the callback with raises and gcsafe, the compiler ensures that
+# any functions assigned to the closure fit the given constraints
+type Callback = proc(...) {.raises: [Defect], gcsafe.}
+</code></pre>
+<h3><a class="header" href="#practical-notes-11" id="practical-notes-11">Practical notes</a></h3>
+<ul>
+<li>Without annotations, <code>raises Exception</code> and no GC-safety is assumed by the compiler, infecting deduction in the whole call stack</li>
+<li>Annotations constrain the functions being assigned to the callback to follow its declaration, simplifying calling the callback safely
+<ul>
+<li>In particular, callbacks are difficult to reason about when they raise exceptions - what should the caller of the callback do?</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#binary-data" id="binary-data">Binary data</a></h2>
+<p>Use <code>byte</code> to denote binary data. Use <code>seq[byte]</code> for dynamic byte arrays.</p>
+<p>Avoid <code>string</code> for binary data. If stdlib returns strings, <a href="https://github.com/status-im/nim-stew/blob/76beeb769e30adc912d648c014fd95bf748fef24/stew/byteutils.nim#L141">convert</a> to <code>seq[byte]</code> as early as possible</p>
+<h3><a class="header" href="#pros-10" id="pros-10">Pros</a></h3>
+<ul>
+<li>Explicit type for binary data helps convey intent</li>
+</ul>
+<h3><a class="header" href="#cons-10" id="cons-10">Cons</a></h3>
+<ul>
+<li><code>char</code> and <code>uint8</code> are common choices often seen in <code>Nim</code></li>
+<li>hidden assumption that 1 byte == 8 bits</li>
+<li>language still being developed to handle this properly - many legacy functions return <code>string</code> for binary data
+<ul>
+<li><a href="https://github.com/nim-lang/Nim/issues/7337">Crypto API</a></li>
+</ul>
+</li>
+</ul>
+<h3><a class="header" href="#practical-notes-12" id="practical-notes-12">Practical notes</a></h3>
+<ul>
+<li><a href="https://github.com/status-im/nim-stew">stew</a> contains helpers for dealing with bytes and strings</li>
+</ul>
+<h2><a class="header" href="#integers" id="integers">Integers</a></h2>
+<p>Prefer signed integers for counting, lengths, array indexing etc.</p>
+<p>Prefer unsigned integers of specified size for interfacing with binary data, bit manipulation, low-level hardware access and similar contexts.</p>
+<p>Don't cast pointers to <code>int</code>.</p>
+<h3><a class="header" href="#practical-notes-13" id="practical-notes-13">Practical notes</a></h3>
+<ul>
+<li>Signed integers are overflow-checked and raise an untracked <code>Defect</code> on overflow, unsigned integers wrap</li>
+<li><code>int</code> and <code>uint</code> vary depending on platform pointer size - use judiciously</li>
+<li>Perform range checks before converting to <code>int</code>, or convert to larger type
+<ul>
+<li>Conversion to signed integer raises untracked <code>Defect</code> on overflow</li>
+<li>When comparing lengths to unsigned integers, convert the length to unsigned</li>
+</ul>
+</li>
+<li>Pointers may overflow <code>int</code> when used for arithmetic</li>
+<li>An alternative to <code>int</code> for non-negative integers such as lengths is <code>Natural</code>
+<ul>
+<li><code>Natural</code> is a <code>range</code> type and therefore <a href="03_language.html#range">unreliable</a> - it generally avoids the worst problems owing to its simplicity but may require additional casts to work around bugs</li>
+<li>Better models length, but is not used by <code>len</code></li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#range" id="range"><code>range</code></a></h2>
+<p>Avoid <code>range</code> types.</p>
+<h3><a class="header" href="#pros-11" id="pros-11">Pros</a></h3>
+<ul>
+<li>Range-checking done by compiler</li>
+<li>More accurate bounds than <code>intXX</code></li>
+<li>Communicates intent</li>
+</ul>
+<h3><a class="header" href="#cons-11" id="cons-11">Cons</a></h3>
+<ul>
+<li>Implicit conversions to &quot;smaller&quot; ranges may raise <code>Defect</code></li>
+<li>Language feature has several fundamental design and implementation issues
+<ul>
+<li>https://github.com/nim-lang/Nim/issues/16839</li>
+<li>https://github.com/nim-lang/Nim/issues/16744</li>
+<li>https://github.com/nim-lang/Nim/issues/13618</li>
+<li>https://github.com/nim-lang/Nim/issues/12780</li>
+<li>https://github.com/nim-lang/Nim/issues/10027</li>
+<li>https://github.com/nim-lang/Nim/issues?page=1&amp;q=is%3Aissue+is%3Aopen+range</li>
+</ul>
+</li>
+</ul>
 <h1><a class="header" href="#error-handling" id="error-handling">Error handling</a></h1>
+<p>Error handling in Nim is a subject under constant re-evaluation - similar to C++, several paradigms are supported leading to confusion as to which one to choose.</p>
+<p>In part, the confusion stems from the various contexts in which nim can be used: when executed as small, one-off scripts that can easily be restarted, exceptions allow low visual overhead and ease of use.</p>
+<p>When faced with more complex and long-running programs where errors must be dealt with as part of control flow, the use of exceptions can directly be linked to issues like resource leaks, security bugs and crashes.</p>
+<p>Likewise, when preparing code for refactoring, the compiler offers little help in exception-based code: although raising a new exception breaks ABI, there is no corresponding change in the API: this means that changes deep inside dependencies silently break dependent code until the issue becomes apparent at runtime (often under exceptional circumstances).</p>
+<p>A final note is that although exceptions may have been used sucessfully in some languages, these languages typically offer complementary features that help manage the complexities introduced by exceptions - RAII, mandatory checking of exceptions etc - these have yet to be developed for Nim.</p>
+<p>Because of the controversies and changing landscape, the preference for Status projects is to avoid the use of exceptions unless specially motivated, if only to maintain consistency and simplicity.</p>
+<ul>
+<li><a href="04_errors.html#general">General</a></li>
+<li><a href="04_errors.html#exceptions">Exceptions</a></li>
+<li><a href="04_errors.html#status-codes">Status codes</a></li>
+<li><a href="04_errors.html#practical-notes-1">Practical notes</a></li>
+<li><a href="04_errors.html#callbacks">Callbacks</a></li>
+</ul>
+<h2><a class="header" href="#general" id="general">General</a></h2>
+<p>Prefer <code>bool</code>, <code>Opt</code> or <code>Result</code> to signal failure outcomes explicitly.</p>
+<p>Prefer the use of <code>Result</code> when multiple failure paths exist and the calling code might need to differentiate between them.</p>
+<p>Raise <code>Defect</code> to signal panics such as logic errors or preconditions being violated.</p>
+<p>Make error handling explicit and visible at call site using explicit control flow (<code>if</code>, <code>try</code>, <code>results.?</code>).</p>
+<p>Handle errors at each abstraction level, avoiding spurious abstraction leakage.</p>
+<p>Isolate legacy code with explicit exception handling, converting the errors to <code>Result</code> or handling them locally, as appropriate.</p>
+<pre><code class="language-nim"># Enable exception tracking for all functions in this module
+`{.push raises: [Defect].}` # Always at start of module
+
+import stew/results
+export results # Re-export modules used in public symbols
+
+# Use `Result` to propagate additional information expected errors
+# See `Result` section for specific guidlines for errror type
+func f*(): Result[void, cstring]
+
+# In special cases that warrant the use of exceptions, list these explicitly using the `raises` pragma.
+func parse(): Type {.raises: [Defect, ParseError]}
+</code></pre>
+<p>See also <a href="04_libraries.html#result">Result</a> for more recommendations about <code>Result</code>.</p>
+<p>See also <a href="https://github.com/status-im/nim-stew/pull/26">Error handling helpers</a> in stew that may change some of these guidelines.</p>
+<h2><a class="header" href="#exceptions" id="exceptions">Exceptions</a></h2>
+<p>In general, prefer <a href="04_errors.html#general">explicit error handling mechanisms</a>.</p>
+<p>Annotate each module with a top-level <code>{.push raises: [Defect].}</code>.</p>
+<p>Use explicit <code>{.raises.}</code> annotation for each public (<code>*</code>) function.</p>
+<p>Raise <code>Defect</code> to signal panics and situations that the code is not prepared to handle.</p>
+<pre><code class="language-nim"># Enable exception tracking for all functions in this module
+`{.push raises: [Defect].}` # Always at start of module
+
+# Inherit from CatchableError and name XxxError
+type MyLibraryError = object of CatchableError
+
+# Raise Defect when panicking - this crashes the application (in different ways
+# depending on Nim version and compiler flags) - name `XxxDefect`
+type SomeDefect = object of Defect
+
+# Use hierarchy for more specific errors
+type MySpecificError = object of MyLibraryError
+
+# Explicitly annotate functions with raises - this replaces the more strict
+# module-level push declaration on top
+func f() {.raises: [Defect, MySpecificError]} = discard
+
+# Isolate code that may generate exceptions using expression-based try:
+let x =
+  try: ...
+  except MyError as exc: ... # use the most specific error kind possible
+
+# Be careful to catch excpetions inside loops, to avoid partial loop evaluations:
+for x in y:
+  try: ..
+  except MyError: ..
+
+# Provide contextual data when raising specific errors
+raise (ref MyError)(msg: &quot;description&quot;, data: value)
+</code></pre>
+<h3><a class="header" href="#pros-12" id="pros-12">Pros</a></h3>
+<ul>
+<li>Used by <code>Nim</code> standard library</li>
+<li>Good for quick prototyping without error handling</li>
+<li>Good performance on happy path without <code>try</code>
+<ul>
+<li>Compatible with RVO</li>
+</ul>
+</li>
+</ul>
+<h3><a class="header" href="#cons-12" id="cons-12">Cons</a></h3>
+<ul>
+<li>Poor readability - exceptions not part of API / signatures by default
+<ul>
+<li>Have to assume every line may fail</li>
+</ul>
+</li>
+<li>Poor maintenance / refactoring support - compiler can't help detect affected code because they're not part of API</li>
+<li>Nim exception hierarchy unclear and changes between versions
+<ul>
+<li>The distinction between <code>Exception</code>, <code>CatchableError</code> and <code>Defect</code> is inconsistently implemented
+<ul>
+<li><a href="https://github.com/nim-lang/Nim/issues/11776">Exception hierarchy RFC not being implemented</a></li>
+</ul>
+</li>
+<li><code>Defect</code> is <a href="(https://github.com/nim-lang/Nim/issues/12862)">not correctly tracked</a></li>
+<li>Nim 1.4 further weakens compiler analysis around <code>Defect</code>(https://github.com/nim-lang/Nim/pull/13626)</li>
+</ul>
+</li>
+<li>Without translation, exceptions leak information between abstraction layers</li>
+<li>Writing exception-safe code in Nim impractical due to missing critical features present in C++
+<ul>
+<li>No RAII - resources often leak in the presence of exceptions</li>
+<li>Destructors incomplete / unstable and thus not usable for safe EH
+<ul>
+<li>No constructors, thus no way to force particular object states at construction</li>
+</ul>
+</li>
+<li><code>ref</code> types incompatible with destructors, even if they worked</li>
+</ul>
+</li>
+<li>Poor performance of error path
+<ul>
+<li>Several heap allocations for each Exception (exception, stack trace, string)</li>
+<li>Expensive stack trace</li>
+</ul>
+</li>
+<li>Poor performance on happy path
+<ul>
+<li>Every <code>try</code> and <code>defer</code> has significant performance overhead due to <code>setjmp</code> exception handling implementation</li>
+</ul>
+</li>
+</ul>
+<h3><a class="header" href="#practical-notes-14" id="practical-notes-14">Practical notes</a></h3>
+<p>The use of exceptions in some modules has significantly contributed to resource leaks, deadlocks and other difficult bugs. The various exception handling proposals aim to alleviate some of the issues but have not found sufficient grounding in the Nim community to warrant the language changes necessary to proceed.</p>
+<p>A notable exception to the guideline is <code>chronos</code> and <code>async</code>/<code>await</code> transformations that lack support for propagating checked exception information. Several bugs and implementation issues exist in the exception handling transformation employed by <code>async</code>.</p>
+<h3><a class="header" href="#open-questions" id="open-questions">Open questions</a></h3>
+<ul>
+<li>Should a hierarchy be used?
+<ul>
+<li>Why? It's rare that calling code differentiates between errors</li>
+<li>What to start the hierarchy with? Unclear whether it should be a global type (like <code>CatchableError</code> or <code>ValueError</code>, or a module-local type</li>
+</ul>
+</li>
+<li>Should exceptions be translated?
+<ul>
+<li>Leaking exception types between layers means no isolation, joining all modules in one big spaghetti bowl</li>
+<li>Translating exceptions has high visual overhead, specially when hierachy is used - not practical, all advantages lost</li>
+</ul>
+</li>
+<li>Should <code>raises</code> be used?
+<ul>
+<li>Equivalent to <code>Result[T, SomeError]</code> but lacks generics</li>
+<li>Additive - asymptotically tends towards <code>raises: [CatchableError]</code>, losing value unless exceptions are translated locally</li>
+<li>No way to transport accurate raises type information across Future/async/generic code boundaries - no <code>raisesof</code> equivalent of <code>typeof</code></li>
+</ul>
+</li>
+</ul>
+<h3><a class="header" href="#background" id="background">Background</a></h3>
+<ul>
+<li><a href="https://github.com/status-im/nim-stew/pull/26">Stew EH helpers</a> - Helpers that make working with checked exceptions easier</li>
+<li><a href="https://github.com/nim-lang/Nim/issues/8363">Nim Exception RFC</a> - seeks to differentiate between recoverable and unrecoverable errors</li>
+<li><a href="https://gist.github.com/zah/d2d729b39d95a1dfedf8183ca35043b3">Zahary's handling proposal</a> - seeks to handle any kind of error-generating API</li>
+<li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0709r0.pdf">C++ proposal</a> - After 25 years of encouragement, half the polled C++ developers continue avoiding exceptions and Herb Sutter argues about the consequences of doing so</li>
+<li><a href="https://google.github.io/styleguide/cppguide.html#Exceptions">Google</a> and <a href="https://llvm.org/docs/CodingStandards.html#id22">llvm</a> style guides on exceptions</li>
+</ul>
+<h2><a class="header" href="#status-codes" id="status-codes">Status codes</a></h2>
+<p>Avoid status codes.</p>
+<pre><code class="language-nim">
+type StatusCode = enum
+  Success
+  Error1
+  ...
+
+func f(output: var Type): StatusCode
+</code></pre>
+<h3><a class="header" href="#pros-13" id="pros-13">Pros</a></h3>
+<ul>
+<li>Interop with <code>C</code></li>
+</ul>
+<h3><a class="header" href="#cons-13" id="cons-13">Cons</a></h3>
+<ul>
+<li><code>output</code> undefined in case of error</li>
+<li>Verbose to use, must first declare mutable variable then call function and check result - mutable variable remains in scope even in &quot;error&quot; branch leading to bugs</li>
+</ul>
+<h2><a class="header" href="#practical-notes-15" id="practical-notes-15">Practical notes</a></h2>
+<p>Unlike &quot;Error Enums&quot; used with <code>Result</code>, status codes mix &quot;success&quot; and &quot;error&quot; returns in a single enum, making it hard to detect &quot;successful&quot; completion of a function in a generic way.</p>
+<h2><a class="header" href="#callbacks" id="callbacks">Callbacks</a></h2>
+<p>See <a href="03_language.html#callbacks-closures-and-forward-declarations">language section on callbacks</a></p>
 <h1><a class="header" href="#libraries" id="libraries">Libraries</a></h1>
+<p>The libraries section contains guidelines for libraries and modules frequently used in the codebase.</p>
+<ul>
+<li><a href="05_libraries.html#results">Results</a></li>
+<li><a href="05_libraries.html#hex-output">Hex output</a></li>
+<li><a href="05_libraries.html#wrappers">Wrappers</a></li>
+<li><a href="05_libraries.html#standard-library-usage">Standard library usage</a></li>
+<li><a href="05_libraries.html#nim-stew">nim-stew</a></li>
+</ul>
+<h2><a class="header" href="#results" id="results">Results</a></h2>
+<p><a href="https://github.com/status-im/nim-stew/blob/master/stew/results.nim#L19">Manual</a></p>
+<p>Use <code>Result</code> to document all outcomes of functions.</p>
+<p>Use <code>cstring</code> errors to provide diagnostics without expectation of error differentiation.</p>
+<p>Use <code>enum</code> errors when error kind matters.</p>
+<p>Use complex types when additional error information needs to be included.</p>
+<p>Use <code>Opt</code> (<code>Result</code>-based <code>Option</code>) for simple functions that fail only in trivial ways.</p>
+<pre><code># Stringly errors - the cstring is just for information and
+# should not be used for comparisons! The expectation is that
+# the caller doesn't have to differentiate between different
+# kinds of errors and uses the string as a print-only diagnostic.
+func f(): Result[int, cstring] = ...
+
+# Calling code acts on error specifics - use an enum
+func f2(): Result[int, SomeEnum] = ...
+if f2.isErr and f2.error == SomeEnum.value: ...
+
+# Transport exceptions - Result has special support for this case
+func f3(): Result[int, ref SomeError] = ...
+</code></pre>
+<h3><a class="header" href="#pros-14" id="pros-14">Pros</a></h3>
+<ul>
+<li>Give equal consideration to normal and error case</li>
+<li>Easier control flow vulnerability analysis</li>
+<li>Good for &quot;binary&quot; cases that either fail or not</li>
+<li>No heap allocations for simple errors</li>
+</ul>
+<h3><a class="header" href="#cons-14" id="cons-14">Cons</a></h3>
+<ul>
+<li>Visual overhead and poor language integration in <code>Nim</code> - ugly <code>if</code> trees grow</li>
+<li>Nim compiler generates ineffient code for complex types due to how return values are 0-intialized</li>
+<li>Lack of pattern matching makes for inconvenient code</li>
+<li>Standard library raises many exceptions, hard to use cleanly</li>
+</ul>
+<h3><a class="header" href="#practical-notes-16" id="practical-notes-16">Practical notes</a></h3>
+<ul>
+<li>When converting modules, isolate errors from legacy code with <code>try/except</code>
+<ul>
+<li>Common helpers may be added at some point to deal with third-party dependencies that are hard to change - see <code>stew/shims</code></li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#hex-output" id="hex-output">Hex output</a></h2>
+<p>Print hex output in lowercase. Accept upper and lower case.</p>
+<h3><a class="header" href="#pros-15" id="pros-15">Pros</a></h3>
+<ul>
+<li>Single case helps tooling</li>
+<li>Arbitrary choice, aim for consistency</li>
+</ul>
+<h3><a class="header" href="#cons-15" id="cons-15">Cons</a></h3>
+<ul>
+<li>No community consensus - some examples in the wild use upper case</li>
+</ul>
+<h3><a class="header" href="#practical-notes-17" id="practical-notes-17">Practical notes</a></h3>
+<p><a href="https://github.com/status-im/nim-stew/blob/76beeb769e30adc912d648c014fd95bf748fef24/stew/byteutils.nim#L129">byteutils</a> contains a convenient hex printer.</p>
+<h2><a class="header" href="#wrappers" id="wrappers">Wrappers</a></h2>
+<p>Prefer native <code>Nim</code> code when available.</p>
+<p><code>C</code> libraries and libraries that expose a <code>C</code> API may be used (including <code>rust</code>, <code>C++</code>).</p>
+<p>Avoid <code>C++</code> libraries.</p>
+<p>Prefer building the library on-the-fly from source using <code>{.compile.}</code>. Pin the library code using a submodule or amalgamation.</p>
+<h3><a class="header" href="#pros-16" id="pros-16">Pros</a></h3>
+<ul>
+<li>Wrapping existing code can improve time-to-market for certain features</li>
+<li>Maintenance is shared with upstream</li>
+<li>Build simplicity is maintained when <code>{.compile.}</code> is used</li>
+</ul>
+<h3><a class="header" href="#cons-16" id="cons-16">Cons</a></h3>
+<ul>
+<li>Often leads to unnatural API for <code>Nim</code></li>
+<li>Constrains platform support</li>
+<li>Nim and <code>nimble</code> tooling poorly supports 3rd-party build systems making installation difficult</li>
+<li>Nim <code>C++</code> support incomplete
+<ul>
+<li>Less test suite coverage - most of <code>Nim</code> test suite uses <code>C</code> backend</li>
+<li>Many core <code>C++</code> features like <code>const</code>, <code>&amp;</code> and <code>&amp;&amp;</code> difficult to express - in particular post-<code>C++11</code> code has a large semantic gap compared to Nim</li>
+<li>Different semantics for exceptions and temporaries compared to <code>C</code> backend</li>
+<li>All-or-nothing - can't use <code>C++</code> codegen selectively for <code>C++</code> libraries</li>
+</ul>
+</li>
+<li>Using <code>{.compile.}</code> increases build times, specially for multi-binary projects - use judiciously for large dependencies</li>
+</ul>
+<h3><a class="header" href="#practical-notes-18" id="practical-notes-18">Practical notes</a></h3>
+<ul>
+<li>Consider tooling like <code>c2nim</code> and <code>nimterop</code> to create initial wrapper</li>
+<li>Generate a <code>.nim</code> file corresponding to the <code>.h</code> file of the C project
+<ul>
+<li>preferably avoid the dependency on the <code>.h</code> file (avoid <code>{.header.}</code> directives unless necessary)</li>
+</ul>
+</li>
+<li>Write a separate &quot;raw&quot; interface that only imports <code>C</code> names and types as they're declared in <code>C</code>, then do convenience accessors on the Nim side
+<ul>
+<li>Name it <code>xxx_abi.nim</code></li>
+</ul>
+</li>
+<li>To use a <code>C++</code> library, write a <code>C</code> wrapper first
+<ul>
+<li>See <code>llvm</code> for example</li>
+</ul>
+</li>
+<li>When wrapping a <code>C</code> library, consider ABI, struct layout etc</li>
+</ul>
+<h3><a class="header" href="#examples" id="examples">Examples</a></h3>
+<ul>
+<li><a href="https://github.com/status-im/nim-secp256k1">nim-secp256k1</a></li>
+<li><a href="https://github.com/arnetheduck/nim-sqlite3-abi">nim-sqlite</a></li>
+<li><a href="https://github.com/status-im/nim-bearssl/">nim-bearssl</a></li>
+<li><a href="https://github.com/status-im/nim-blscurve/">nim-blscurve</a></li>
+</ul>
+<h2><a class="header" href="#standard-library-usage" id="standard-library-usage">Standard library usage</a></h2>
+<p>Use the Nim standard library judiciously. Prefer smaller, separate packages that implement similar functionality, where available.</p>
+<h3><a class="header" href="#pros-17" id="pros-17">Pros</a></h3>
+<ul>
+<li>Using components from the standard library increases compatibility with other Nim projects</li>
+<li>Fewer dependencies in general</li>
+</ul>
+<h3><a class="header" href="#cons-17" id="cons-17">Cons</a></h3>
+<ul>
+<li>Large, monolithic releases make upgrading difficult - bugs, fixes and improvements are released together causing upgrade churn</li>
+<li>Many modules in the standard library are unmaintained and don't use state-of-the-art features of Nim</li>
+<li>Long lead times for getting fixes and improvements to market</li>
+<li>Often not tailored for specific use cases</li>
+<li>Stability and backwards compatibility requirements prevent fixing poor and unsafe API</li>
+</ul>
+<h3><a class="header" href="#practical-notes-19" id="practical-notes-19">Practical notes</a></h3>
+<p>Use the following stdlib replacements that offer safer API (allowing more issues to be detected at compile time):</p>
+<ul>
+<li>async -&gt; chronos</li>
+<li>bitops -&gt; stew/bitops2</li>
+<li>endians -&gt; stew/endians2</li>
+<li>exceptions -&gt; stew/results</li>
+<li>io -&gt; stew/io2</li>
+<li>sqlite -&gt; nim-sqlite3-abi</li>
+<li>streams -&gt; nim-faststreams</li>
+</ul>
+<h2><a class="header" href="#nim-stew" id="nim-stew">nim-stew</a></h2>
+<p>If similar libraries exist in nim stdlib and stew, prefer <a href="https://github.com/status-im/nim-stew">stew</a></p>
+<h3><a class="header" href="#pros-18" id="pros-18">Pros</a></h3>
+<ul>
+<li><code>stew</code> solves bugs and practical API design issues in stdlib without having to wait for nim release</li>
+<li>Fast development cycle</li>
+<li>Allows battle-testing API before stdlib consideration (think boost)</li>
+<li>Encourages not growing nim stdlib further, which helps upstream maintenance</li>
+</ul>
+<h3><a class="header" href="#cons-18" id="cons-18">Cons</a></h3>
+<ul>
+<li>Less code reuse across community</li>
+<li>More dependencies that are not part of nim standard distribution</li>
+</ul>
+<h3><a class="header" href="#practical-notes-20" id="practical-notes-20">Practical notes</a></h3>
+<p><code>nim-stew</code> exists as a staging area for code that could be considered for future inclusion in the standard library or, preferably, a separate package, but that has not yet been fully fleshed out as a separate and complete library.</p>
 <h1><a class="header" href="#tooling" id="tooling">Tooling</a></h1>
+<ul>
+<li><a href="06_tooling.html#build-system">Build system</a></li>
+<li><a href="06_tooling.html#dependency-management">Dependency management</a></li>
+<li><a href="06_tooling.html#nim-version">Nim version</a></li>
+<li><a href="06_tooling.html#editors">Editors</a></li>
+<li><a href="06_tooling.html#debugging">Debugging</a></li>
+<li><a href="06_tooling.html#profiling">Profiling</a></li>
+<li><a href="06_tooling.html#code-tricks">Code tricks</a></li>
+</ul>
+<h2><a class="header" href="#build-system" id="build-system">Build system</a></h2>
+<p>We use a build system with <code>make</code> and <code>git</code> submodules. The long term plan is to move to a dedicated package and build manager once one becomes available.</p>
+<h3><a class="header" href="#pros-19" id="pros-19">Pros</a></h3>
+<ul>
+<li>Reproducible build environment</li>
+<li>Fewer disruptions due to mismatching versions of compiler and dependencies</li>
+</ul>
+<h3><a class="header" href="#cons-19" id="cons-19">Cons</a></h3>
+<ul>
+<li>Increased build system complexity with tools that may not be familiar to <code>nim</code> developers</li>
+<li>Build system dependencies hard to use on Windows and constrained environments</li>
+</ul>
+<h3><a class="header" href="#nimble" id="nimble">nimble</a></h3>
+<p>We do not use <code>nimble</code>, due to the lack of build reproducibility and other team-oriented features. We sometimes provide <code>.nimble</code> packages but these may be out of date and/or incomplete.</p>
+<h2><a class="header" href="#dependency-management" id="dependency-management">Dependency management</a></h2>
+<p>We track dependencies using <code>git</code> submodules to ensure a consistent build environment for all development. This includes the Nim compiler, which is treated like just another dependency - when checking out a top-level project, it comes with an <code>env.sh</code> file that allows you to enter the build environment, similar to python <code>venv</code>.</p>
+<p>When working with upstream projects, it's sometimes convenient to <em>fork</em> the project and submodule the fork, in case urgent fixes / patches are needed. These patches should be passed on to the relevant upstream.</p>
+<h3><a class="header" href="#pros-20" id="pros-20">Pros</a></h3>
+<ul>
+<li>Reproducible build environment ensures that developers and users talk about the same code
+<ul>
+<li>dependencies must be audited for security issues</li>
+</ul>
+</li>
+<li>Easier for community to understand exact set of dependencies</li>
+<li>Fork enables escape hatch for critical issues</li>
+</ul>
+<h3><a class="header" href="#cons-20" id="cons-20">Cons</a></h3>
+<ul>
+<li>Forking incurs overhead when upgrading</li>
+<li>Transitive dependencies are difficult to coordinate</li>
+<li>Cross-project commits hard to orchestrate</li>
+</ul>
+<h3><a class="header" href="#practical-notes-21" id="practical-notes-21">Practical notes</a></h3>
+<ul>
+<li>All continuous integration tools build using the same Nim compiler and dependencies</li>
+<li>When a <code>Nim</code> or other upstream issue is encountered, consider project priorities:
+<ul>
+<li>Use a work-around, report issue upstream and leave a note in code so that the work-around can be removed when a fix is available</li>
+<li>Patch our branch after achieving team consensus</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#nim-version" id="nim-version">Nim version</a></h2>
+<p>We support a single Nim version that is upgraded between release cycles of our own projects. Individual projects and libraries may choose to support multiple Nim versions, though this involves significant overhead.</p>
+<h3><a class="header" href="#pros-21" id="pros-21">Pros</a></h3>
+<ul>
+<li>Nim <code>devel</code> branch, as well as feature and bugfix releases often break the codebase due to subtle changes in the language and code generation which are hard to diagnose - each upgrade requires extensive testing</li>
+<li>Easier for community to understand exact set of dependencies</li>
+<li>Balance between cutting edge and stability</li>
+<li>Own branch enables escape hatch for critical issues</li>
+</ul>
+<h3><a class="header" href="#cons-21" id="cons-21">Cons</a></h3>
+<ul>
+<li>Work-arounds in our code for <code>Nim</code> issues add technical debt</li>
+<li>Compiler is rebuilt in every clone</li>
+</ul>
+<h3><a class="header" href="#practical-notes-22" id="practical-notes-22">Practical notes</a></h3>
+<ul>
+<li>Following Nim <code>devel</code>, from experience, leads to frequent disruptions as &quot;mysterious&quot; issues appear</li>
+<li>To support multiple Nim versions in a project, the project should be set up to run CI with all supported versions</li>
+</ul>
+<h2><a class="header" href="#editors" id="editors">Editors</a></h2>
+<ul>
+<li>Most developers use <code>vscode</code>
+<ul>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=nimsaem.nimvscode">Nim Extension</a> gets you syntax highlighting, goto definition and other modernities
+<ul>
+<li>The older, but less maintained <a href="https://marketplace.visualstudio.com/items?itemName=kosz78.nim">Nim plugin</a> is an alternative</li>
+</ul>
+</li>
+<li>To start <code>vscode</code> with the correct Nim compiler, run it with <code>./env.sh code</code></li>
+<li>Run nim files with <code>F6</code></li>
+<li>Suggestions, goto and similar features mostly work, but sometimes hang
+<ul>
+<li>You might need to <code>killall nimsuggest</code> occasionally</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Sublime text and <code>vim</code> are other popular choices</li>
+</ul>
+<h2><a class="header" href="#debugging" id="debugging">Debugging</a></h2>
+<ul>
+<li>Debugging can be done with <code>gdb</code>
+<ul>
+<li>Follow the <a href="https://code.visualstudio.com/docs/cpp/config-linux">C/C++ guide</a> for setting it up in <code>vscode</code></li>
+<li>Pass <code>--opt:none --debugger:native</code> to disable optimizations and enable debug symbols</li>
+</ul>
+</li>
+</ul>
+<h2><a class="header" href="#profiling" id="profiling">Profiling</a></h2>
+<ul>
+<li>Linux: <code>perf</code></li>
+<li>Anywhere: <a href="https://software.intel.com/content/www/us/en/develop/tools/oneapi/components/vtune-profiler.html">vtune</a></li>
+</ul>
+<h2><a class="header" href="#code-tricks" id="code-tricks">Code tricks</a></h2>
+<ul>
+<li>Find out where a function is used: temporarily mark it <code>{.deprecated.}</code></li>
+</ul>
 
                     </main>
 
