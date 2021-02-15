@@ -44,13 +44,13 @@ func f3(): Result[int, ref SomeError] = ...
 
 * Visual overhead and poor language integration in `Nim` - ugly `if` trees grow
 * Nim compiler generates ineffient code for complex types due to how return values are 0-intialized
-* lack of pattern matching makes for inconvenient code
-* standard library raises many exceptions, hard to use cleanly
+* Lack of pattern matching makes for inconvenient code
+* Standard library raises many exceptions, hard to use cleanly
 
 ### Practical notes
 
 * When converting modules, isolate errors from legacy code with `try/except`
-  * common helpers may be added at some point to deal with third-party dependencies that are hard to change - see `stew/shims`
+  * Common helpers may be added at some point to deal with third-party dependencies that are hard to change - see `stew/shims`
 
 ## Hex output
 
@@ -105,7 +105,7 @@ Prefer building the library on-the-fly from source using `{.compile.}`. Pin the 
 * Write a separate "raw" interface that only imports `C` names and types as they're declared in `C`, then do convenience accessors on the Nim side
   * Name it `xxx_abi.nim`
 * To use a `C++` library, write a `C` wrapper first
-  * see `llvm` for example
+  * See `llvm` for example
 * When wrapping a `C` library, consider ABI, struct layout etc
 
 ### Examples
@@ -121,16 +121,16 @@ Use the Nim standard library judiciously. Prefer smaller, separate packages that
 
 ### Pros
 
-* using components from the standard library increases compatibility with other Nim projects
-* fewer dependencies in general
+* Using components from the standard library increases compatibility with other Nim projects
+* Fewer dependencies in general
 
 ### Cons
 
-* large, monolithic releases make upgrading difficult - bugs, fixes and improvements are released together causing upgrade churn
-* many modules in the standard library are unmaintained and don't use state-of-the-art features of Nim
-* long lead times for getting fixes and improvements to market
-* often not tailored for specific use cases
-* stability and backwards compatibility requirements prevent fixing poor and unsafe API
+* Large, monolithic releases make upgrading difficult - bugs, fixes and improvements are released together causing upgrade churn
+* Many modules in the standard library are unmaintained and don't use state-of-the-art features of Nim
+* Long lead times for getting fixes and improvements to market
+* Often not tailored for specific use cases
+* Stability and backwards compatibility requirements prevent fixing poor and unsafe API
 
 ### Practical notes
 
@@ -162,4 +162,4 @@ If similar libraries exist in nim stdlib and stew, prefer [stew](https://github.
 
 ### Practical notes
 
-`nim-stew` exists as a staging area for code that could be considered for future inclusion in the standard library or, preferably, a separate package, but has not yet been fully fleshed out as a separate and complete library.
+`nim-stew` exists as a staging area for code that could be considered for future inclusion in the standard library or, preferably, a separate package, but that has not yet been fully fleshed out as a separate and complete library.

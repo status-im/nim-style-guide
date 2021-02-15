@@ -4,17 +4,17 @@
 
 This text is an ever evolving collection of conventions, idioms and tricks that reflects the experience of developing a production-grade application in Nim with a small team of developers.
 
-The guide is a living document to help manage the complexities of using a off-the-beaten-track language and environment to produce a stable product ready for an adverserial internet.
+The guide is a living document to help manage the complexities of using an off-the-beaten-track language and environment to produce a stable product ready for an adverserial internet.
 
-Each guideline starts with a general recommendation to use or not use a particular feature, that represents a safe "default" choice. It is followed by a rationale to help you decide when and how to apply the guideline with nuance - it will not be right for every situation out there but all other things being neutral, following the guideline will make life easier for others, your future self included.
+Each guideline starts with a general recommendation to use or not use a particular feature, this recommendation represents a safe "default" choice. It is followed by a rationale to help you decide when and how to apply the guideline with nuance - it will not be right for every situation out there but all other things being equal, following the guideline will make life easier for others, your future self included.
 
-Following the principles and defaults set out here helps newcomers to familiarise themselves with the codebase more quickly, while experienced developers will appreciate the consistency when deciphering the intent behind a specific passage of code, above all when trying to debug production issues under pressure.
+Following the principles and defaults set out here helps newcomers to familiarise themselves with the codebase more quickly, while experienced developers will appreciate the consistency when deciphering the intent behind a specific passage of code -- above all when trying to debug production issues under pressure.
 
 The `pros` and `cons` sections are based on bugs, confusions and security issues that have been found in real-life code and that could easily have been avoided with.. a bit of style. The objective of this section is to pass the experience on to you, dear reader!
 
 In particular when coming from a different language, experience with features like exception handling, generics and compile-time guarantees may not carry over due to subtle, and sometimes surprising, differences in semantics.
 
-Much Nim code "out there" hails from past times when certain language features were not yet developed and best practices not yet established - this also applies to the guide, that will change over time as the practice and language evolves.
+Much Nim code "out there" hails from past times when certain language features were not yet developed and best practices not yet established - this also applies to this guide, which will change over time as the practice and language evolves.
 
 When in doubt:
 
@@ -55,7 +55,7 @@ In general, the guide will aim to prioritise:
 While this book covers Nim at Status in general, there are other resources available that partially may overlap with this guide:
 
 * [Nim manual](https://nim-lang.org/docs/manual.html) - the authorative source for understanding the features of the language
-* [The Nimbus auditor book](https://nimbus.guide/auditors-book/) - goes over security details of Nimbus itself and how it relates to the features of Nim
+* [The Nimbus auditor book](https://nimbus.guide/auditors-book/) - covers the security details of Nimbus itself and how it relates to the features of Nim
 
 ## Workflow
 

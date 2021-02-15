@@ -64,7 +64,7 @@ We support a single Nim version that is upgraded between release cycles of our o
 
 ### Practical notes
 
-* Following Nim `devel`, from experience, leads frequent disruptions as "mysterious" issues appear
+* Following Nim `devel`, from experience, leads to frequent disruptions as "mysterious" issues appear
 * To support multiple Nim versions in a project, the project should be set up to run CI with all supported versions
 
 ## Editors
@@ -82,7 +82,7 @@ We support a single Nim version that is upgraded between release cycles of our o
 
 * Debugging can be done with `gdb`
   * Follow the [C/C++ guide](https://code.visualstudio.com/docs/cpp/config-linux) for setting it up in `vscode`
-  * pass `--opt:none --debugger:native` to disable optimizations and enable debug symbols
+  * Pass `--opt:none --debugger:native` to disable optimizations and enable debug symbols
 
 ## Profiling
 

@@ -30,7 +30,7 @@ export options
 
 ### Practical notes
 
-Modules in Nim share a global namespace, both for the module name itself and for all symbols contained therein - because of this, it happens that your code might break because a dependency introduces a module or symbol with the same name - using prefixed imports (relative or package) helps mitigate some of these conflicts.
+Modules in Nim share a global namespace, both for the module name itself and for all symbols contained therein - because of this, your code might break because a dependency introduces a module or symbol with the same name - using prefixed imports (relative or package) helps mitigate some of these conflicts.
 
 Because of overloading and generic catch-alls, the same code can behave differently depending on which modules have been imported and in which order - reexporting modules that are used in public symbols helps avoid some of these differences.
 
@@ -80,7 +80,7 @@ Avoid `ref object` types, except:
 * for "handle" types that manage a resource and thus break under value semantics
 * where shared ownership is intended
 * in reference-based data structures (trees, linked lists)
-* where a stable pointer is needed for 3rd-party compatibility.
+* where a stable pointer is needed for 3rd-party compatibility
 
 Prefer explicit `ref MyType` where reference semantics are needed, allowing the caller to choose where possible.
 

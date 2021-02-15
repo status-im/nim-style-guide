@@ -6,11 +6,11 @@ In part, the confusion stems from the various contexts in which nim can be used:
 
 When faced with more complex and long-running programs where errors must be dealt with as part of control flow, the use of exceptions can directly be linked to issues like resource leaks, security bugs and crashes.
 
-Likewise, when preparing code for refactoring, the compiler offers little help in exception-based code: although raising a new exception breaks ABI, there is no corresponding change on in the API meaning that changes deep inside dependencies silently break dependent code until the issue becomes apparent at runtime, often under exceptional circumstances.
+Likewise, when preparing code for refactoring, the compiler offers little help in exception-based code: although raising a new exception breaks ABI, there is no corresponding change in the API: this means that changes deep inside dependencies silently break dependent code until the issue becomes apparent at runtime (often under exceptional circumstances).
 
-A final note is that although exceptions may have been used sucessfully in some languages, these languages typically offer complementary features that help manage the complexities introduced by exceptions - RAII, mandatory checking of exceptions etc - this has yet to be developed for Nim.
+A final note is that although exceptions may have been used sucessfully in some languages, these languages typically offer complementary features that help manage the complexities introduced by exceptions - RAII, mandatory checking of exceptions etc - these have yet to be developed for Nim.
 
-Because of the controversies and changing landscape, the preference for Status projects is to avoid the use exceptions unless specially motivated, if only to maintain consistency and simplicity.
+Because of the controversies and changing landscape, the preference for Status projects is to avoid the use of exceptions unless specially motivated, if only to maintain consistency and simplicity.
 
 <!-- toc -->
 
@@ -102,21 +102,21 @@ raise (ref MyError)(msg: "description", data: value)
     * Have to assume every line may fail
 * Poor maintenance / refactoring support - compiler can't help detect affected code because they're not part of API
 * Nim exception hierarchy unclear and changes between versions
-    * the distinction between `Exception`, `CatchableError` and `Defect` is inconsistently implemented
+    * The distinction between `Exception`, `CatchableError` and `Defect` is inconsistently implemented
         * [Exception hierarchy RFC not being implemented](https://github.com/nim-lang/Nim/issues/11776)
     * `Defect` is [not correctly tracked]((https://github.com/nim-lang/Nim/issues/12862))
     * Nim 1.4 further weakens compiler analysis around `Defect`(https://github.com/nim-lang/Nim/pull/13626)
 * Without translation, exceptions leak information between abstraction layers
-* Writing exception-safe code in Nim unpractical due to missing critical features (compared to C++)
-    * no RAII - resources often leak in the presence of exceptions
-    * destructors incomplete / unstable and thus not usable for safe EH
-        * no constructors, thus no way to force particular object states at construction
+* Writing exception-safe code in Nim impractical due to missing critical features present in C++
+    * No RAII - resources often leak in the presence of exceptions
+    * Destructors incomplete / unstable and thus not usable for safe EH
+        * No constructors, thus no way to force particular object states at construction
     * `ref` types incompatible with destructors, even if they worked
 * Poor performance of error path
     * Several heap allocations for each Exception (exception, stack trace, string)
     * Expensive stack trace
 * Poor performance on happy path
-    * every `try` and `defer` has significant performance overhead due to `setjmp` exception handling implementation
+    * Every `try` and `defer` has significant performance overhead due to `setjmp` exception handling implementation
 
 ### Practical notes
 
@@ -166,7 +166,7 @@ func f(output: var Type): StatusCode
 ### Cons
 
 * `output` undefined in case of error
-* verbose to use, must first declare mutable variable then call function and check result - mutable variable remains in scope even in "error" branch leading to bugs
+* Verbose to use, must first declare mutable variable then call function and check result - mutable variable remains in scope even in "error" branch leading to bugs
 
 ## Practical notes
 
