@@ -8,7 +8,7 @@ When faced with more complex and long-running programs where errors must be deal
 
 Likewise, when preparing code for refactoring, the compiler offers little help in exception-based code: although raising a new exception breaks ABI, there is no corresponding change in the API: this means that changes deep inside dependencies silently break dependent code until the issue becomes apparent at runtime (often under exceptional circumstances).
 
-A final note is that although exceptions may have been used sucessfully in some languages, these languages typically offer complementary features that help manage the complexities introduced by exceptions - RAII, mandatory checking of exceptions etc - these have yet to be developed for Nim.
+A final note is that although exceptions may have been used successfully in some languages, these languages typically offer complementary features that help manage the complexities introduced by exceptions - RAII, mandatory checking of exceptions etc - these have yet to be developed for Nim.
 
 Because of the controversies and changing landscape, the preference for Status projects is to avoid the use of exceptions unless specially motivated, if only to maintain consistency and simplicity.
 
