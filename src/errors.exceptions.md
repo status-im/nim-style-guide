@@ -1,53 +1,4 @@
-# Error handling
-
-Error handling in Nim is a subject under constant re-evaluation - similar to C++, several paradigms are supported leading to confusion as to which one to choose.
-
-In part, the confusion stems from the various contexts in which nim can be used: when executed as small, one-off scripts that can easily be restarted, exceptions allow low visual overhead and ease of use.
-
-When faced with more complex and long-running programs where errors must be dealt with as part of control flow, the use of exceptions can directly be linked to issues like resource leaks, security bugs and crashes.
-
-Likewise, when preparing code for refactoring, the compiler offers little help in exception-based code: although raising a new exception breaks ABI, there is no corresponding change in the API: this means that changes deep inside dependencies silently break dependent code until the issue becomes apparent at runtime (often under exceptional circumstances).
-
-A final note is that although exceptions may have been used successfully in some languages, these languages typically offer complementary features that help manage the complexities introduced by exceptions - RAII, mandatory checking of exceptions etc - these have yet to be developed for Nim.
-
-Because of the controversies and changing landscape, the preference for Status projects is to avoid the use of exceptions unless specially motivated, if only to maintain consistency and simplicity.
-
-<!-- toc -->
-
-## General
-
-Prefer `bool`, `Opt` or `Result` to signal failure outcomes explicitly.
-
-Prefer the use of `Result` when multiple failure paths exist and the calling code might need to differentiate between them.
-
-Raise `Defect` to signal panics such as logic errors or preconditions being violated.
-
-Make error handling explicit and visible at call site using explicit control flow (`if`, `try`, `results.?`).
-
-Handle errors at each abstraction level, avoiding spurious abstraction leakage.
-
-Isolate legacy code with explicit exception handling, converting the errors to `Result` or handling them locally, as appropriate.
-
-```nim
-# Enable exception tracking for all functions in this module
-`{.push raises: [Defect].}` # Always at start of module
-
-import stew/results
-export results # Re-export modules used in public symbols
-
-# Use `Result` to propagate additional information expected errors
-# See `Result` section for specific guidlines for errror type
-func f*(): Result[void, cstring]
-
-# In special cases that warrant the use of exceptions, list these explicitly using the `raises` pragma.
-func parse(): Type {.raises: [Defect, ParseError]}
-```
-
-See also [Result](04_libraries.md#result) for more recommendations about `Result`.
-
-See also [Error handling helpers](https://github.com/status-im/nim-stew/pull/26) in stew that may change some of these guidelines.
-
-## Exceptions
+## Exceptions `[errors.exceptions]`
 
 In general, prefer [explicit error handling mechanisms](#general).
 
@@ -145,33 +96,3 @@ A notable exception to the guideline is `chronos` and `async`/`await` transforma
 * [C++ proposal](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0709r0.pdf) - After 25 years of encouragement, half the polled C++ developers continue avoiding exceptions and Herb Sutter argues about the consequences of doing so
 * [Google](https://google.github.io/styleguide/cppguide.html#Exceptions) and [llvm](https://llvm.org/docs/CodingStandards.html#id22) style guides on exceptions
 
-## Status codes
-
-Avoid status codes.
-
-```nim
-
-type StatusCode = enum
-  Success
-  Error1
-  ...
-
-func f(output: var Type): StatusCode
-```
-
-### Pros
-
-* Interop with `C`
-
-### Cons
-
-* `output` undefined in case of error
-* Verbose to use, must first declare mutable variable then call function and check result - mutable variable remains in scope even in "error" branch leading to bugs
-
-## Practical notes
-
-Unlike "Error Enums" used with `Result`, status codes mix "success" and "error" returns in a single enum, making it hard to detect "successful" completion of a function in a generic way.
-
-## Callbacks
-
-See [language section on callbacks](03_language.md#callbacks-closures-and-forward-declarations)
