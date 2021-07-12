@@ -706,7 +706,7 @@ if stringValue.len &gt; 32:
 <p>Handle errors locally at each abstraction level, avoiding spurious abstraction leakage.</p>
 <p>Isolate legacy code with explicit exception handling, converting the errors to <code>Result</code> or handling them locally, as appropriate.</p>
 <pre><code class="language-nim"># Enable exception tracking for all functions in this module
-`{.push raises: [Defect].}` # Always at start of module
+{.push raises: [Defect].} # Always at start of module
 
 import stew/results
 export results # Re-export modules used in public symbols
