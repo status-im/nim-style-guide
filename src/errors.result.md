@@ -14,7 +14,7 @@ Isolate legacy code with explicit exception handling, converting the errors to `
 
 ```nim
 # Enable exception tracking for all functions in this module
-`{.push raises: [Defect].}` # Always at start of module
+{.push raises: [Defect].} # Always at start of module
 
 import stew/results
 export results # Re-export modules used in public symbols
