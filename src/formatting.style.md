@@ -8,6 +8,7 @@ We strive to follow [NEP-1](https://nim-lang.org/docs/nep1.html) for style matte
     * Ports from other languages
 * Small differences due to manual formatting
 * Aligned indents - we prefer python-style hanging indent for in multiline code
+    * This is to avoid realignments when changes occur on the first line. The extra level of indentation is there to clearly distinguish itself as a continuation line.
 
 ```
 func someLongFunctinName(
