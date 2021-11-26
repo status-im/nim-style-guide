@@ -1,7 +1,6 @@
 # Summary
 
 [Introduction](00_introduction.md)
-
 - [Formatting](formatting.md)
   - [Style](formatting.style.md)
   - [Naming](formatting.naming.md)
@@ -35,6 +34,7 @@
   - [Wrappers](libraries.wrappers.md)
   - [`stew`](libraries.stew.md)
 - [Tooling](tooling.md)
+  - [Git practices](tooling.git.md)
   - [Nim version](tooling.nim.md)
   - [Build](tooling.build.md)
   - [Dependencies](tooling.deps.md)
