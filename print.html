@@ -339,8 +339,11 @@ func init(T: type Xxx, a, b: int): T = T(
 
 let m = Xxx.init(1, 2)
 
-# For ref types, name the constructor `new`:
-func new(T: type XxxRef): T = ...
+# `new` returns a reference to the given type:
+func new(T: type Xxx, a, b: int ): ref T = ...
+
+# ... or `init` when used with a `ref Xxx`:
+func init(T: type ref Xxx, a, b: int ): T = ...
 </code></pre>
 <h3 id="pros-1"><a class="header" href="#pros-1">Pros</a></h3>
 <ul>
@@ -356,7 +359,7 @@ func new(T: type XxxRef): T = ...
 <h3 id="practical-notes-4"><a class="header" href="#practical-notes-4">Practical notes</a></h3>
 <ul>
 <li>The default, 0-initialized state of the object often gets constructed in the language - avoiding a requirement that a magic <code>init</code> function be called makes the type more ergonomic to use</li>
-<li>Avoid using <code>result</code> (see below) or <code>var instance: Type</code> which disable several compiler diagnostics</li>
+<li>Avoid using <code>result</code> or <code>var instance: Type</code> which disable several compiler diagnostics</li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.objconstr.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="ref-object-types-languagerefobject"><a class="header" href="#ref-object-types-languagerefobject"><code>ref object</code> types <code>[language.refobject]</code></a></h2>
 <p>Avoid <code>ref object</code> types, except:</p>
@@ -716,7 +719,7 @@ func parse(): Type {.raises: [Defect, ParseError]}
 <p>See also <a href="libraries.result.html">Result</a> for more recommendations about <code>Result</code>.</p>
 <p>See also <a href="https://github.com/status-im/nim-stew/pull/26">Error handling helpers</a> in stew that may change some of these guidelines.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.result.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="exceptions-errorsexceptions"><a class="header" href="#exceptions-errorsexceptions">Exceptions <code>[errors.exceptions]</code></a></h2>
-<p>In general, prefer <a href="errors.exceptions.html#general">explicit error handling mechanisms</a>.</p>
+<p>In general, prefer <a href="errors.result.html">explicit error handling mechanisms</a>.</p>
 <p>Annotate each module with a top-level <code>{.push raises: [Defect].}</code>.</p>
 <p>Use explicit <code>{.raises.}</code> annotation for each public (<code>*</code>) function.</p>
 <p>Raise <code>Defect</code> to signal panics and situations that the code is not prepared to handle.</p>
