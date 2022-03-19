@@ -13,8 +13,11 @@ func init(T: type Xxx, a, b: int): T = T(
 
 let m = Xxx.init(1, 2)
 
-# For ref types, name the constructor `new`:
-func new(T: type XxxRef): T = ...
+# `new` returns a reference to the given type:
+func new(T: type Xxx, a, b: int ): ref T = ...
+
+# ... or `init` when used with a `ref Xxx`:
+func init(T: type ref Xxx, a, b: int ): T = ...
 ```
 
 ### Pros
@@ -31,4 +34,4 @@ func new(T: type XxxRef): T = ...
 ### Practical notes
 
 * The default, 0-initialized state of the object often gets constructed in the language - avoiding a requirement that a magic `init` function be called makes the type more ergonomic to use
-* Avoid using `result` (see below) or `var instance: Type` which disable several compiler diagnostics
+* Avoid using `result` or `var instance: Type` which disable several compiler diagnostics

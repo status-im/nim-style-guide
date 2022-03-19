@@ -1,6 +1,6 @@
 ## Exceptions `[errors.exceptions]`
 
-In general, prefer [explicit error handling mechanisms](#general).
+In general, prefer [explicit error handling mechanisms](errors.result.md).
 
 Annotate each module with a top-level `{.push raises: [Defect].}`.
 
