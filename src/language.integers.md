@@ -15,6 +15,6 @@ Don't cast pointers to `int`.
   * When comparing lengths to unsigned integers, convert the length to unsigned
 * Pointers may overflow `int` when used for arithmetic
 * An alternative to `int` for non-negative integers such as lengths is `Natural`
-  * `Natural` is a `range` type and therefore [unreliable](language.range.md) - it generally avoids the worst problems owing to its simplicity but may require additional casts to work around bugs
+  * `Natural` is a `range` type and therefore [unreliable](#range) - it generally avoids the worst problems owing to its simplicity but may require additional casts to work around bugs
   * Better models length, but is not used by `len`
 
