@@ -2,7 +2,10 @@
 
 In general, prefer [explicit error handling mechanisms](errors.result.md).
 
-Annotate each module with a top-level `{.push raises: [Defect].}`.
+Annotate each module at top-level (before imports):
+
+* `{.push raises: [Defect].}` (nim 1.2+)
+* `{.push raises: [].}` (nim 1.6+)
 
 Use explicit `{.raises.}` annotation for each public (`*`) function.
 
@@ -71,9 +74,23 @@ raise (ref MyError)(msg: "description", data: value)
 
 ### Practical notes
 
-The use of exceptions in some modules has significantly contributed to resource leaks, deadlocks and other difficult bugs. The various exception handling proposals aim to alleviate some of the issues but have not found sufficient grounding in the Nim community to warrant the language changes necessary to proceed.
+The use of exceptions in Nim has significantly contributed to resource leaks, deadlocks and other difficult bugs. The various exception handling proposals aim to alleviate some of the issues but have not found sufficient grounding in the Nim community to warrant the language changes necessary to proceed.
 
 A notable exception to the guideline is `chronos` and `async`/`await` transformations that lack support for propagating checked exception information. Several bugs and implementation issues exist in the exception handling transformation employed by `async`.
+
+### `Defect`
+
+`Defect` does [not cause](https://github.com/nim-lang/Nim/issues/12862) a `raises` effect - code must be manually verified - common sources of Defect include:
+
+* Over/underflows in signed arithmetic
+* `[]` operator for indexing arrays/seqs/etc (but not tables!)
+* accidental/implicit conversions to `range` types
+
+### `CatchableError`
+
+Catching `CatchableError` implies that any errors are funnelled through the same exception handler. When called code starts raising new exceptions, it becomes difficult to find affected code - catching more specific errors avoids this maintenance problem.
+
+Frameworks may catch `CatchableError` to forward exceptions through layers. Doing so leads to type erasure of the actual raised exception type in `raises` tracking.
 
 ### Open questions
 
@@ -95,4 +112,3 @@ A notable exception to the guideline is `chronos` and `async`/`await` transforma
 * [Zahary's handling proposal](https://gist.github.com/zah/d2d729b39d95a1dfedf8183ca35043b3) - seeks to handle any kind of error-generating API
 * [C++ proposal](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0709r0.pdf) - After 25 years of encouragement, half the polled C++ developers continue avoiding exceptions and Herb Sutter argues about the consequences of doing so
 * [Google](https://google.github.io/styleguide/cppguide.html#Exceptions) and [llvm](https://llvm.org/docs/CodingStandards.html#id22) style guides on exceptions
-

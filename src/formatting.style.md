@@ -14,6 +14,10 @@ We strive to follow [NEP-1](https://nim-lang.org/docs/nep1.html) for style matte
 func someLongFunctinName(
     alsoLongVariableName: int) = # Double-indent
   discard # back to normal indent
+
+  if someLongCondition and
+      moreLongConditions: # Double-indent
+    discard # back to normal indent
 ```
 
 ### Practical notes
@@ -22,3 +26,4 @@ func someLongFunctinName(
     * Can break working code
     * Naive formatting algorithm
 * We do not make use of Nim's "flexible" identifier names - all uses of an identifier should match the declaration in capitalization and underscores
+    * Enable `--styleCheck:usages`
