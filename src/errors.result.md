@@ -27,6 +27,6 @@ func f*(): Result[void, cstring]
 func parse(): Type {.raises: [Defect, ParseError]}
 ```
 
-See also [Result](libraries.result.md) for more recommendations about `Result`.
+See also [Result](libraries.results.md) for more recommendations about `Result`.
 
 See also [Error handling helpers](https://github.com/status-im/nim-stew/pull/26) in stew that may change some of these guidelines.

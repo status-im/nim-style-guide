@@ -30,8 +30,10 @@ func init(T: type (ref Xxx), a, b: int ): T = ...
 ### Cons
 
 * Sometimes inefficient compared to updating an existing `var` instance, since all fields must be re-initialized
+* Compared to `func newXxx()`, `func new(T: type Xxx)` will be a generic procedure, which can cause issues. See [Import, export](language.import.md)
 
 ### Practical notes
 
 * The default, 0-initialized state of the object often gets constructed in the language - avoiding a requirement that a magic `init` function be called makes the type more ergonomic to use
 * Avoid using `result` or `var instance: Type` which disable several compiler diagnostics
+* When using inheritance, `func new(T: type Xxx)` will also bind to any type inheriting from Xxx

@@ -38,5 +38,5 @@ Of the three:
 
 Multiple security issues, `nil` reference crashes and wrong-init-order issues have been linked to the use of `result` and lack of assignment in branches.
 
-In general, the use of accumulation-style initialization is discouraged unless made necessary by the data type - see [Variable initialization](#variable-initialization)
+In general, the use of accumulation-style initialization is discouraged unless made necessary by the data type - see [Variable initialization](language.varinit.md)
 

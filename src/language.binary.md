@@ -17,5 +17,5 @@ Avoid `string` for binary data. If stdlib returns strings, [convert](https://git
 
 ### Practical notes
 
-* [stew](https://github.com/status-im/nim-stew) contains helpers for dealing with bytes and strings
+* [stew](libraries.stew.md) contains helpers for dealing with bytes and strings
 
