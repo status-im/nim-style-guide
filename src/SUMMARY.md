@@ -23,6 +23,7 @@
   - [Binary data](language.binary.md)
   - [Integers](language.integers.md)
   - [`range` types](language.range.md)
+  - [`string`](language.string.md)
 - [Error handling](errors.md)
   - [`Result`](errors.result.md)
   - [Exceptions](errors.exceptions.md)

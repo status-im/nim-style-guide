@@ -16,4 +16,4 @@ Avoid using explicit `{.inline.}` functions.
 
 * `{.inline.}` does not inline code - rather it copies the function definition into every `C` module making it available for the `C` compiler to inline
 * Compilers can use contextual information to balance inlining
-* LTO achieves the same end result without the cons
+* LTO achieves a similar end result without the cons

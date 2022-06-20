@@ -6,7 +6,7 @@ Don't use finalizers.
 
 ### Pros
 
-* Work around missing manual cleanup
+* Alleviates the need for manual cleanup
 
 ### Cons
 

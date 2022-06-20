@@ -18,4 +18,3 @@ We support a single Nim version that is upgraded between release cycles of our o
 
 * Following Nim `devel`, from experience, leads to frequent disruptions as "mysterious" issues appear
 * To support multiple Nim versions in a project, the project should be set up to run CI with all supported versions
-
