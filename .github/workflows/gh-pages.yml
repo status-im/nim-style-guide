@@ -14,9 +14,15 @@ jobs:
       - uses: actions-rs/install@v0.1
         with:
          crate: mdbook
+         use-tool-cache: true
       - uses: actions-rs/install@v0.1
         with:
          crate: mdbook-toc
+         use-tool-cache: true
+      - uses: actions-rs/install@v0.1
+        with:
+         crate: mdbook-open-on-gh
+         use-tool-cache: true
       - name: Build   
         run: |
           PATH=.cargo/bin:$PATH mdbook build
