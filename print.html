@@ -380,11 +380,13 @@ func init(T: type (ref Xxx), a, b: int ): T = ...
 <h3 id="cons-1"><a class="header" href="#cons-1">Cons</a></h3>
 <ul>
 <li>Sometimes inefficient compared to updating an existing <code>var</code> instance, since all fields must be re-initialized</li>
+<li>Compared to <code>func newXxx()</code>, <code>func new(T: type Xxx)</code> will be a generic procedure, which can cause issues. See <a href="language.import.html">Import, export</a></li>
 </ul>
 <h3 id="practical-notes-4"><a class="header" href="#practical-notes-4">Practical notes</a></h3>
 <ul>
 <li>The default, 0-initialized state of the object often gets constructed in the language - avoiding a requirement that a magic <code>init</code> function be called makes the type more ergonomic to use</li>
 <li>Avoid using <code>result</code> or <code>var instance: Type</code> which disable several compiler diagnostics</li>
+<li>When using inheritance, <code>func new(T: type Xxx)</code> will also bind to any type inheriting from Xxx</li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.objconstr.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="ref-object-types-languagerefobject"><a class="header" href="#ref-object-types-languagerefobject"><code>ref object</code> types <code>[language.refobject]</code></a></h2>
 <p>Avoid <code>ref object</code> types, except:</p>
@@ -588,7 +590,7 @@ type Callback = proc(...) {.raises: [Defect], gcsafe.}
 <li><code>result</code> is used to accumulate / build up return value, allowing it to take on invalid values in the interim</li>
 </ul>
 <p>Multiple security issues, <code>nil</code> reference crashes and wrong-init-order issues have been linked to the use of <code>result</code> and lack of assignment in branches.</p>
-<p>In general, the use of accumulation-style initialization is discouraged unless made necessary by the data type - see <a href="language.result.html#variable-initialization">Variable initialization</a></p>
+<p>In general, the use of accumulation-style initialization is discouraged unless made necessary by the data type - see <a href="language.varinit.html">Variable initialization</a></p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.result.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="inline-functions-languageinline"><a class="header" href="#inline-functions-languageinline">Inline functions <code>[language.inline]</code></a></h2>
 <p>Avoid using explicit <code>{.inline.}</code> functions.</p>
 <h3 id="pros-7"><a class="header" href="#pros-7">Pros</a></h3>
@@ -657,7 +659,7 @@ if stringValue.len &gt; 32:
 </ul>
 <h3 id="practical-notes-12"><a class="header" href="#practical-notes-12">Practical notes</a></h3>
 <ul>
-<li><a href="https://github.com/status-im/nim-stew">stew</a> contains helpers for dealing with bytes and strings</li>
+<li><a href="libraries.stew.html">stew</a> contains helpers for dealing with bytes and strings</li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.binary.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="integers-languageintegers"><a class="header" href="#integers-languageintegers">Integers <code>[language.integers]</code></a></h2>
 <p>Prefer signed integers for counting, lengths, array indexing etc.</p>
@@ -751,7 +753,7 @@ func f*(): Result[void, cstring]
 # In special cases that warrant the use of exceptions, list these explicitly using the `raises` pragma.
 func parse(): Type {.raises: [Defect, ParseError]}
 </code></pre>
-<p>See also <a href="libraries.result.html">Result</a> for more recommendations about <code>Result</code>.</p>
+<p>See also <a href="libraries.results.html">Result</a> for more recommendations about <code>Result</code>.</p>
 <p>See also <a href="https://github.com/status-im/nim-stew/pull/26">Error handling helpers</a> in stew that may change some of these guidelines.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.result.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="exceptions-errorsexceptions"><a class="header" href="#exceptions-errorsexceptions">Exceptions <code>[errors.exceptions]</code></a></h2>
 <p>In general, prefer <a href="errors.result.html">explicit error handling mechanisms</a>.</p>

@@ -173,11 +173,13 @@ func init(T: type (ref Xxx), a, b: int ): T = ...
 <h3 id="cons"><a class="header" href="#cons">Cons</a></h3>
 <ul>
 <li>Sometimes inefficient compared to updating an existing <code>var</code> instance, since all fields must be re-initialized</li>
+<li>Compared to <code>func newXxx()</code>, <code>func new(T: type Xxx)</code> will be a generic procedure, which can cause issues. See <a href="language.import.html">Import, export</a></li>
 </ul>
 <h3 id="practical-notes"><a class="header" href="#practical-notes">Practical notes</a></h3>
 <ul>
 <li>The default, 0-initialized state of the object often gets constructed in the language - avoiding a requirement that a magic <code>init</code> function be called makes the type more ergonomic to use</li>
 <li>Avoid using <code>result</code> or <code>var instance: Type</code> which disable several compiler diagnostics</li>
+<li>When using inheritance, <code>func new(T: type Xxx)</code> will also bind to any type inheriting from Xxx</li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.objconstr.md">Edit this file on GitHub.</a></footer>
                     </main>
