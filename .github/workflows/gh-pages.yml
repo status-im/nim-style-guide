@@ -13,7 +13,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions-rs/install@v0.1
         with:
-         crate: [mdbook, mdbook-toc, mdbook-open-gh]
+         crate: mdbook
+         crate: mdbook-toc
       - name: Build   
         run: |
           PATH=.cargo/bin:$PATH mdbook build
