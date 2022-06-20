@@ -13,19 +13,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions-rs/install@v0.1
         with:
-         crate: mdbook
-         use-tool-cache: true
-        with:
-          crate: mdbook-toc
-          use-tool-cache: true
-        with:
-          crate: mdbook-open-on-gh
-          use-tool-cache: true
+         crate: [mdbook, mdbook-toc, mdbook-open-gh]
           
         run: |
-          curl -LSfs https://japaric.github.io/trust/install.sh | sh -s -- --git rust-lang/mdBook
-          curl -LSfs https://japaric.github.io/trust/install.sh | sh -s -- --git badboy/mdbook-toc
-          curl -LSfs https://japaric.github.io/trust/install.sh | sh -s -- --git badboy/mdbook-open-on-gh
           PATH=.cargo/bin:$PATH mdbook build
 
       - name: Deploy
