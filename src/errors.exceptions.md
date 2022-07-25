@@ -4,8 +4,18 @@ In general, prefer [explicit error handling mechanisms](errors.result.md).
 
 Annotate each module at top-level (before imports):
 
-* `{.push raises: [Defect].}` (nim 1.2+)
-* `{.push raises: [].}` (nim 1.6+)
+* `{.push raises: [Defect].}` (nim 1.2)
+* `{.push raises: [].}` (nim 1.4+)
+
+To make a module compatible with both Nim 1.2 and newer versions, use:
+
+```nim
+when (NimMajor, NimMinor) < (1, 4):
+  {.push raises: [Defect].}
+else:
+  {.push raises: [].}
+```
+
 
 Use explicit `{.raises.}` annotation for each public (`*`) function.
 
