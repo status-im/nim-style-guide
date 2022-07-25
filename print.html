@@ -224,8 +224,8 @@
 <li>For small ideas, use a PR</li>
 <li>For big ideas, use an RFC issue</li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/00_introduction.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="formatting"><a class="header" href="#formatting">Formatting</a></h1>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/formatting.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="style-formattingstyle"><a class="header" href="#style-formattingstyle">Style <code>[formatting.style]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/00_introduction.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="formatting"><a class="header" href="#formatting">Formatting</a></h1>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/formatting.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="style-formattingstyle"><a class="header" href="#style-formattingstyle">Style <code>[formatting.style]</code></a></h2>
 <p>We strive to follow <a href="https://nim-lang.org/docs/nep1.html">NEP-1</a> for style matters - naming, capitalization, 80-character limit etc. Common places where deviations happen include:</p>
 <ul>
 <li>Code based on external projects
@@ -264,7 +264,7 @@
 </ul>
 </li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/formatting.style.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="naming-conventions-formattingnaming"><a class="header" href="#naming-conventions-formattingnaming">Naming conventions <code>[formatting.naming]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/formatting.style.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="naming-conventions-formattingnaming"><a class="header" href="#naming-conventions-formattingnaming">Naming conventions <code>[formatting.naming]</code></a></h2>
 <p>Always use the same identifier style (case, underscores) as the declaration.</p>
 <p>Enable <code>--styleCheck:usages</code>.</p>
 <ul>
@@ -287,10 +287,10 @@
 <li><code>XxxError</code> for exceptions inheriting from <code>CatchableError</code></li>
 <li><code>XxxDefect</code> for exceptions inheriting from <code>Defect</code></li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/formatting.naming.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="language-features"><a class="header" href="#language-features">Language features</a></h1>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/formatting.naming.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="language-features"><a class="header" href="#language-features">Language features</a></h1>
 <p>Nim is a language that organically has grown to include many advanced features and constructs. These features allow you to express your intent with great creativity, but often come with significant stability, simplicity and correctness caveats when combined.</p>
 <p>Before stepping off the well-trodden path, consider the maintenance and compatibilty costs.</p>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="import-export-languageimport"><a class="header" href="#import-export-languageimport">Import, export <code>[language.import]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="import-export-languageimport"><a class="header" href="#import-export-languageimport">Import, export <code>[language.import]</code></a></h2>
 <p><a href="https://nim-lang.org/docs/manual.html#modules-import-statement">Manual</a></p>
 <p><code>import</code> a minimal set of modules using explicit paths.</p>
 <p><code>export</code> all modules whose types appear in public symbols of the current module.</p>
@@ -311,7 +311,7 @@ export options
 <p>Modules in Nim share a global namespace, both for the module name itself and for all symbols contained therein - because of this, your code might break because a dependency introduces a module or symbol with the same name - using prefixed imports (relative or package) helps mitigate some of these conflicts.</p>
 <p>Because of overloading and generic catch-alls, the same code can behave differently depending on which modules have been imported and in which order - reexporting modules that are used in public symbols helps avoid some of these differences.</p>
 <p>See also: <a href="https://github.com/nim-lang/Nim/issues/11225">sandwich problem</a></p>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.import.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="macros-languagemacros"><a class="header" href="#macros-languagemacros">Macros <code>[language.macros]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.import.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="macros-languagemacros"><a class="header" href="#macros-languagemacros">Macros <code>[language.macros]</code></a></h2>
 <p><a href="https://nim-lang.org/docs/manual.html#macros">Manual</a></p>
 <p>Be judicious in macro usage - prefer more simple constructs.
 Avoid generating public API functions with macros.</p>
@@ -353,7 +353,7 @@ Avoid generating public API functions with macros.</p>
 <li>Write as much code as possible in templates, and glue together using macros</li>
 </ul>
 <p>See also: <a href="https://github.com/status-im/nimbus-eth2/wiki/The-macro-skeptics-guide-to-the-p2pProtocol-macro">macro defense</a></p>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.macros.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="object-construction-languageobjconstr"><a class="header" href="#object-construction-languageobjconstr">Object construction <code>[language.objconstr]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.macros.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="object-construction-languageobjconstr"><a class="header" href="#object-construction-languageobjconstr">Object construction <code>[language.objconstr]</code></a></h2>
 <p>Use <code>Xxx(x: 42, y: Yyy(z: 54))</code> style, or if type has an <code>init</code> function, <code>Type.init(a, b, c)</code>.</p>
 <p>Prefer that the default 0-initialization is a valid state for the type.</p>
 <pre><code class="language-nim"># `init` functions are a convention for constructors - they are not enforced by the language
@@ -388,7 +388,7 @@ func init(T: type (ref Xxx), a, b: int ): T = ...
 <li>Avoid using <code>result</code> or <code>var instance: Type</code> which disable several compiler diagnostics</li>
 <li>When using inheritance, <code>func new(T: type Xxx)</code> will also bind to any type inheriting from Xxx</li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.objconstr.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="ref-object-types-languagerefobject"><a class="header" href="#ref-object-types-languagerefobject"><code>ref object</code> types <code>[language.refobject]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.objconstr.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="ref-object-types-languagerefobject"><a class="header" href="#ref-object-types-languagerefobject"><code>ref object</code> types <code>[language.refobject]</code></a></h2>
 <p>Avoid <code>ref object</code> types, except:</p>
 <ul>
 <li>for &quot;handle&quot; types that manage a resource and thus break under value semantics</li>
@@ -427,7 +427,7 @@ type XxxRef = ref object
 </ul>
 <h3 id="notes"><a class="header" href="#notes">Notes</a></h3>
 <p><code>XxxRef = ref object</code> is a syntactic shortcut that hides the more explicit <code>ref Xxx</code> where the type is used - by explicitly spelling out <code>ref</code>, readers of the code become aware of the alternative reference / shared ownership semantics, which generally allows a deeper understanding of the code without having to look up the type declaration.</p>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.refobject.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="memory-allocation-languagememory"><a class="header" href="#memory-allocation-languagememory">Memory allocation <code>[language.memory]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.refobject.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="memory-allocation-languagememory"><a class="header" href="#memory-allocation-languagememory">Memory allocation <code>[language.memory]</code></a></h2>
 <p>Prefer to use stack-based and statically sized data types in core/low-level libraries.
 Use heap allocation in glue layers.</p>
 <p>Avoid <code>alloca</code>.</p>
@@ -461,7 +461,7 @@ let x = (ref Xxx)(
 </ul>
 <h3 id="practical-notes-5"><a class="header" href="#practical-notes-5">Practical notes</a></h3>
 <p><code>alloca</code> has confusing semantics that easily cause stack overflows - in particular, memory is released when function ends which means that in a loop, each iteration will add to the stack usage. Several <code>C</code> compilers implement <code>alloca</code> incorrectly, specially when inlining.</p>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.memory.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="variable-declaration-languagevardecl"><a class="header" href="#variable-declaration-languagevardecl">Variable declaration <code>[language.vardecl]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.memory.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="variable-declaration-languagevardecl"><a class="header" href="#variable-declaration-languagevardecl">Variable declaration <code>[language.vardecl]</code></a></h2>
 <p>Use the most restrictive of <code>const</code>, <code>let</code> and <code>var</code> that the situation allows.</p>
 <pre><code class="language-nim"># Group related variables
 const
@@ -470,7 +470,7 @@ const
 </code></pre>
 <h3 id="practical-notes-6"><a class="header" href="#practical-notes-6">Practical notes</a></h3>
 <p><code>const</code> and <code>let</code> each introduce compile-time constraints that help limit the scope of bugs that must be considered when reading and debugging code.</p>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.vardecl.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="variable-initialization-languagevarinit"><a class="header" href="#variable-initialization-languagevarinit">Variable initialization <code>[language.varinit]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.vardecl.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="variable-initialization-languagevarinit"><a class="header" href="#variable-initialization-languagevarinit">Variable initialization <code>[language.varinit]</code></a></h2>
 <p>Prefer expressions to initialize variables and return values</p>
 <pre><code>let x =
   if a &gt; 4: 5
@@ -494,7 +494,7 @@ else: x = 6
 <ul>
 <li>Becomes hard to read when deeply nested</li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.varinit.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="functions-and-procedures-languageproc"><a class="header" href="#functions-and-procedures-languageproc">Functions and procedures <code>[language.proc]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.varinit.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="functions-and-procedures-languageproc"><a class="header" href="#functions-and-procedures-languageproc">Functions and procedures <code>[language.proc]</code></a></h2>
 <p>Prefer <code>func</code> - use <code>proc</code> when side effects cannot conveniently be avoided.</p>
 <p>Avoid public functions and variables (<code>*</code>) that don't make up an intended part of public API.</p>
 <h3 id="practical-notes-7"><a class="header" href="#practical-notes-7">Practical notes</a></h3>
@@ -502,7 +502,7 @@ else: x = 6
 <li>Public functions are not covered by dead-code warnings and contribute to overload resolution in the the global namespace</li>
 <li>Prefer <code>openArray</code> as argument type over <code>seq</code> for traversals</li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.proc.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="methods-languagemethods"><a class="header" href="#methods-languagemethods">Methods <code>[language.methods]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.proc.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="methods-languagemethods"><a class="header" href="#methods-languagemethods">Methods <code>[language.methods]</code></a></h2>
 <p><a href="https://nim-lang.org/docs/manual.html#methods">Manual</a></p>
 <p>Use <code>method</code> sparingly - consider a &quot;manual&quot; vtable with <code>proc</code> closures instead.</p>
 <h3 id="pros-5"><a class="header" href="#pros-5">Pros</a></h3>
@@ -528,7 +528,7 @@ else: x = 6
 <li>Does not work with generics</li>
 <li>No longer does multi-dispatch</li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.methods.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="callbacks-closures-and-forward-declarations-languageproctypes"><a class="header" href="#callbacks-closures-and-forward-declarations-languageproctypes">Callbacks, closures and forward declarations <code>[language.proctypes]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.methods.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="callbacks-closures-and-forward-declarations-languageproctypes"><a class="header" href="#callbacks-closures-and-forward-declarations-languageproctypes">Callbacks, closures and forward declarations <code>[language.proctypes]</code></a></h2>
 <p>Annotate <code>proc</code> type definitions and forward declarations with <code>{.raises [Defect], gcsafe.}</code> or specific exception types.</p>
 <pre><code class="language-nim"># By default, Nim assumes closures may raise any exception and are not gcsafe
 # By annotating the callback with raises and gcsafe, the compiler ensures that
@@ -544,7 +544,7 @@ type Callback = proc(...) {.raises: [Defect], gcsafe.}
 </ul>
 </li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.proctypes.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="result-return-languageresult"><a class="header" href="#result-return-languageresult"><code>result</code> return <code>[language.result]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.proctypes.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="result-return-languageresult"><a class="header" href="#result-return-languageresult"><code>result</code> return <code>[language.result]</code></a></h2>
 <p>Avoid using <code>result</code> for returning values.</p>
 <p>Use expression-based return or explicit <code>return</code> keyword with a value</p>
 <h3 id="pros-6"><a class="header" href="#pros-6">Pros</a></h3>
@@ -591,7 +591,7 @@ type Callback = proc(...) {.raises: [Defect], gcsafe.}
 </ul>
 <p>Multiple security issues, <code>nil</code> reference crashes and wrong-init-order issues have been linked to the use of <code>result</code> and lack of assignment in branches.</p>
 <p>In general, the use of accumulation-style initialization is discouraged unless made necessary by the data type - see <a href="language.varinit.html">Variable initialization</a></p>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.result.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="inline-functions-languageinline"><a class="header" href="#inline-functions-languageinline">Inline functions <code>[language.inline]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.result.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="inline-functions-languageinline"><a class="header" href="#inline-functions-languageinline">Inline functions <code>[language.inline]</code></a></h2>
 <p>Avoid using explicit <code>{.inline.}</code> functions.</p>
 <h3 id="pros-7"><a class="header" href="#pros-7">Pros</a></h3>
 <ul>
@@ -609,7 +609,7 @@ type Callback = proc(...) {.raises: [Defect], gcsafe.}
 <li>Compilers can use contextual information to balance inlining</li>
 <li>LTO achieves a similar end result without the cons</li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.inline.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="converters-languageconverters"><a class="header" href="#converters-languageconverters">Converters <code>[language.converters]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.inline.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="converters-languageconverters"><a class="header" href="#converters-languageconverters">Converters <code>[language.converters]</code></a></h2>
 <p><a href="https://nim-lang.org/docs/manual.html#converters">Manual</a></p>
 <p>Avoid using converters.</p>
 <h3 id="pros-8"><a class="header" href="#pros-8">Pros</a></h3>
@@ -627,7 +627,7 @@ if stringValue.len &gt; 32:
 </code></pre>
 </li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.converters.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="finalizers-languagefinalizers"><a class="header" href="#finalizers-languagefinalizers">Finalizers <code>[language.finalizers]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.converters.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="finalizers-languagefinalizers"><a class="header" href="#finalizers-languagefinalizers">Finalizers <code>[language.finalizers]</code></a></h2>
 <p><a href="https://nim-lang.org/docs/system.html#new%2Cref.T%2Cproc%28ref.T%29">Manual</a></p>
 <p>Don't use finalizers.</p>
 <h3 id="pros-9"><a class="header" href="#pros-9">Pros</a></h3>
@@ -640,7 +640,7 @@ if stringValue.len &gt; 32:
 <li>Calling <code>new</code> with finalizer for one instance infects all instances with same finalizer</li>
 <li>Newer Nim versions migrating new implementation of finalizers that are sometimes deterministic (aka destructors)</li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.finalizers.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="binary-data-languagebinary"><a class="header" href="#binary-data-languagebinary">Binary data <code>[language.binary]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.finalizers.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="binary-data-languagebinary"><a class="header" href="#binary-data-languagebinary">Binary data <code>[language.binary]</code></a></h2>
 <p>Use <code>byte</code> to denote binary data. Use <code>seq[byte]</code> for dynamic byte arrays.</p>
 <p>Avoid <code>string</code> for binary data. If stdlib returns strings, <a href="https://github.com/status-im/nim-stew/blob/76beeb769e30adc912d648c014fd95bf748fef24/stew/byteutils.nim#L141">convert</a> to <code>seq[byte]</code> as early as possible</p>
 <h3 id="pros-10"><a class="header" href="#pros-10">Pros</a></h3>
@@ -661,7 +661,7 @@ if stringValue.len &gt; 32:
 <ul>
 <li><a href="libraries.stew.html">stew</a> contains helpers for dealing with bytes and strings</li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.binary.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="integers-languageintegers"><a class="header" href="#integers-languageintegers">Integers <code>[language.integers]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.binary.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="integers-languageintegers"><a class="header" href="#integers-languageintegers">Integers <code>[language.integers]</code></a></h2>
 <p>Prefer signed integers for counting, lengths, array indexing etc.</p>
 <p>Prefer unsigned integers of specified size for interfacing with binary data, bit manipulation, low-level hardware access and similar contexts.</p>
 <p>Don't cast pointers to <code>int</code>.</p>
@@ -682,7 +682,7 @@ if stringValue.len &gt; 32:
 </ul>
 </li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.integers.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="range-languagerange"><a class="header" href="#range-languagerange"><code>range</code> <code>[language.range]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.integers.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="range-languagerange"><a class="header" href="#range-languagerange"><code>range</code> <code>[language.range]</code></a></h2>
 <p>Avoid <code>range</code> types.</p>
 <h3 id="pros-11"><a class="header" href="#pros-11">Pros</a></h3>
 <ul>
@@ -704,7 +704,7 @@ if stringValue.len &gt; 32:
 </ul>
 </li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.range.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="string-languagestring"><a class="header" href="#string-languagestring"><code>string</code> <code>[language.string]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.range.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="string-languagestring"><a class="header" href="#string-languagestring"><code>string</code> <code>[language.string]</code></a></h2>
 <p>The <code>string</code> type in Nim represents text in an unspecified encoding, typically UTF-8 on modern systems.</p>
 <p>Avoid <code>string</code> for binary data (see <a href="./language.binary.html">language.binary</a>)</p>
 <h3 id="practical-notes-14"><a class="header" href="#practical-notes-14">Practical notes</a></h3>
@@ -715,7 +715,7 @@ if stringValue.len &gt; 32:
 </ul>
 </li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.string.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="error-handling"><a class="header" href="#error-handling">Error handling</a></h1>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.string.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="error-handling"><a class="header" href="#error-handling">Error handling</a></h1>
 <p>Error handling in Nim is a subject under constant re-evaluation - similar to C++, several paradigms are supported leading to confusion as to which one to choose.</p>
 <p>In part, the confusion stems from the various contexts in which Nim can be used: when executed as small, one-off scripts that can easily be restarted, exceptions allow low visual overhead and ease of use.</p>
 <p>When faced with more complex and long-running programs where errors must be dealt with as part of control flow, the use of exceptions can directly be linked to issues like resource leaks, security bugs and crashes.</p>
@@ -733,7 +733,7 @@ if stringValue.len &gt; 32:
 </ul>
 </li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="result-errorsresult"><a class="header" href="#result-errorsresult">Result <code>[errors.result]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="result-errorsresult"><a class="header" href="#result-errorsresult">Result <code>[errors.result]</code></a></h2>
 <p>Prefer <code>bool</code>, <code>Opt</code> or <code>Result</code> to signal failure outcomes explicitly. Avoid using the <a href="language.result.html"><code>result</code> identifier</a>.</p>
 <p>Prefer the use of <code>Result</code> when multiple failure paths exist and the calling code might need to differentiate between them.</p>
 <p>Raise <code>Defect</code> to signal panics such as logic errors or preconditions being violated.</p>
@@ -755,13 +755,19 @@ func parse(): Type {.raises: [Defect, ParseError]}
 </code></pre>
 <p>See also <a href="libraries.results.html">Result</a> for more recommendations about <code>Result</code>.</p>
 <p>See also <a href="https://github.com/status-im/nim-stew/pull/26">Error handling helpers</a> in stew that may change some of these guidelines.</p>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.result.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="exceptions-errorsexceptions"><a class="header" href="#exceptions-errorsexceptions">Exceptions <code>[errors.exceptions]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.result.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="exceptions-errorsexceptions"><a class="header" href="#exceptions-errorsexceptions">Exceptions <code>[errors.exceptions]</code></a></h2>
 <p>In general, prefer <a href="errors.result.html">explicit error handling mechanisms</a>.</p>
 <p>Annotate each module at top-level (before imports):</p>
 <ul>
-<li><code>{.push raises: [Defect].}</code> (nim 1.2+)</li>
-<li><code>{.push raises: [].}</code> (nim 1.6+)</li>
+<li><code>{.push raises: [Defect].}</code> (nim 1.2)</li>
+<li><code>{.push raises: [].}</code> (nim 1.4+)</li>
 </ul>
+<p>To make a module compatible with both Nim 1.2 and newer versions, use:</p>
+<pre><code class="language-nim">when (NimMajor, NimMinor) &lt; (1, 4):
+  {.push raises: [Defect].}
+else:
+  {.push raises: [].}
+</code></pre>
 <p>Use explicit <code>{.raises.}</code> annotation for each public (<code>*</code>) function.</p>
 <p>Raise <code>Defect</code> to signal panics and situations that the code is not prepared to handle.</p>
 <pre><code class="language-nim"># Enable exception tracking for all functions in this module
@@ -890,7 +896,7 @@ raise (ref MyError)(msg: &quot;description&quot;, data: value)
 <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0709r0.pdf">C++ proposal</a> - After 25 years of encouragement, half the polled C++ developers continue avoiding exceptions and Herb Sutter argues about the consequences of doing so</li>
 <li><a href="https://google.github.io/styleguide/cppguide.html#Exceptions">Google</a> and <a href="https://llvm.org/docs/CodingStandards.html#id22">llvm</a> style guides on exceptions</li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.exceptions.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="status-codes-errorsstatus"><a class="header" href="#status-codes-errorsstatus">Status codes <code>[errors.status]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.exceptions.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="status-codes-errorsstatus"><a class="header" href="#status-codes-errorsstatus">Status codes <code>[errors.status]</code></a></h2>
 <p>Avoid status codes.</p>
 <pre><code class="language-nim">
 type StatusCode = enum
@@ -911,11 +917,11 @@ func f(output: var Type): StatusCode
 </ul>
 <h3 id="practical-notes-16"><a class="header" href="#practical-notes-16">Practical notes</a></h3>
 <p>Unlike &quot;Error Enums&quot; used with <code>Result</code>, status codes mix &quot;success&quot; and &quot;error&quot; returns in a single enum, making it hard to detect &quot;successful&quot; completion of a function in a generic way.</p>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.status.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="callbacks"><a class="header" href="#callbacks">Callbacks</a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.status.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="callbacks"><a class="header" href="#callbacks">Callbacks</a></h2>
 <p>See <a href="language.proctypes.html">language section on callbacks</a>.</p>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.callbacks.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="libraries"><a class="header" href="#libraries">Libraries</a></h1>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.callbacks.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="libraries"><a class="header" href="#libraries">Libraries</a></h1>
 <p>The libraries section contains guidelines for libraries and modules frequently used in the codebase.</p>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/libraries.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="standard-library-usage-librariesstd"><a class="header" href="#standard-library-usage-librariesstd">Standard library usage <code>[libraries.std]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/libraries.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="standard-library-usage-librariesstd"><a class="header" href="#standard-library-usage-librariesstd">Standard library usage <code>[libraries.std]</code></a></h2>
 <p>Use the Nim standard library judiciously. Prefer smaller, separate packages that implement similar functionality, where available.</p>
 <h3 id="pros-14"><a class="header" href="#pros-14">Pros</a></h3>
 <ul>
@@ -941,7 +947,7 @@ func f(output: var Type): StatusCode
 <li>sqlite -&gt; nim-sqlite3-abi</li>
 <li>streams -&gt; nim-faststreams</li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/libraries.std.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="results-librariesresults"><a class="header" href="#results-librariesresults">Results <code>[libraries.results]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/libraries.std.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="results-librariesresults"><a class="header" href="#results-librariesresults">Results <code>[libraries.results]</code></a></h2>
 <p><a href="https://github.com/status-im/nim-stew/blob/master/stew/results.nim#L19">Manual</a></p>
 <p>Use <code>Result</code> to document all outcomes of functions.</p>
 <p>Use <code>cstring</code> errors to provide diagnostics without expectation of error differentiation.</p>
@@ -983,7 +989,7 @@ func f3(): Result[int, ref SomeError] = ...
 </ul>
 </li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/libraries.results.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="hex-output-librarieshex"><a class="header" href="#hex-output-librarieshex">Hex output <code>[libraries.hex]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/libraries.results.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="hex-output-librarieshex"><a class="header" href="#hex-output-librarieshex">Hex output <code>[libraries.hex]</code></a></h2>
 <p>Print hex output in lowercase. Accept upper and lower case.</p>
 <h3 id="pros-16"><a class="header" href="#pros-16">Pros</a></h3>
 <ul>
@@ -996,7 +1002,7 @@ func f3(): Result[int, ref SomeError] = ...
 </ul>
 <h3 id="practical-notes-19"><a class="header" href="#practical-notes-19">Practical notes</a></h3>
 <p><a href="https://github.com/status-im/nim-stew/blob/76beeb769e30adc912d648c014fd95bf748fef24/stew/byteutils.nim#L129">byteutils</a> contains a convenient hex printer.</p>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/libraries.hex.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="wrappers-librarieswrappers"><a class="header" href="#wrappers-librarieswrappers">Wrappers <code>[libraries.wrappers]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/libraries.hex.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="wrappers-librarieswrappers"><a class="header" href="#wrappers-librarieswrappers">Wrappers <code>[libraries.wrappers]</code></a></h2>
 <p>Prefer native <code>Nim</code> code when available.</p>
 <p><code>C</code> libraries and libraries that expose a <code>C</code> API may be used (including <code>rust</code>, <code>C++</code>).</p>
 <p>Avoid <code>C++</code> libraries.</p>
@@ -1049,7 +1055,7 @@ func f3(): Result[int, ref SomeError] = ...
 <li><a href="https://github.com/status-im/nim-bearssl/">nim-bearssl</a></li>
 <li><a href="https://github.com/status-im/nim-blscurve/">nim-blscurve</a></li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/libraries.wrappers.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="stew-librariesstew"><a class="header" href="#stew-librariesstew"><code>stew</code> <code>[libraries.stew]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/libraries.wrappers.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="stew-librariesstew"><a class="header" href="#stew-librariesstew"><code>stew</code> <code>[libraries.stew]</code></a></h2>
 <p><code>stew</code> contains small utilities and replacements for <code>std</code> libraries.</p>
 <p>If similar libraries exist in <code>std</code> and <code>stew</code>, prefer <a href="https://github.com/status-im/nim-stew">stew</a>.</p>
 <h3 id="pros-18"><a class="header" href="#pros-18">Pros</a></h3>
@@ -1066,8 +1072,8 @@ func f3(): Result[int, ref SomeError] = ...
 </ul>
 <h3 id="practical-notes-21"><a class="header" href="#practical-notes-21">Practical notes</a></h3>
 <p><code>nim-stew</code> exists as a staging area for code that could be considered for future inclusion in the standard library or, preferably, a separate package, but that has not yet been fully fleshed out as a separate and complete library.</p>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/libraries.stew.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="tooling"><a class="header" href="#tooling">Tooling</a></h1>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="nim-version"><a class="header" href="#nim-version">Nim version</a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/libraries.stew.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="tooling"><a class="header" href="#tooling">Tooling</a></h1>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="nim-version"><a class="header" href="#nim-version">Nim version</a></h2>
 <p>We support a single Nim version that is upgraded between release cycles of our own projects. Individual projects and libraries may choose to support multiple Nim versions, though this involves significant overhead.</p>
 <h3 id="pros-19"><a class="header" href="#pros-19">Pros</a></h3>
 <ul>
@@ -1086,7 +1092,7 @@ func f3(): Result[int, ref SomeError] = ...
 <li>Following Nim <code>devel</code>, from experience, leads to frequent disruptions as &quot;mysterious&quot; issues appear</li>
 <li>To support multiple Nim versions in a project, the project should be set up to run CI with all supported versions</li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.nim.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="build-system-toolingbuild"><a class="header" href="#build-system-toolingbuild">Build system <code>[tooling.build]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.nim.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="build-system-toolingbuild"><a class="header" href="#build-system-toolingbuild">Build system <code>[tooling.build]</code></a></h2>
 <p>We use a build system with <code>make</code> and <code>git</code> submodules. The long term plan is to move to a dedicated package and build manager once one becomes available.</p>
 <h3 id="pros-20"><a class="header" href="#pros-20">Pros</a></h3>
 <ul>
@@ -1100,7 +1106,7 @@ func f3(): Result[int, ref SomeError] = ...
 </ul>
 <h3 id="nimble"><a class="header" href="#nimble">nimble</a></h3>
 <p>We do not use <code>nimble</code>, due to the lack of build reproducibility and other team-oriented features. We sometimes provide <code>.nimble</code> packages but these may be out of date and/or incomplete.</p>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.build.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="dependency-management-toolingdeps"><a class="header" href="#dependency-management-toolingdeps">Dependency management <code>[tooling.deps]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.build.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="dependency-management-toolingdeps"><a class="header" href="#dependency-management-toolingdeps">Dependency management <code>[tooling.deps]</code></a></h2>
 <p>We track dependencies using <code>git</code> submodules to ensure a consistent build environment for all development. This includes the Nim compiler, which is treated like just another dependency - when checking out a top-level project, it comes with an <code>env.sh</code> file that allows you to enter the build environment, similar to python <code>venv</code>.</p>
 <p>When working with upstream projects, it's sometimes convenient to <em>fork</em> the project and submodule the fork, in case urgent fixes / patches are needed. These patches should be passed on to the relevant upstream.</p>
 <h3 id="pros-21"><a class="header" href="#pros-21">Pros</a></h3>
@@ -1129,7 +1135,7 @@ func f3(): Result[int, ref SomeError] = ...
 </ul>
 </li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.deps.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="editors-toolingeditors"><a class="header" href="#editors-toolingeditors">Editors <code>[tooling.editors]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.deps.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="editors-toolingeditors"><a class="header" href="#editors-toolingeditors">Editors <code>[tooling.editors]</code></a></h2>
 <h3 id="vscode"><a class="header" href="#vscode"><code>vscode</code></a></h3>
 <p>Most <code>nim</code> developers use <code>vscode</code>.</p>
 <ul>
@@ -1151,7 +1157,7 @@ func f3(): Result[int, ref SomeError] = ...
 <li>Sublime text</li>
 <li><code>vim</code></li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.editors.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="debugging-toolingdebugging"><a class="header" href="#debugging-toolingdebugging">Debugging <code>[tooling.debugging]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.editors.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="debugging-toolingdebugging"><a class="header" href="#debugging-toolingdebugging">Debugging <code>[tooling.debugging]</code></a></h2>
 <ul>
 <li>Debugging can be done with <code>gdb</code> just as if <code>C</code> was being debugged
 <ul>
@@ -1160,16 +1166,16 @@ func f3(): Result[int, ref SomeError] = ...
 </ul>
 </li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.debugging.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="profiling"><a class="header" href="#profiling">Profiling</a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.debugging.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="profiling"><a class="header" href="#profiling">Profiling</a></h2>
 <ul>
 <li>Linux: <code>perf</code></li>
 <li>Anywhere: <a href="https://software.intel.com/content/www/us/en/develop/tools/oneapi/components/vtune-profiler.html">vtune</a></li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.profiling.md">Edit this file on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="code-tricks-toolingtricks"><a class="header" href="#code-tricks-toolingtricks">Code tricks <code>[tooling.tricks]</code></a></h2>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.profiling.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="code-tricks-toolingtricks"><a class="header" href="#code-tricks-toolingtricks">Code tricks <code>[tooling.tricks]</code></a></h2>
 <ul>
 <li>Find out where a function is used: temporarily mark it <code>{.deprecated.}</code></li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.tricks.md">Edit this file on GitHub.</a></footer>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/tooling.tricks.md">Edit this page on GitHub.</a></footer>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

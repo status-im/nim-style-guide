@@ -150,9 +150,15 @@
 <p>In general, prefer <a href="errors.result.html">explicit error handling mechanisms</a>.</p>
 <p>Annotate each module at top-level (before imports):</p>
 <ul>
-<li><code>{.push raises: [Defect].}</code> (nim 1.2+)</li>
-<li><code>{.push raises: [].}</code> (nim 1.6+)</li>
+<li><code>{.push raises: [Defect].}</code> (nim 1.2)</li>
+<li><code>{.push raises: [].}</code> (nim 1.4+)</li>
 </ul>
+<p>To make a module compatible with both Nim 1.2 and newer versions, use:</p>
+<pre><code class="language-nim">when (NimMajor, NimMinor) &lt; (1, 4):
+  {.push raises: [Defect].}
+else:
+  {.push raises: [].}
+</code></pre>
 <p>Use explicit <code>{.raises.}</code> annotation for each public (<code>*</code>) function.</p>
 <p>Raise <code>Defect</code> to signal panics and situations that the code is not prepared to handle.</p>
 <pre><code class="language-nim"># Enable exception tracking for all functions in this module
@@ -281,7 +287,7 @@ raise (ref MyError)(msg: &quot;description&quot;, data: value)
 <li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0709r0.pdf">C++ proposal</a> - After 25 years of encouragement, half the polled C++ developers continue avoiding exceptions and Herb Sutter argues about the consequences of doing so</li>
 <li><a href="https://google.github.io/styleguide/cppguide.html#Exceptions">Google</a> and <a href="https://llvm.org/docs/CodingStandards.html#id22">llvm</a> style guides on exceptions</li>
 </ul>
-<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.exceptions.md">Edit this file on GitHub.</a></footer>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.exceptions.md">Edit this page on GitHub.</a></footer>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
