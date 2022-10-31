@@ -35,6 +35,7 @@
   - [Hex output](libraries.hex.md)
   - [Wrappers](libraries.wrappers.md)
   - [`stew`](libraries.stew.md)
+- [Setup](setup.md)
 - [Tooling](tooling.md)
   - [Nim version](tooling.nim.md)
   - [Build](tooling.build.md)
