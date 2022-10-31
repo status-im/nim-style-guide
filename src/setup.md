@@ -31,4 +31,27 @@ The above are all names of Beacon Chain "forks", where we add new features and i
 
 In the above link you should find all current Buzzwords for the names of the Beacon Chain forks. If you don't see the word there, then it's probably something else and it's nice to ask about it.
 
-### Development `[setup.buzzwords.development]`
+## Development `[setup.development]`
+
+### Birds Eye View `[setup.development.birdseye]`
+
+I was linked [this docs page](https://github.com/status-im/nimbus-eth2/tree/stable/docs), which actually resolves to this domain [nimbus.guide](https://nimbus.guide/) with perhaps a little extra in there.
+
+### Nim `[setup.development.nim]`
+
+#### Type system
+
+At Nimbus we use discreet types for each fork (capella, bellatrix etc). This means that the code you find in the `/beacon_chain/spec/datatypes/{forkname}.nim` should be unique to that fork. However it's not perfect yet and we have a bit of duplication between the files.
+
+#### Common errors
+
+```
+Error: ambiguous identifier: 'ExecutionPayloadHeader' -- use one of the following:
+  bellatrix.ExecutionPayloadHeader: ExecutionPayloadHeader
+  capella.ExecutionPayloadHeader: ExecutionPayloadHeader
+```
+
+The problem is that you have to import from a specific module.
+
+1. If you are finding a simple conflicted type, ensure you have imported the correct spec file (or `forks.nim`)
+2. If you are performing a migration, be sure that you have exported everything from the specific files.
