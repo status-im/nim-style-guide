@@ -43,6 +43,31 @@ I was linked [this docs page](https://github.com/status-im/nimbus-eth2/tree/stab
 
 At Nimbus we use discreet types for each fork (capella, bellatrix etc). This means that the code you find in the `/beacon_chain/spec/datatypes/{forkname}.nim` should be unique to that fork. However it's not perfect yet and we have a bit of duplication between the files.
 
+### Building
+
+For the nimbus-eth`2` repository, the following command builds the project quickly:
+
+`make -j8 nimbus_beacon_node NIMFLAGS="-c -d:disableLTO" V=0`
+
+### Working with vendor repositories
+
+When working with vendor repositories, i.e. `nimbus-eth2/vendor/nim...` which are produced by status, there are some helpful tricks.
+
+- source `/nimbus-eth2/env.sh`
+
+As I understand this gives you a set of locally running versions of the most common status nim vendor libraries.
+
+A good example for this was when I was working on the `nim-web3` project:
+
+```
+cd /nimbus-eth2/
+source env.sh
+cd ../nim-web3
+&& ...
+```
+
+This then allowed me to debug directly the code from `nimbus-eth2/vendor/nim-json-rpc` and edit it in that repository. I can then `debugEcho` to show incoming raw websocket data for example.
+
 #### Common errors
 
 ```
