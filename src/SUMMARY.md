@@ -43,3 +43,7 @@
   - [Debugging](tooling.debugging.md)
   - [Profiling](tooling.profiling.md)
   - [Tricks](tooling.tricks.md)
+- [Interop with other languages](interop.md)
+  - [C / general wrapping](interop.c.md)
+  - [go](interop.go.md)
+  - [rust](interop.rust.md)
