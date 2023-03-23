@@ -21,8 +21,8 @@ import std/sharedlist
 
 var list: SharedList[pointer]
 
-proc f(v: pointer, len: csize_t) {.exportc.} =
-  # copy data to a shared buffer
+proc writer(v: pointer, len: csize_t) {.exportc.} =
+  # Copy data to a shared buffer by prefixing a buffer with its length
   let
     copy = allocShared(int(len) + sizeof(len))
   copyMem(copy, addr len, sizeof(len))
@@ -31,16 +31,11 @@ proc f(v: pointer, len: csize_t) {.exportc.} =
   # Put the data on a thread-safe queue / list
   list.add(copy)
 
-  # Normally, we would notify the consumer here!
+  # Notify the reader - since in the example we use polling, this step is empty
 
 proc reader() {.thread.} =
   while true:
-    var items: seq[pointer]
     list[].iterAndMutate do (item: pointer) -> bool:
-      items.add $item
-      deallocShared(item)
-      true
-    for item in items:
       var len: int
       copyMem(addr len, v, sizeof(len))
       let
@@ -48,5 +43,8 @@ proc reader() {.thread.} =
 
       echo "got " len, " bytes"
 
-    sleep(100) # poll every 100ms
+      deallocShared(item)
+      true # `true` means `iterAndMutate` will remove the item from the list
+
+    sleep(100) # alternatively, use a thread wakeup mechanism here
 ```
