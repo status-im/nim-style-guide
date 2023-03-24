@@ -12,7 +12,7 @@ Since C serves as the "lingua franca" of interop, the [C guide](./interop.c.md) 
 
 ## Basics
 
-In order for interoperability to happen, we rely on a lowest common denominator of features between the two languages - typically, this is the mutually overlapping part of the [ABI](https://en.wikipedia.org/wiki/Application_binary_interface) of the two languages. Nim is unique in that it also allows interoperability at the API level with C - however, this guide focuses on interoperability via ABI since this is more general and broadly useful.
+In FFI, we rely on a lowest common denominator of features between the two languages - typically, this is the mutually overlapping part of the [ABI](https://en.wikipedia.org/wiki/Application_binary_interface) of the two languages. Nim is unique in that it also allows interoperability at the API level with C/C++ - however, this guide focuses on interoperability via ABI since this is more general and broadly useful.
 
 Most languages define their FFI in terms of a simplified version of the C ABI - thus, the process of using code from one language in another typically consists of two steps:
 
@@ -32,26 +32,50 @@ We'll call this API wrapping - the API wrapper takes care of:
 * introducing Nim idioms such as generics
 * adapting the [error handling](./errors.md) model
 
-### Calling Nim code from other languages
+## Calling Nim code from other languages
 
-When calling Nim from other languages, care must be taken to first initialize the garbage collector, at least once for every thread - this can be done in two ways:
+Nim code can be compiled both as a shared and static library, and used from other languages.
 
-* Exporting a dedicated "initialization function" for the library:
-  ```nim
-  # Use a dedicate initialization function - the application will crash if users of the library forget to call this function!
-  proc initializeMyLibrary() {.exportc.} =
-    setupForeignThreadGc()
+When calling Nim from other languages, care must be taken to first initialize the garbage collector, at least once for every thread.
 
-  proc exportedFunction {.exportc.} =
-    echo "Hello from Nim
-  ```
-* Calling `setupForeignThreadGc` in every exported function:
-  ```nim
-  # Always safe to call
-  proc exportedFunction {.exportc.} =
-    setupForeignThreadGc()
-    echo "Hello from Nim
-  ```
+Garbage collector initialization is a two-step process:
+
+* the garbage collector itself must be inititialized with a call to `setupForeignThreadGc`
+* `nimGC_setStackBottom` must be called whenever it is possible that the exported function is being called from a "shorter" stack frame
+
+Typically, this is solved with a "library initialization" call that users of the library should call near the beginning of every thread (ie in their `main` or thread entry point function):
+
+```nim
+var initialized {.threadvar.}: bool
+
+proc initializeMyLibrary() {.exportc.} =
+  when declared(setupForeignThreadGc): setupForeignThreadGc()
+
+proc exportedFunction {.exportc, raises: [].} =
+  assert initialized, "You forgot to call `initializeMyLibrary"
+
+  echo "Hello from Nim
+```
+
+In some languages such as `go`, it is hard to anticipate which thread code will be called from - in such cases, you can safely initialize the garbage collector in every exported function instead:
+
+```nim
+template initializeMyLibrary() =
+  when declared(setupForeignThreadGc): setupForeignThreadGc()
+  when declared(nimGC_setStackBottom):
+    var locals {.volatile, noinit.}: pointer
+    locals = addr(locals)
+    nimGC_setStackBottom(locals)
+
+# Always safe to call
+proc exportedFunction {.exportc, raises: [].} =
+  initializeMyLibrary()
+  echo "Hello from Nim
+```
+
+## Exceptions
+
+You must ensure that no exceptions pass to the foreign language - instead, catch all exceptions and covert them to a different [error handling mechanism](./errors.md), annotating the exported function with `{.raises: [].}`.
 
 ## Memory
 
@@ -123,13 +147,13 @@ To allocate memory for cross-thread usage, ie allocating in one thread and deall
 
 Threads in Nim are created with [`createThread`](https://nim-lang.org/docs/threads.html) which creates the thread and prepares the garbage collector for use on that thread.
 
-When calling Nim code from a "foreign" thread, `setupForeignThreadGc` must be called in each thread and `teardownForeignThreadGc` should be called before the thread ends to avoid memory leaks.
+See [above](#calling-nim-code-from-other-languages) for how to initialize the garbage collector when calling Nim from other languages.
 
 ### Passing data between threads
 
 The primary method of passing data between threads is to encode the data into a shared memory section then transfer ownership of the memory section to the receiving thread either via a thread-safe queue, channel, socket or pipe.
 
-The queue itself can be passed to thread either at creation or via a global variable. The latter method is discouraged.
+The queue itself can be passed to thread either at creation or via a global variable, though we generally seek to avoid global variables.
 
 ```nim
 # TODO pick a queue
