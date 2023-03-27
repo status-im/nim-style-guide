@@ -2,17 +2,17 @@
 
 Nim comes with powerful interoperability options, both when integrating Nim code in other languages and vice versa.
 
-This section of the book covers interoperability / [FFI](https://en.wikipedia.org/wiki/Foreign_function_interface) in both directions: how to integrate Nim into other languages and how to use libraries from other languages in Nim.
+Acting as a complement to the [manual](https://nim-lang.org/docs/manual.html#foreign-function-interface), this section of the book covers interoperability / [FFI](https://en.wikipedia.org/wiki/Foreign_function_interface): how to integrate Nim into other languages and how to use libraries from other languages in Nim.
 
-While it is possible to automate many things related to FFI, this guide focuses on simplicity and fundamentals - while tooling, macros and helpers can simplify the process, they remain a cosmetic layer on top of the fundamentals presented here.
+While it is possible to automate many things related to FFI, this guide focuses on core functionality - while tooling, macros and helpers can simplify the process, they remain a cosmetic layer on top of the fundamentals presented here.
 
-In general, the focus is on pragmatic solutions available for the currently released versions of Nim - 1.6 at the time of writing - the recommendations may change as new libraries and Nim versions become available.
-
-Since C serves as the "lingua franca" of interop, the [C guide](./interop.c.md) in particular can be studied for topics not covered in the other language-specific sections.
+The focus of this guide is on pragmatic solutions available for the currently supported versions of Nim - 1.6 at the time of writing - the recommendations may change as new libraries and Nim versions become available.
 
 ## Basics
 
-In FFI, we rely on a lowest common denominator of features between the two languages - typically, this is the mutually overlapping part of the [ABI](https://en.wikipedia.org/wiki/Application_binary_interface) of the two languages. Nim is unique in that it also allows interoperability at the API level with C/C++ - however, this guide focuses on interoperability via ABI since this is more general and broadly useful.
+In interop, we rely on a lowest common denominator of features between languages - for compiled languages, this is typically the mutually overlapping part of the [ABI](https://en.wikipedia.org/wiki/Application_binary_interface).
+
+Nim is unique in that it also allows interoperability at the API level with C/C++ - however, this guide focuses on interoperability via ABI since this is more general and broadly useful.
 
 Most languages define their FFI in terms of a simplified version of the C ABI - thus, the process of using code from one language in another typically consists of two steps:
 
@@ -32,16 +32,19 @@ We'll call this API wrapping - the API wrapper takes care of:
 * introducing Nim idioms such as generics
 * adapting the [error handling](./errors.md) model
 
+The C ABI serves as the "lingua franca" of interop - the [C guide](./interop.c.md) in particular can be studied for topics not covered in the other language-specific sections.
+
 ## Calling Nim code from other languages
 
-Nim code can be compiled both as a shared and static library, and used from other languages.
+Nim code can be compiled both as shared and static libraries and thus used from other languages.
 
 When calling Nim from other languages, care must be taken to first initialize the garbage collector, at least once for every thread.
 
 Garbage collector initialization is a two-step process:
 
 * the garbage collector itself must be inititialized with a call to `setupForeignThreadGc`
-* `nimGC_setStackBottom` must be called whenever it is possible that the exported function is being called from a "shorter" stack frame
+* `nimGC_setStackBottom` must be called to establish the starting point of the stack
+  * this function must be called in all places where it is possible that the exported function is being called from a "shorter" stack frame
 
 Typically, this is solved with a "library initialization" call that users of the library should call near the beginning of every thread (ie in their `main` or thread entry point function):
 
@@ -57,7 +60,7 @@ proc exportedFunction {.exportc, raises: [].} =
   echo "Hello from Nim
 ```
 
-In some languages such as `go`, it is hard to anticipate which thread code will be called from - in such cases, you can safely initialize the garbage collector in every exported function instead:
+In some languages such as [Go](./interop.go.md), it is hard to anticipate which thread code will be called from - in such cases, you can safely initialize the garbage collector in every exported function instead:
 
 ```nim
 template initializeMyLibrary() =
@@ -72,6 +75,14 @@ proc exportedFunction {.exportc, raises: [].} =
   initializeMyLibrary()
   echo "Hello from Nim
 ```
+
+See also the [Nim documentation](https://nim-lang.org/docs/backends.html#interfacing-backend-code-calling-nim) on this topic.
+
+### Globals and top-level code
+
+Code written outside of a `proc` / `func` is executed as part of `import`:ing the module, or, in the case of the "main" module of the program, as part of executing the module itself similar to the `main` function in C.
+
+Nim puts this code in a function called `NimMain` and it serves a complement to the "library intialization function": it must only be called once!
 
 ## Exceptions
 
@@ -147,7 +158,7 @@ To allocate memory for cross-thread usage, ie allocating in one thread and deall
 
 Threads in Nim are created with [`createThread`](https://nim-lang.org/docs/threads.html) which creates the thread and prepares the garbage collector for use on that thread.
 
-See [above](#calling-nim-code-from-other-languages) for how to initialize the garbage collector when calling Nim from other languages.
+See [above](#calling-nim-code-from-other-languages) for how to initialize the garbage collector when calling Nim from threads created in other languages.
 
 ### Passing data between threads
 
@@ -197,12 +208,6 @@ proc reader(queue: ptr Queue[pointer]):
       # Polling should usually be replaced with an appropriate "wake-up" mechanism
       sleep(100)
 ```
-
-### Globals and top-level code
-
-Code written outside of a `proc` / `func` is executed as part of `import`:ing the module, or, in the case of the "main" module of the program, as part of executing the module itself similar to the `main` function in C.
-
-When using Nim as a library, this code can be executed by calling the `NimMain` function.
 
 ### async / await
 

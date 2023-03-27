@@ -17,11 +17,11 @@ Thus, for C++ the recommened way of creating wrappers is similar to other langua
 
 ## Qt
 
-[Qt](https://www.qt.io/) takes control of the main application thread to run the UI event loop. Blocking this thread means that the UI becomes unresponsive, thus it is recommended to run any compution in separate threads.
+[Qt](https://www.qt.io/) takes control of the main application thread to run the UI event loop. Blocking this thread means that the UI becomes unresponsive, thus it is recommended to run any compution in separate threads, for example using [nim-taskpools](https://github.com/status-im/nim-taskpools).
 
 For cross-thread communication, the recommended way of sending information to the Qt thread is via a [queued signal/slot connection](https://doc.qt.io/qt-6/threads-qobject.html#signals-and-slots-across-threads).
 
-For sending information from the Qt thread to other Nim threads, encode the data into a buffer allocated with `allocShared` and use a thread-safe queue such as `std/sharedlists`:
+For sending information from the Qt thread to other Nim threads, encode the data into a buffer allocated with `allocShared` and use a thread-safe queue such as `std/sharedlists`.
 
 ## Examples
 
