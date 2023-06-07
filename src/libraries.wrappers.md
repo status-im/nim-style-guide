@@ -2,11 +2,13 @@
 
 Prefer native `Nim` code when available.
 
-`C` libraries and libraries that expose a `C` API may be used (including `rust`, `C++`).
+`C` libraries and libraries that expose a `C` API may be used (including `rust`, `C++`, `go`).
 
 Avoid `C++` libraries.
 
 Prefer building the library on-the-fly from source using `{.compile.}`. Pin the library code using a submodule or amalgamation.
+
+The [interop](./interop.md) guide contains more information about foreing language interoperability.
 
 ### Pros
 
@@ -23,7 +25,7 @@ Prefer building the library on-the-fly from source using `{.compile.}`. Pin the 
   * Less test suite coverage - most of `Nim` test suite uses `C` backend
   * Many core `C++` features like `const`, `&` and `&&` difficult to express - in particular post-`C++11` code has a large semantic gap compared to Nim
   * Different semantics for exceptions and temporaries compared to `C` backend
-  * All-or-nothing - can't use `C++` codegen selectively for `C++` libraries
+  * All-or-nothing - can't use `C++` backend selectively for `C++` libraries
 * Using `{.compile.}` increases build times, specially for multi-binary projects - use judiciously for large dependencies
 
 ### Practical notes
@@ -40,6 +42,6 @@ Prefer building the library on-the-fly from source using `{.compile.}`. Pin the 
 ### Examples
 
 * [nim-secp256k1](https://github.com/status-im/nim-secp256k1)
-* [nim-sqlite](https://github.com/arnetheduck/nim-sqlite3-abi)
+* [nim-sqlite3-abi](https://github.com/arnetheduck/nim-sqlite3-abi)
 * [nim-bearssl](https://github.com/status-im/nim-bearssl/)
 * [nim-blscurve](https://github.com/status-im/nim-blscurve/)
