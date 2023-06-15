@@ -2,7 +2,7 @@
 
 Always use the same identifier style (case, underscores) as the declaration.
 
-Enable `--styleCheck:usages`.
+Enable `--styleCheck:usages`, and, where feasible, `--styleCheck:error`.
 
 * `Ref` for `ref object` types, which have surprising semantics
   * `type XxxRef = ref Xxx`
