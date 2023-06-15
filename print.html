@@ -254,7 +254,7 @@
 </code></pre>
 <h3 id="practical-notes-1"><a class="header" href="#practical-notes-1">Practical notes</a></h3>
 <ul>
-<li>We do not use <code>nimpretty</code> - as of writing (nim 1.2), it is not stable enough for daily use:
+<li>We do not use <code>nimpretty</code> - as of writing (Nim 1.6), it is not stable enough for daily use:
 <ul>
 <li>Can break working code</li>
 <li>Naive formatting algorithm</li>
@@ -262,13 +262,13 @@
 </li>
 <li>We do not make use of Nim's &quot;flexible&quot; identifier names - all uses of an identifier should match the declaration in capitalization and underscores
 <ul>
-<li>Enable <code>--styleCheck:usages</code></li>
+<li>Enable <code>--styleCheck:usages</code> and, where feasible, <code>--styleCheck:error</code></li>
 </ul>
 </li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/formatting.style.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="naming-conventions-formattingnaming"><a class="header" href="#naming-conventions-formattingnaming">Naming conventions <code>[formatting.naming]</code></a></h2>
 <p>Always use the same identifier style (case, underscores) as the declaration.</p>
-<p>Enable <code>--styleCheck:usages</code>.</p>
+<p>Enable <code>--styleCheck:usages</code>, and, where feasible, <code>--styleCheck:error</code>.</p>
 <ul>
 <li><code>Ref</code> for <code>ref object</code> types, which have surprising semantics
 <ul>
