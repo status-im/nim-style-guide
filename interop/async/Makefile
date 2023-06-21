@@ -7,4 +7,4 @@ main-rs: asynclib.nim main.rs
 	rustc main.rs -L. -lasynclib -o main-rs
 
 prepare:
-	nimble install chronos
+	nimble install -y chronos
