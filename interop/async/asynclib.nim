@@ -2,6 +2,7 @@
 
 {.pragma: exported, exportc, cdecl, raises: [].}
 {.pragma: callback, cdecl, raises: [], gcsafe.}
+{.passc: "-fPIC".}
 
 import std/atomics
 import chronos, chronos/apps/http/httpserver
