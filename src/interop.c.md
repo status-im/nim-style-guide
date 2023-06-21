@@ -17,7 +17,8 @@ Exporting Nim code is done by creating an export module that presents the Nim co
 ```nim
 import mylibrary
 
-proc function(arg: int64): cint {.exportc: "function", raises: [].} =
+# either `c`-prefixed types (`cint` etc) or explicitly sized types (int64 etc) work well
+proc function(arg: int64): cint {.exportc: "function", dynlib, raises: [].} =
   # Validate incoming arguments before converting them to Nim equivalents
   if arg >= int64(int.high) or arg <= int64(int.low):
     return 0 # Expose error handling
@@ -65,9 +66,9 @@ Having created a separate module for the type, create definitions for each funct
 # * No Nim exceptions
 # * No GC interation
 
-{.pragma ffi, importc, raises: [], gcsafe.}
+{.pragma imported, importc, cdecl, raises: [], gcsafe.}
 
-proc function(arg: int64): cint {.ffi.}
+proc function(arg: int64): cint {.imported.}
 ```
 
 ### Callbacks
@@ -79,9 +80,7 @@ Callbacks are functions in the Nim code that are registered with the imported li
 #
 # * sets an explicit calling convention to match C
 # * ensures no exceptions leak from Nim to the caller of the callback
-{.pragma: callback, cdecl, raises: [].}
-
-{.pragma: ffi, importc, raises: [], gcsafe.}
+{.pragma: callback, cdecl, raises: [], gcsafe.}
 
 import strutils
 proc mycallback(arg: cstring) {.callback.} =
@@ -94,7 +93,7 @@ proc mycallback(arg: cstring) {.callback.} =
   except ValueError:
     echo "couldn't parse"
 
-proc registerCallback(callback: proc(arg: cstring) {.callback.}) {.ffi.}
+proc registerCallback(callback: proc(arg: cstring) {.callback.}) {.imported.}
 
 registerCallback(mycallback)
 ```
@@ -108,13 +107,11 @@ Nim supports both garbage-collected, stack-based and manually managed memory all
 When using garbage-collected types, care must be taken to extend the lifetime of objects passed to C code whose lifetime extends beyond the function call:
 
 ```nim
-{.pragma: ffi, importc, raises: [], gcsafe.}
-
 # Register a long-lived instance with C library
-proc register(arg: ptr cint) {.ffi.}
+proc register(arg: ptr cint) {.imported.}
 
 # Unregister a previously registered instance
-proc unregister(arg: ptr cint) {.ffi.}
+proc unregister(arg: ptr cint) {.imported.}
 
 proc setup(): ref cint =
   let arg = new cint

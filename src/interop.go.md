@@ -11,7 +11,7 @@ Go includes a native `M:N` scheduler for running Go tasks - because of this, car
 As an alternative, we can pass the work to a dedicated thread instead - this works well for asynchronous code that reports the result via a callback mechanism:
 
 ```nim
-{.pragma callback, cdecl, gcsafe, raises: [].}
+{.pragma: callback, cdecl, raises: [], gcsafe.}
 
 type
   MyAPI = object
@@ -36,6 +36,8 @@ proc exportedFunction(api: ptr MyAPI, v: cint, callback: ExportedFunctionCallbac
   # By not allocating any garbage-collected data, we avoid the need to initialize the garbage collector
   queue.add(ExportedFunctionData(v: cint, callback: callback))
 ```
+
+The `go` thread scheduler can detect blocking functions and start new threads as appropriate - thus, blocking the C API function is a good alternative to callbacks - for example, results can be posted onto a queue that is read from by a blocking call.
 
 ## Variables
 
