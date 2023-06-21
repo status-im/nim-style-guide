@@ -47,7 +47,7 @@ To export functions to other languages, the function must be marked as `exportc,
 We can declare a helper `pragma` to set all the options at once:
 
 ```nim
-{.pragma: exported, exportc, dynlib, cdecl, raises: [].}
+{.pragma: exported, exportc, cdecl, raises: [].}
 ```
 
 ### Importing other language functions to Nim

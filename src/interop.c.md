@@ -18,7 +18,7 @@ Exporting Nim code is done by creating an export module that presents the Nim co
 import mylibrary
 
 # either `c`-prefixed types (`cint` etc) or explicitly sized types (int64 etc) work well
-proc function(arg: int64): cint {.exportc: "function", dynlib, raises: [].} =
+proc function(arg: int64): cint {.exportc: "function", cdecl, raises: [].} =
   # Validate incoming arguments before converting them to Nim equivalents
   if arg >= int64(int.high) or arg <= int64(int.low):
     return 0 # Expose error handling

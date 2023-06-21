@@ -1,6 +1,6 @@
 {.push raises: [].}
 
-{.pragma: exported, exportc, dynlib, cdecl, raises: [].}
+{.pragma: exported, exportc, cdecl, raises: [].}
 {.pragma: callback, cdecl, raises: [], gcsafe.}
 
 import std/atomics

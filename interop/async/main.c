@@ -3,7 +3,7 @@
 
 /* Import functions from Nim */
 void* startNode(const char* url, void* user, void* callback);
-void stopNode(void* ctx);
+void stopNode(void** ctx);
 
 void callback(void* user, const void* data, size_t len) {
   printf("Callback! %lu\n", len);
@@ -19,5 +19,5 @@ int main(int argc, char** argv) {
 
   printf("Stopping node\n");
 
-  stopNode(ctx);
+  stopNode(&ctx);
 }
