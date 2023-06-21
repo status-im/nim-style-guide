@@ -47,6 +47,7 @@ jobs:
     runs-on: ${{ matrix.builder }}
     continue-on-error: ${{ matrix.branch == 'devel' }}
     steps:
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
       - name: Checkout
         uses: actions/checkout@v3
 
