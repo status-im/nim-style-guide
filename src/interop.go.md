@@ -44,3 +44,8 @@ The `go` thread scheduler can detect blocking functions and start new threads as
 When calling Nim code from Go, care must be taken that instances of [garbage-collected types](./interop.md#garbage-collected-types) don't pass between threads - this means process-wide globals and other forms of shared-memory apporaches of GC types must be avoided.
 
 [`LockOSThread`](https://pkg.go.dev/runtime#LockOSThread) can be used to constrain the thread from which a particular `goroutine` calls Nim.
+
+## `go` interop resources
+
+* [cgo wiki](https://github.com/golang/go/wiki/cgo)
+* [cockroachdb experience](https://www.cockroachlabs.com/blog/the-cost-and-complexity-of-cgo/) - general cgo costs
