@@ -50,9 +50,9 @@ proc runContext(args: tuple[ctx: ptr Context, address: cstring]) {.thread.} =
       let headers = $req.headers
       if headers.len > 0:
         ctx[].onHeaders(ctx[].user, unsafeAddr headers[0], csize_t headers.len)
-      await req.respond(Http200, "Hello from Nim")
+      return await req.respond(Http200, "Hello from Nim")
     else:
-      dumbResponse()
+      return dumbResponse()
 
   try:
     let

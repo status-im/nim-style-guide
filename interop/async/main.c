@@ -10,6 +10,9 @@ void onHeader(void* user, const char* headers, size_t len) {
   printf("%.*s\n\n", (int)len, headers);
 }
 
+
+
+
 int main(int argc, char** argv) {
   printf("Starting node\n");
   void* ctx = startNode("127.0.0.1:60000", onHeader, 0);
