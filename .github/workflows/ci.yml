@@ -18,10 +18,13 @@ jobs:
         target:
           - os: linux
             cpu: amd64
+            rust: stable
           - os: macos
             cpu: amd64
+            rust: stable
           - os: windows
             cpu: amd64
+            rust: stable-gnu
         branch: [version-1-6, version-2-0, devel]
         include:
           - target:
@@ -47,7 +50,7 @@ jobs:
     steps:
       - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          toolchain: "stable-gnu"
+          toolchain: '${{matrix.target.rust}}'
       - name: Checkout
         uses: actions/checkout@v3
 
