@@ -66,6 +66,9 @@ proc runContext(args: tuple[ctx: ptr Context, address: cstring]) {.thread.} =
 
     while not args.ctx[].stop.load():
       # Keep running until we're asked not to, by polling `stop`
+      # TODO A replacement for the polling mechanism is being developed here:
+      #      https://github.com/status-im/nim-chronos/pull/406
+      #      Once it has been completed, it should be used instead.
       waitFor sleepAsync(100.millis)
 
   except CatchableError as exc:
