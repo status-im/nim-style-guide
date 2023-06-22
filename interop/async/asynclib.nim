@@ -61,10 +61,13 @@ proc runContext(args: tuple[ctx: ptr Context, address: cstring]) {.thread.} =
       initTAddress(address), process, socketFlags = socketFlags).expect("working server")
 
     node.server.start()
+    defer:
+      waitFor node.server.closeWait()
 
     while not args.ctx[].stop.load():
       # Keep running until we're asked not to, by polling `stop`
       waitFor sleepAsync(100.millis)
+
   except CatchableError as exc:
     echo "Shutting down because of error", exc.msg
 
