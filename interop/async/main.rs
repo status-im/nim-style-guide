@@ -1,17 +1,21 @@
 use std::ffi::{c_char, c_void, CString};
-use std::io;
+use std::{io, ptr, slice};
 
 extern "C" {
+    // Functions exported by `asynclib`
     pub fn startNode(
-        ctx: *const c_char,
-        user: u64,
-        callback: extern "C" fn(*mut c_void, *const u8, u64),
+        address: *const c_char,
+        on_headers: extern "C" fn(*mut c_void, *const c_char, usize),
+        user: *mut c_void,
     ) -> *mut c_void;
     pub fn stopNode(ctx: *mut *mut c_void);
 }
 
-extern "C" fn callback(_user: *mut c_void, _data: *const u8, len: u64) {
-    println!("Callback! {len}");
+extern "C" fn on_headers(_user: *mut c_void, data: *const c_char, len: usize) {
+    println!("Received headers! {len}");
+    let data = String::from_utf8(unsafe { slice::from_raw_parts(data as *const u8, len) }.to_vec())
+        .expect("valid utf8");
+    println!("{data}\n\n");
 }
 
 fn main() {
@@ -19,7 +23,7 @@ fn main() {
 
     let address = CString::new("127.0.0.1:60000").expect("CString::new failed");
 
-    let mut ctx = unsafe { startNode(address.into_raw(), 0, callback) };
+    let mut ctx = unsafe { startNode(address.into_raw(), on_headers, ptr::null_mut()) };
     print!("Node is listening on http://127.0.0.1:60000\nType `q` and press enter to stop\n");
 
     let mut input = String::new();

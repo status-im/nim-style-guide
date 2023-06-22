@@ -2,16 +2,17 @@
 #include <stdlib.h>
 
 /* Import functions from Nim */
-void* startNode(const char* url, void* user, void* callback);
+void* startNode(const char* url, void (*onHeader)(void*, const char*, size_t), void* user);
 void stopNode(void** ctx);
 
-void callback(void* user, const void* data, size_t len) {
-  printf("Callback! %lu\n", len);
+void onHeader(void* user, const char* headers, size_t len) {
+  printf("Received headers! %lu\n", len);
+  printf("%.*s\n\n", (int)len, headers);
 }
 
 int main(int argc, char** argv) {
   printf("Starting node\n");
-  void* ctx = startNode("127.0.0.1:60000", 0, callback);
+  void* ctx = startNode("127.0.0.1:60000", onHeader, 0);
   printf("Node is listening on http://127.0.0.1:60000\nType `q` and press enter to stop\n");
 
   int stop = 0;
