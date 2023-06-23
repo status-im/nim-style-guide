@@ -11,7 +11,7 @@ Go includes a native `M:N` scheduler for running Go tasks - because of this, car
 As an alternative, we can pass the work to a dedicated thread instead - this works well for asynchronous code that reports the result via a callback mechanism:
 
 ```nim
-{.pragma callback, cdecl, gcsafe, raises: [].}
+{.pragma: callback, cdecl, raises: [], gcsafe.}
 
 type
   MyAPI = object
@@ -37,8 +37,15 @@ proc exportedFunction(api: ptr MyAPI, v: cint, callback: ExportedFunctionCallbac
   queue.add(ExportedFunctionData(v: cint, callback: callback))
 ```
 
+The `go` thread scheduler can detect blocking functions and start new threads as appropriate - thus, blocking the C API function is a good alternative to callbacks - for example, results can be posted onto a queue that is read from by a blocking call.
+
 ## Variables
 
 When calling Nim code from Go, care must be taken that instances of [garbage-collected types](./interop.md#garbage-collected-types) don't pass between threads - this means process-wide globals and other forms of shared-memory apporaches of GC types must be avoided.
 
 [`LockOSThread`](https://pkg.go.dev/runtime#LockOSThread) can be used to constrain the thread from which a particular `goroutine` calls Nim.
+
+## `go` interop resources
+
+* [cgo wiki](https://github.com/golang/go/wiki/cgo)
+* [cockroachdb experience](https://www.cockroachlabs.com/blog/the-cost-and-complexity-of-cgo/) - general cgo costs
