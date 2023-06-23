@@ -154,7 +154,7 @@
 <h2 id="threads"><a class="header" href="#threads">Threads</a></h2>
 <p>Go includes a native <code>M:N</code> scheduler for running Go tasks - because of this, care must be taken both when calling Nim code from Go: the thread from which the call will happen is controlled by Go and  we must initialise the Nim garbage collector in every function exposed to Go, as documented in the <a href="./interop.html#calling-nim-code-from-other-languages">main guide</a>.</p>
 <p>As an alternative, we can pass the work to a dedicated thread instead - this works well for asynchronous code that reports the result via a callback mechanism:</p>
-<pre><code class="language-nim">{.pragma callback, cdecl, gcsafe, raises: [].}
+<pre><code class="language-nim">{.pragma: callback, cdecl, raises: [], gcsafe.}
 
 type
   MyAPI = object
@@ -179,9 +179,15 @@ proc exportedFunction(api: ptr MyAPI, v: cint, callback: ExportedFunctionCallbac
   # By not allocating any garbage-collected data, we avoid the need to initialize the garbage collector
   queue.add(ExportedFunctionData(v: cint, callback: callback))
 </code></pre>
+<p>The <code>go</code> thread scheduler can detect blocking functions and start new threads as appropriate - thus, blocking the C API function is a good alternative to callbacks - for example, results can be posted onto a queue that is read from by a blocking call.</p>
 <h2 id="variables"><a class="header" href="#variables">Variables</a></h2>
 <p>When calling Nim code from Go, care must be taken that instances of <a href="./interop.html#garbage-collected-types">garbage-collected types</a> don't pass between threads - this means process-wide globals and other forms of shared-memory apporaches of GC types must be avoided.</p>
 <p><a href="https://pkg.go.dev/runtime#LockOSThread"><code>LockOSThread</code></a> can be used to constrain the thread from which a particular <code>goroutine</code> calls Nim.</p>
+<h2 id="go-interop-resources"><a class="header" href="#go-interop-resources"><code>go</code> interop resources</a></h2>
+<ul>
+<li><a href="https://github.com/golang/go/wiki/cgo">cgo wiki</a></li>
+<li><a href="https://www.cockroachlabs.com/blog/the-cost-and-complexity-of-cgo/">cockroachdb experience</a> - general cgo costs</li>
+</ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/interop.go.md">Edit this page on GitHub.</a></footer>
                     </main>
 
