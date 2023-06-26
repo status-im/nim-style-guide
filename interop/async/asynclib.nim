@@ -50,9 +50,9 @@ proc runContext(args: tuple[ctx: ptr Context, address: cstring]) {.thread.} =
       let headers = $req.headers
       if headers.len > 0:
         ctx[].onHeaders(ctx[].user, unsafeAddr headers[0], csize_t headers.len)
-      return await req.respond(Http200, "Hello from Nim")
+      await req.respond(Http200, "Hello from Nim")
     else:
-      return dumbResponse()
+      dumbResponse()
 
   try:
     let
@@ -66,6 +66,9 @@ proc runContext(args: tuple[ctx: ptr Context, address: cstring]) {.thread.} =
 
     while not args.ctx[].stop.load():
       # Keep running until we're asked not to, by polling `stop`
+      # TODO A replacement for the polling mechanism is being developed here:
+      #      https://github.com/status-im/nim-chronos/pull/406
+      #      Once it has been completed, it should be used instead.
       waitFor sleepAsync(100.millis)
 
   except CatchableError as exc:
