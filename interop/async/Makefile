@@ -11,4 +11,4 @@ main-go: asynclib.nim main.go
 	go build -o main-go main.go
 
 prepare:
-	nimble install -y chronos@#master
+	nimble install -y chronos

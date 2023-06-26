@@ -42,7 +42,7 @@ proc runContext(args: tuple[ctx: ptr Context, address: cstring]) {.thread.} =
 
   deallocShared(args.address) # Don't forget to release memory manually!
 
-  proc process(r: RequestFence): Future[HttpResponseRef] {.async.} =
+  proc process(r: RequestFence): Future[HttpResponseRef] {.async.} = return
     if r.isOk():
       let
         req = r.get()
