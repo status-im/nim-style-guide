@@ -4,26 +4,17 @@ In general, prefer [explicit error handling mechanisms](errors.result.md).
 
 Annotate each module at top-level (before imports):
 
-* `{.push raises: [Defect].}` (nim 1.2)
-* `{.push raises: [].}` (nim 1.4+)
-
-To make a module compatible with both Nim 1.2 and newer versions, use:
-
 ```nim
-when (NimMajor, NimMinor) < (1, 4):
-  {.push raises: [Defect].}
-else:
   {.push raises: [].}
 ```
 
-
 Use explicit `{.raises.}` annotation for each public (`*`) function.
 
-Raise `Defect` to signal panics and situations that the code is not prepared to handle.
+Raise `Defect` to signal panics and undefined behavior that the code is not prepared to handle.
 
 ```nim
 # Enable exception tracking for all functions in this module
-`{.push raises: [Defect].}` # Always at start of module
+`{.push raises: [].}` # Always at start of module
 
 # Inherit from CatchableError and name XxxError
 type MyLibraryError = object of CatchableError
@@ -37,7 +28,7 @@ type MySpecificError = object of MyLibraryError
 
 # Explicitly annotate functions with raises - this replaces the more strict
 # module-level push declaration on top
-func f() {.raises: [Defect, MySpecificError]} = discard
+func f() {.raises: [MySpecificError]} = discard
 
 # Isolate code that may generate exceptions using expression-based try:
 let x =
@@ -68,8 +59,7 @@ raise (ref MyError)(msg: "description", data: value)
 * Nim exception hierarchy unclear and changes between versions
     * The distinction between `Exception`, `CatchableError` and `Defect` is inconsistently implemented
         * [Exception hierarchy RFC not being implemented](https://github.com/nim-lang/Nim/issues/11776)
-    * `Defect` is [not correctly tracked]((https://github.com/nim-lang/Nim/issues/12862))
-    * Nim 1.4 further weakens compiler analysis around `Defect`(https://github.com/nim-lang/Nim/pull/13626)
+    * `Defect` is [not tracked](https://github.com/nim-lang/Nim/pull/13626)
 * Without translation, exceptions leak information between abstraction layers
 * Writing exception-safe code in Nim impractical due to missing critical features present in C++
     * No RAII - resources often leak in the presence of exceptions
@@ -77,7 +67,7 @@ raise (ref MyError)(msg: "description", data: value)
         * No constructors, thus no way to force particular object states at construction
     * `ref` types incompatible with destructors, even if they worked
 * Poor performance of error path
-    * Several heap allocations for each Exception (exception, stack trace, string)
+    * Several heap allocations for each `Exception`` (exception, stack trace, message)
     * Expensive stack trace
 * Poor performance on happy path
     * Every `try` and `defer` has significant performance overhead due to `setjmp` exception handling implementation
@@ -86,11 +76,9 @@ raise (ref MyError)(msg: "description", data: value)
 
 The use of exceptions in Nim has significantly contributed to resource leaks, deadlocks and other difficult bugs. The various exception handling proposals aim to alleviate some of the issues but have not found sufficient grounding in the Nim community to warrant the language changes necessary to proceed.
 
-A notable exception to the guideline is `chronos` and `async`/`await` transformations that lack support for propagating checked exception information. Several bugs and implementation issues exist in the exception handling transformation employed by `async`.
-
 ### `Defect`
 
-`Defect` does [not cause](https://github.com/nim-lang/Nim/issues/12862) a `raises` effect - code must be manually verified - common sources of Defect include:
+`Defect` does [not cause](https://github.com/nim-lang/Nim/issues/12862) a `raises` effect - code must be manually verified - common sources of `Defect` include:
 
 * Over/underflows in signed arithmetic
 * `[]` operator for indexing arrays/seqs/etc (but not tables!)
@@ -98,7 +86,7 @@ A notable exception to the guideline is `chronos` and `async`/`await` transforma
 
 ### `CatchableError`
 
-Catching `CatchableError` implies that any errors are funnelled through the same exception handler. When called code starts raising new exceptions, it becomes difficult to find affected code - catching more specific errors avoids this maintenance problem.
+Catching `CatchableError` implies that all errors are funnelled through the same exception handler. When called code starts raising new exceptions, it becomes difficult to find affected code - catching more specific errors avoids this maintenance problem.
 
 Frameworks may catch `CatchableError` to forward exceptions through layers. Doing so leads to type erasure of the actual raised exception type in `raises` tracking.
 

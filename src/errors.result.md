@@ -14,7 +14,7 @@ Isolate legacy code with explicit exception handling, converting the errors to `
 
 ```nim
 # Enable exception tracking for all functions in this module
-{.push raises: [Defect].} # Always at start of module
+{.push raises: [].} # Always at start of module
 
 import stew/results
 export results # Re-export modules used in public symbols
@@ -24,7 +24,7 @@ export results # Re-export modules used in public symbols
 func f*(): Result[void, cstring]
 
 # In special cases that warrant the use of exceptions, list these explicitly using the `raises` pragma.
-func parse(): Type {.raises: [Defect, ParseError]}
+func parse(): Type {.raises: [ParseError]}
 ```
 
 See also [Result](libraries.results.md) for more recommendations about `Result`.

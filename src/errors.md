@@ -20,4 +20,4 @@ When porting code, there are two approaches:
 
 * Bottom up - fix the underlying library / code
 * Top down - isolate the legacy code with `try/except`
-  * In this case, we note where the Exception effect is coming from, should it be fixed in the future
+  * In this case, we note where the `Exception` effect is coming from, should it be fixed in the future
