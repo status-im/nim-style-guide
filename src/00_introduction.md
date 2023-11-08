@@ -28,6 +28,10 @@ When in doubt:
 
 The latest version of this book can be found [online](https://status-im.github.io/nim-style-guide/) or on [GitHub](https://github.com/status-im/nim-style-guide/).
 
+This guide currently targets Nim v1.6.
+
+At the time of writing, v2.0 has been released but its new garbage collector is not yet stable enough for production use. It is advisable to test new code with both `--mm:gc` and `--mm:orc` (the default) in the transition period.
+
 <!-- toc -->
 
 ## Practical notes

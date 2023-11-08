@@ -5,7 +5,7 @@ Use heap allocation in glue layers.
 
 Avoid `alloca`.
 
-```
+```nim
 func init(T: type Yyy, a, b: int): T = ...
 
 # Heap allocation as a local decision
