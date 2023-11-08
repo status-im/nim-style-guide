@@ -179,7 +179,7 @@
 <p>Prefer to use stack-based and statically sized data types in core/low-level libraries.
 Use heap allocation in glue layers.</p>
 <p>Avoid <code>alloca</code>.</p>
-<pre><code>func init(T: type Yyy, a, b: int): T = ...
+<pre><code class="language-nim">func init(T: type Yyy, a, b: int): T = ...
 
 # Heap allocation as a local decision
 let x = (ref Xxx)(

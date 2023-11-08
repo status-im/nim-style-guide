@@ -198,6 +198,8 @@
 <li>Correct, readable, elegant, efficient, in that order</li>
 </ul>
 <p>The latest version of this book can be found <a href="https://status-im.github.io/nim-style-guide/">online</a> or on <a href="https://github.com/status-im/nim-style-guide/">GitHub</a>.</p>
+<p>This guide currently targets Nim v1.6.</p>
+<p>At the time of writing, v2.0 has been released but its new garbage collector is not yet stable enough for production use. It is advisable to test new code with both <code>--mm:gc</code> and <code>--mm:orc</code> (the default) in the transition period.</p>
 <ul>
 <li><a href="00_introduction.html#practical-notes">Practical notes</a></li>
 <li><a href="00_introduction.html#updates-to-this-guide">Updates to this guide</a></li>
@@ -460,7 +462,7 @@ type XxxRef = ref object
 <p>Prefer to use stack-based and statically sized data types in core/low-level libraries.
 Use heap allocation in glue layers.</p>
 <p>Avoid <code>alloca</code>.</p>
-<pre><code>func init(T: type Yyy, a, b: int): T = ...
+<pre><code class="language-nim">func init(T: type Yyy, a, b: int): T = ...
 
 # Heap allocation as a local decision
 let x = (ref Xxx)(
@@ -558,15 +560,15 @@ else: x = 6
 <li>No longer does multi-dispatch</li>
 </ul>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/language.methods.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="callbacks-closures-and-forward-declarations-languageproctypes"><a class="header" href="#callbacks-closures-and-forward-declarations-languageproctypes">Callbacks, closures and forward declarations <code>[language.proctypes]</code></a></h2>
-<p>Annotate <code>proc</code> type definitions and forward declarations with <code>{.raises [Defect], gcsafe.}</code> or specific exception types.</p>
+<p>Annotate <code>proc</code> type definitions and forward declarations with <code>{.raises [], gcsafe.}</code> or specific exception types.</p>
 <pre><code class="language-nim"># By default, Nim assumes closures may raise any exception and are not gcsafe
 # By annotating the callback with raises and gcsafe, the compiler ensures that
 # any functions assigned to the closure fit the given constraints
-type Callback = proc(...) {.raises: [Defect], gcsafe.}
+type Callback = proc(...) {.raises: [], gcsafe.}
 </code></pre>
 <h3 id="practical-notes-9"><a class="header" href="#practical-notes-9">Practical notes</a></h3>
 <ul>
-<li>Without annotations, <code>raises Exception</code> and no GC-safety is assumed by the compiler, infecting deduction in the whole call stack</li>
+<li>Without annotations, <code>{.raises [Exception].}</code> and no GC-safety is assumed by the compiler, infecting deduction in the whole call stack</li>
 <li>Annotations constrain the functions being assigned to the callback to follow its declaration, simplifying calling the callback safely
 <ul>
 <li>In particular, callbacks are difficult to reason about when they raise exceptions - what should the caller of the callback do?</li>
@@ -758,7 +760,7 @@ if stringValue.len &gt; 32:
 <li>Bottom up - fix the underlying library / code</li>
 <li>Top down - isolate the legacy code with <code>try/except</code>
 <ul>
-<li>In this case, we note where the Exception effect is coming from, should it be fixed in the future</li>
+<li>In this case, we note where the <code>Exception</code> effect is coming from, should it be fixed in the future</li>
 </ul>
 </li>
 </ul>
@@ -770,7 +772,7 @@ if stringValue.len &gt; 32:
 <p>Handle errors locally at each abstraction level, avoiding spurious abstraction leakage.</p>
 <p>Isolate legacy code with explicit exception handling, converting the errors to <code>Result</code> or handling them locally, as appropriate.</p>
 <pre><code class="language-nim"># Enable exception tracking for all functions in this module
-{.push raises: [Defect].} # Always at start of module
+{.push raises: [].} # Always at start of module
 
 import stew/results
 export results # Re-export modules used in public symbols
@@ -780,27 +782,19 @@ export results # Re-export modules used in public symbols
 func f*(): Result[void, cstring]
 
 # In special cases that warrant the use of exceptions, list these explicitly using the `raises` pragma.
-func parse(): Type {.raises: [Defect, ParseError]}
+func parse(): Type {.raises: [ParseError]}
 </code></pre>
 <p>See also <a href="libraries.results.html">Result</a> for more recommendations about <code>Result</code>.</p>
 <p>See also <a href="https://github.com/status-im/nim-stew/pull/26">Error handling helpers</a> in stew that may change some of these guidelines.</p>
 <footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.result.md">Edit this page on GitHub.</a></footer><div style="break-before: page; page-break-before: always;"></div><h2 id="exceptions-errorsexceptions"><a class="header" href="#exceptions-errorsexceptions">Exceptions <code>[errors.exceptions]</code></a></h2>
 <p>In general, prefer <a href="errors.result.html">explicit error handling mechanisms</a>.</p>
 <p>Annotate each module at top-level (before imports):</p>
-<ul>
-<li><code>{.push raises: [Defect].}</code> (nim 1.2)</li>
-<li><code>{.push raises: [].}</code> (nim 1.4+)</li>
-</ul>
-<p>To make a module compatible with both Nim 1.2 and newer versions, use:</p>
-<pre><code class="language-nim">when (NimMajor, NimMinor) &lt; (1, 4):
-  {.push raises: [Defect].}
-else:
-  {.push raises: [].}
+<pre><code class="language-nim">  {.push raises: [].}
 </code></pre>
 <p>Use explicit <code>{.raises.}</code> annotation for each public (<code>*</code>) function.</p>
-<p>Raise <code>Defect</code> to signal panics and situations that the code is not prepared to handle.</p>
+<p>Raise <code>Defect</code> to signal panics and undefined behavior that the code is not prepared to handle.</p>
 <pre><code class="language-nim"># Enable exception tracking for all functions in this module
-`{.push raises: [Defect].}` # Always at start of module
+`{.push raises: [].}` # Always at start of module
 
 # Inherit from CatchableError and name XxxError
 type MyLibraryError = object of CatchableError
@@ -814,7 +808,7 @@ type MySpecificError = object of MyLibraryError
 
 # Explicitly annotate functions with raises - this replaces the more strict
 # module-level push declaration on top
-func f() {.raises: [Defect, MySpecificError]} = discard
+func f() {.raises: [MySpecificError]} = discard
 
 # Isolate code that may generate exceptions using expression-based try:
 let x =
@@ -854,8 +848,7 @@ raise (ref MyError)(msg: &quot;description&quot;, data: value)
 <li><a href="https://github.com/nim-lang/Nim/issues/11776">Exception hierarchy RFC not being implemented</a></li>
 </ul>
 </li>
-<li><code>Defect</code> is <a href="(https://github.com/nim-lang/Nim/issues/12862)">not correctly tracked</a></li>
-<li>Nim 1.4 further weakens compiler analysis around <code>Defect</code>(https://github.com/nim-lang/Nim/pull/13626)</li>
+<li><code>Defect</code> is <a href="https://github.com/nim-lang/Nim/pull/13626">not tracked</a></li>
 </ul>
 </li>
 <li>Without translation, exceptions leak information between abstraction layers</li>
@@ -872,7 +865,7 @@ raise (ref MyError)(msg: &quot;description&quot;, data: value)
 </li>
 <li>Poor performance of error path
 <ul>
-<li>Several heap allocations for each Exception (exception, stack trace, string)</li>
+<li>Several heap allocations for each `Exception`` (exception, stack trace, message)</li>
 <li>Expensive stack trace</li>
 </ul>
 </li>
@@ -884,16 +877,15 @@ raise (ref MyError)(msg: &quot;description&quot;, data: value)
 </ul>
 <h3 id="practical-notes-15"><a class="header" href="#practical-notes-15">Practical notes</a></h3>
 <p>The use of exceptions in Nim has significantly contributed to resource leaks, deadlocks and other difficult bugs. The various exception handling proposals aim to alleviate some of the issues but have not found sufficient grounding in the Nim community to warrant the language changes necessary to proceed.</p>
-<p>A notable exception to the guideline is <code>chronos</code> and <code>async</code>/<code>await</code> transformations that lack support for propagating checked exception information. Several bugs and implementation issues exist in the exception handling transformation employed by <code>async</code>.</p>
 <h3 id="defect"><a class="header" href="#defect"><code>Defect</code></a></h3>
-<p><code>Defect</code> does <a href="https://github.com/nim-lang/Nim/issues/12862">not cause</a> a <code>raises</code> effect - code must be manually verified - common sources of Defect include:</p>
+<p><code>Defect</code> does <a href="https://github.com/nim-lang/Nim/issues/12862">not cause</a> a <code>raises</code> effect - code must be manually verified - common sources of <code>Defect</code> include:</p>
 <ul>
 <li>Over/underflows in signed arithmetic</li>
 <li><code>[]</code> operator for indexing arrays/seqs/etc (but not tables!)</li>
 <li>accidental/implicit conversions to <code>range</code> types</li>
 </ul>
 <h3 id="catchableerror"><a class="header" href="#catchableerror"><code>CatchableError</code></a></h3>
-<p>Catching <code>CatchableError</code> implies that any errors are funnelled through the same exception handler. When called code starts raising new exceptions, it becomes difficult to find affected code - catching more specific errors avoids this maintenance problem.</p>
+<p>Catching <code>CatchableError</code> implies that all errors are funnelled through the same exception handler. When called code starts raising new exceptions, it becomes difficult to find affected code - catching more specific errors avoids this maintenance problem.</p>
 <p>Frameworks may catch <code>CatchableError</code> to forward exceptions through layers. Doing so leads to type erasure of the actual raised exception type in <code>raises</code> tracking.</p>
 <h3 id="open-questions"><a class="header" href="#open-questions">Open questions</a></h3>
 <ul>

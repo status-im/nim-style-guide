@@ -176,15 +176,15 @@
                 <div id="content" class="content">
                     <main>
                         <h2 id="callbacks-closures-and-forward-declarations-languageproctypes"><a class="header" href="#callbacks-closures-and-forward-declarations-languageproctypes">Callbacks, closures and forward declarations <code>[language.proctypes]</code></a></h2>
-<p>Annotate <code>proc</code> type definitions and forward declarations with <code>{.raises [Defect], gcsafe.}</code> or specific exception types.</p>
+<p>Annotate <code>proc</code> type definitions and forward declarations with <code>{.raises [], gcsafe.}</code> or specific exception types.</p>
 <pre><code class="language-nim"># By default, Nim assumes closures may raise any exception and are not gcsafe
 # By annotating the callback with raises and gcsafe, the compiler ensures that
 # any functions assigned to the closure fit the given constraints
-type Callback = proc(...) {.raises: [Defect], gcsafe.}
+type Callback = proc(...) {.raises: [], gcsafe.}
 </code></pre>
 <h3 id="practical-notes"><a class="header" href="#practical-notes">Practical notes</a></h3>
 <ul>
-<li>Without annotations, <code>raises Exception</code> and no GC-safety is assumed by the compiler, infecting deduction in the whole call stack</li>
+<li>Without annotations, <code>{.raises [Exception].}</code> and no GC-safety is assumed by the compiler, infecting deduction in the whole call stack</li>
 <li>Annotations constrain the functions being assigned to the callback to follow its declaration, simplifying calling the callback safely
 <ul>
 <li>In particular, callbacks are difficult to reason about when they raise exceptions - what should the caller of the callback do?</li>
