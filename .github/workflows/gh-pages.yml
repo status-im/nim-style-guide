@@ -14,17 +14,22 @@ jobs:
         with:
          crate: mdbook
          use-tool-cache: true
-         version: "0.4.28"
+         version: "0.4.35"
       - uses: actions-rs/install@v0.1
         with:
          crate: mdbook-toc
          use-tool-cache: true
-         version: "0.11.2"
+         version: "0.14.1"
       - uses: actions-rs/install@v0.1
         with:
          crate: mdbook-open-on-gh
          use-tool-cache: true
-         version: "2.3.3"
+         version: "2.4.1"
+      - uses: actions-rs/install@v0.1
+        with:
+          crate: mdbook-admonish
+          use-tool-cache: true
+          version: "1.13.1"
       - name: Build book
         run: |
           PATH=.cargo/bin:$PATH mdbook build
