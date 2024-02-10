@@ -187,7 +187,7 @@
 <pre><code class="language-nim"># Enable exception tracking for all functions in this module
 {.push raises: [].} # Always at start of module
 
-import stew/results
+import results
 export results # Re-export modules used in public symbols
 
 # Use `Result` to propagate additional information expected errors
