@@ -1,6 +1,6 @@
 ## Results `[libraries.results]`
 
-[Manual](https://github.com/status-im/nim-stew/blob/master/stew/results.nim#L19)
+[Manual](https://github.com/arnetheduck/nim-results/blob/592e0dcba157da84e2cced2309fa27dc67b667f3/results.nim#L18)
 
 Use `Result` to document all outcomes of functions.
 

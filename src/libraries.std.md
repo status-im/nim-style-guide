@@ -22,7 +22,7 @@ Use the following stdlib replacements that offer safer API (allowing more issues
 * async -> chronos
 * bitops -> stew/bitops2
 * endians -> stew/endians2
-* exceptions -> stew/results
+* exceptions -> results
 * io -> stew/io2
 * sqlite -> nim-sqlite3-abi
 * streams -> nim-faststreams
