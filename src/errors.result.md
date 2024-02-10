@@ -16,7 +16,7 @@ Isolate legacy code with explicit exception handling, converting the errors to `
 # Enable exception tracking for all functions in this module
 {.push raises: [].} # Always at start of module
 
-import stew/results
+import results
 export results # Re-export modules used in public symbols
 
 # Use `Result` to propagate additional information expected errors
