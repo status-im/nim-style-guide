@@ -2,7 +2,7 @@
 
 Prefer expressions to initialize variables and return values
 
-```
+```nim
 let x =
   if a > 4: 5
   else: 6
