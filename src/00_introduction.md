@@ -28,9 +28,9 @@ When in doubt:
 
 The latest version of this book can be found [online](https://status-im.github.io/nim-style-guide/) or on [GitHub](https://github.com/status-im/nim-style-guide/).
 
-This guide currently targets Nim v1.6.
+This guide currently targets Nim v2.0.
 
-At the time of writing, v2.0 has been released but its new garbage collector is not yet stable enough for production use. It is advisable to test new code with both `--mm:gc` and `--mm:orc` (the default) in the transition period.
+At the time of writing, v2.0 has been released but its new garbage collector is not yet stable enough for production use. It is advisable to test new code with both `--mm:refc` and `--mm:orc` (the default) in the transition period.
 
 <!-- toc -->
 
@@ -58,8 +58,11 @@ In general, the guide will aim to prioritise:
 
 While this book covers Nim at Status in general, there are other resources available that partially may overlap with this guide:
 
-* [Nim manual](https://nim-lang.org/docs/manual.html) - the authorative source for understanding the features of the language
-* [The Nimbus auditor book](https://nimbus.guide/auditors-book/) - covers the security details of Nimbus itself and how it relates to the features of Nim
+* [Nim language manual](https://nim-lang.org/docs/manual.html) - the authorative source for understanding the features of the language
+* [Nim documentation](https://nim-lang.org/documentation.html) - other official Nim documentation, including its standard library and toolchain
+* [Nim by Example](https://nim-by-example.github.io/getting_started/) - Nim tutorials to start with
+* [Chronos guides](https://github.com/status-im/nim-chronos/blob/master/docs/src/SUMMARY.md)
+* [nim-libp2p docs](https://vacp2p.github.io/nim-libp2p/docs/)
 
 ## Workflow
 

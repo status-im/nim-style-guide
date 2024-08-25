@@ -29,15 +29,15 @@ jobs:
         include:
           - target:
               os: linux
-            builder: ubuntu-20.04
+            builder: ubuntu-latest
             shell: bash
           - target:
               os: macos
-            builder: macos-11
+            builder: macos-latest
             shell: bash
           - target:
               os: windows
-            builder: windows-2019
+            builder: windows-latest
             shell: msys2 {0}
 
     defaults:
@@ -52,7 +52,7 @@ jobs:
         with:
           toolchain: '${{matrix.target.rust}}'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install build dependencies (Linux i386)
         if: runner.os == 'Linux' && matrix.target.cpu == 'i386'
@@ -87,7 +87,7 @@ jobs:
       - name: Restore Nim DLLs dependencies (Windows) from cache
         if: runner.os == 'Windows'
         id: windows-dlls-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: external/dlls-${{ matrix.target.cpu }}
           key: 'dlls-${{ matrix.target.cpu }}'
