@@ -92,6 +92,9 @@ proc exportedFunction {.exported.} =
   echo "Hello from Nim
 ```
 
+When creating a Nim library, it should be compiled with the flag `--nimMainPrefix:your_prefix`. This changes the generated `NimMain()` function to `your_prefixNimMain()`, ensuring that its runtime initialization won’t conflict with other Nim libraries or applications.
+Then, proceed to use `your_prefixNimMain()` intead of `NimMain()` to initialize your library's Nim runtime.
+
 In languages such as [Go](./interop.go.md), it is hard to anticipate which thread code will be called from - in such cases, you can safely initialize the garbage collector in every exported function instead:
 
 ```nim
