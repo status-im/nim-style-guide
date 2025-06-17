@@ -10,10 +10,7 @@ The style guide is built using [mdBook](https://github.com/rust-lang/mdBook), an
 
 ```bash
 # Install or update tooling (make sure you add "~/.cargo/bin" to PATH):
-cargo install mdbook --version 0.4.36
-cargo install mdbook-toc --version 0.14.1
-cargo install mdbook-open-on-gh --version 2.4.1
-cargo install mdbook-admonish --version 1.14.0
+cargo install mdbook@0.4.51 mdbook-toc@0.14.2 mdbook-open-on-gh@2.4.3 mdbook-admonish@1.20.0
 
 # Edit book and view through local browser
 mdbook serve

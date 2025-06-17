@@ -9,27 +9,27 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions-rs/install@v0.1
         with:
          crate: mdbook
          use-tool-cache: true
-         version: "0.4.36"
+         version: "0.4.51"
       - uses: actions-rs/install@v0.1
         with:
          crate: mdbook-toc
          use-tool-cache: true
-         version: "0.14.1"
+         version: "0.14.2"
       - uses: actions-rs/install@v0.1
         with:
          crate: mdbook-open-on-gh
          use-tool-cache: true
-         version: "2.4.1"
+         version: "2.4.3"
       - uses: actions-rs/install@v0.1
         with:
           crate: mdbook-admonish
           use-tool-cache: true
-          version: "1.14.0"
+          version: "1.20.0"
       - name: Build book
         run: |
           PATH=.cargo/bin:$PATH mdbook build
@@ -39,3 +39,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./book
+          force_orphan: true
