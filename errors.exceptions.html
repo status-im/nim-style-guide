@@ -1,0 +1,356 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Exceptions - The Status Nim style guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="open-in.css">
+        <link rel="stylesheet" href="./mdbook-admonish.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Status Nim style guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/status-im/nim-style-guide/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="exceptions-errorsexceptions"><a class="header" href="#exceptions-errorsexceptions">Exceptions <code>[errors.exceptions]</code></a></h2>
+<p>In general, prefer <a href="errors.result.html">explicit error handling mechanisms</a>.</p>
+<p>Annotate each module at top-level (before imports):</p>
+<pre><code class="language-nim">  {.push raises: [].}
+</code></pre>
+<p>Use explicit <code>{.raises.}</code> annotation for each public (<code>*</code>) function.</p>
+<p>Raise <code>Defect</code> to signal panics and undefined behavior that the code is not prepared to handle.</p>
+<pre><code class="language-nim"># Enable exception tracking for all functions in this module
+`{.push raises: [].}` # Always at start of module
+
+# Inherit from CatchableError and name XxxError
+type MyLibraryError = object of CatchableError
+
+# Raise Defect when panicking - this crashes the application (in different ways
+# depending on Nim version and compiler flags) - name `XxxDefect`
+type SomeDefect = object of Defect
+
+# Use hierarchy for more specific errors
+type MySpecificError = object of MyLibraryError
+
+# Explicitly annotate functions with raises - this replaces the more strict
+# module-level push declaration on top
+func f() {.raises: [MySpecificError]} = discard
+
+# Isolate code that may generate exceptions using expression-based try:
+let x =
+  try: ...
+  except MyError as exc: ... # use the most specific error kind possible
+
+# Be careful to catch excpetions inside loops, to avoid partial loop evaluations:
+for x in y:
+  try: ..
+  except MyError: ..
+
+# Provide contextual data when raising specific errors
+raise (ref MyError)(msg: "description", data: value)
+</code></pre>
+<h3 id="pros"><a class="header" href="#pros">Pros</a></h3>
+<ul>
+<li>Used by <code>Nim</code> standard library</li>
+<li>Good for quick prototyping without error handling</li>
+<li>Good performance on happy path without <code>try</code>
+<ul>
+<li>Compatible with RVO</li>
+</ul>
+</li>
+</ul>
+<h3 id="cons"><a class="header" href="#cons">Cons</a></h3>
+<ul>
+<li>Poor readability - exceptions not part of API / signatures by default
+<ul>
+<li>Have to assume every line may fail</li>
+</ul>
+</li>
+<li>Poor maintenance / refactoring support - compiler can't help detect affected code because they're not part of API</li>
+<li>Nim exception hierarchy unclear and changes between versions
+<ul>
+<li>The distinction between <code>Exception</code>, <code>CatchableError</code> and <code>Defect</code> is inconsistently implemented
+<ul>
+<li><a href="https://github.com/nim-lang/Nim/issues/11776">Exception hierarchy RFC not being implemented</a></li>
+</ul>
+</li>
+<li><code>Defect</code> is <a href="https://github.com/nim-lang/Nim/pull/13626">not tracked</a></li>
+</ul>
+</li>
+<li>Without translation, exceptions leak information between abstraction layers</li>
+<li>Writing exception-safe code in Nim impractical due to missing critical features present in C++
+<ul>
+<li>No RAII - resources often leak in the presence of exceptions</li>
+<li>Destructors incomplete / unstable and thus not usable for safe EH
+<ul>
+<li>No constructors, thus no way to force particular object states at construction</li>
+</ul>
+</li>
+<li><code>ref</code> types incompatible with destructors, even if they worked</li>
+</ul>
+</li>
+<li>Poor performance of error path
+<ul>
+<li>Several heap allocations for each `Exception`` (exception, stack trace, message)</li>
+<li>Expensive stack trace</li>
+</ul>
+</li>
+<li>Poor performance on happy path
+<ul>
+<li>Every <code>try</code> and <code>defer</code> has significant performance overhead due to <code>setjmp</code> exception handling implementation</li>
+</ul>
+</li>
+</ul>
+<h3 id="practical-notes"><a class="header" href="#practical-notes">Practical notes</a></h3>
+<p>The use of exceptions in Nim has significantly contributed to resource leaks, deadlocks and other difficult bugs. The various exception handling proposals aim to alleviate some of the issues but have not found sufficient grounding in the Nim community to warrant the language changes necessary to proceed.</p>
+<h3 id="defect"><a class="header" href="#defect"><code>Defect</code></a></h3>
+<p><code>Defect</code> does <a href="https://github.com/nim-lang/Nim/issues/12862">not cause</a> a <code>raises</code> effect - code must be manually verified - common sources of <code>Defect</code> include:</p>
+<ul>
+<li>Over/underflows in signed arithmetic</li>
+<li><code>[]</code> operator for indexing arrays/seqs/etc (but not tables!)</li>
+<li>accidental/implicit conversions to <code>range</code> types</li>
+</ul>
+<h3 id="catchableerror"><a class="header" href="#catchableerror"><code>CatchableError</code></a></h3>
+<p>Catching <code>CatchableError</code> implies that all errors are funnelled through the same exception handler. When called code starts raising new exceptions, it becomes difficult to find affected code - catching more specific errors avoids this maintenance problem.</p>
+<p>Frameworks may catch <code>CatchableError</code> to forward exceptions through layers. Doing so leads to type erasure of the actual raised exception type in <code>raises</code> tracking.</p>
+<h3 id="open-questions"><a class="header" href="#open-questions">Open questions</a></h3>
+<ul>
+<li>Should a hierarchy be used?
+<ul>
+<li>Why? It's rare that calling code differentiates between errors</li>
+<li>What to start the hierarchy with? Unclear whether it should be a global type (like <code>CatchableError</code> or <code>ValueError</code>, or a module-local type</li>
+</ul>
+</li>
+<li>Should exceptions be translated?
+<ul>
+<li>Leaking exception types between layers means no isolation, joining all modules in one big spaghetti bowl</li>
+<li>Translating exceptions has high visual overhead, specially when hierachy is used - not practical, all advantages lost</li>
+</ul>
+</li>
+<li>Should <code>raises</code> be used?
+<ul>
+<li>Equivalent to <code>Result[T, SomeError]</code> but lacks generics</li>
+<li>Additive - asymptotically tends towards <code>raises: [CatchableError]</code>, losing value unless exceptions are translated locally</li>
+<li>No way to transport accurate raises type information across Future/async/generic code boundaries - no <code>raisesof</code> equivalent of <code>typeof</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="background"><a class="header" href="#background">Background</a></h3>
+<ul>
+<li><a href="https://github.com/status-im/nim-stew/pull/26">Stew EH helpers</a> - Helpers that make working with checked exceptions easier</li>
+<li><a href="https://github.com/nim-lang/Nim/issues/8363">Nim Exception RFC</a> - seeks to differentiate between recoverable and unrecoverable errors</li>
+<li><a href="https://gist.github.com/zah/d2d729b39d95a1dfedf8183ca35043b3">Zahary's handling proposal</a> - seeks to handle any kind of error-generating API</li>
+<li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0709r0.pdf">C++ proposal</a> - After 25 years of encouragement, half the polled C++ developers continue avoiding exceptions and Herb Sutter argues about the consequences of doing so</li>
+<li><a href="https://google.github.io/styleguide/cppguide.html#Exceptions">Google</a> and <a href="https://llvm.org/docs/CodingStandards.html#id22">llvm</a> style guides on exceptions</li>
+</ul>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/errors.exceptions.md">Edit this page on GitHub.</a></footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="errors.result.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="errors.status.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="errors.result.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="errors.status.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
