@@ -5,7 +5,7 @@ In general, prefer [explicit error handling mechanisms](errors.result.md).
 Annotate each module at top-level (before imports):
 
 ```nim
-  {.push raises: [].}
+{.push raises: [], gcsafe.}
 ```
 
 Use explicit `{.raises.}` annotation for each public (`*`) function.
@@ -13,8 +13,8 @@ Use explicit `{.raises.}` annotation for each public (`*`) function.
 Raise `Defect` to signal panics and undefined behavior that the code is not prepared to handle.
 
 ```nim
-# Enable exception tracking for all functions in this module
-`{.push raises: [].}` # Always at start of module
+# Enable exception and gcsafe tracking for all functions in this module
+`{.push raises: [], gcsafe.}` # Always at start of module
 
 # Inherit from CatchableError and name XxxError
 type MyLibraryError = object of CatchableError
@@ -42,6 +42,13 @@ for x in y:
 
 # Provide contextual data when raising specific errors
 raise (ref MyError)(msg: "description", data: value)
+
+# Quit or reraise if you're interacting with `Defect` - the exception handler
+# will not always be invoked
+try: ..
+except Defect as exc:
+  debugEcho "oh no! ", exc.msg
+  raise exc
 ```
 
 ### Pros
@@ -67,7 +74,7 @@ raise (ref MyError)(msg: "description", data: value)
         * No constructors, thus no way to force particular object states at construction
     * `ref` types incompatible with destructors, even if they worked
 * Poor performance of error path
-    * Several heap allocations for each `Exception`` (exception, stack trace, message)
+    * Several heap allocations for each `Exception` (exception, stack trace, message)
     * Expensive stack trace
 * Poor performance on happy path
     * Every `try` and `defer` has significant performance overhead due to `setjmp` exception handling implementation
@@ -84,11 +91,19 @@ The use of exceptions in Nim has significantly contributed to resource leaks, de
 * `[]` operator for indexing arrays/seqs/etc (but not tables!)
 * accidental/implicit conversions to `range` types
 
+Catching `Defect` is undefined behavior - do not rely on it being caught outside of tests and/or re-raise it or `quit`.
+
 ### `CatchableError`
 
 Catching `CatchableError` implies that all errors are funnelled through the same exception handler. When called code starts raising new exceptions, it becomes difficult to find affected code - catching more specific errors avoids this maintenance problem.
 
 Frameworks may catch `CatchableError` to forward exceptions through layers. Doing so leads to type erasure of the actual raised exception type in `raises` tracking.
+
+### `except:`
+
+`except:`, following a [changed semantics](https://github.com/nim-lang/RFCs/issues/557) is similar in behavior to `catch CatchableError` and should be used judiciously.
+
+The change is available from Nim [v2.2.4](https://github.com/nim-lang/Nim/pull/24821) - portable code should prefer `catch CatchableError`.
 
 ### Open questions
 
