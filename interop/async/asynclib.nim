@@ -1,4 +1,4 @@
-{.push raises: [].}
+{.push raises: [], gcsafe.}
 
 {.pragma: exported, exportc, cdecl, raises: [].}
 {.pragma: callback, cdecl, raises: [], gcsafe.}
