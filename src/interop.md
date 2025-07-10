@@ -242,7 +242,7 @@ proc reader(queue: ptr Queue[pointer]):
 
 When `chronos` is used, execution is typically controlled by the `chronos` per-thread dispatcher - passing data to `chronos` is done either via a pipe / socket or by polling a thread-safe queue.
 
-See [the async example](https://github.com/status-im/nim-style-guide/tree/main/interop/async/).
+See async usage in the [nim-library-template](https://github.com/logos-co/nim-library-template/blob/59a7a9d8a501219a397ae0860e38d4ec69cecde2/library/clock_thread/clock_thread.nim#L42-L66).
 
 ## Resources
 
