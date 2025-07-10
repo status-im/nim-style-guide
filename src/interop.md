@@ -8,7 +8,7 @@ While it is possible to automate many things related to FFI, this guide focuses 
 
 The focus of this guide is on pragmatic solutions available for the currently supported versions of Nim - 1.6 at the time of writing - the recommendations may change as new libraries and Nim versions become available.
 
-For examples, head to the [interop](https://github.com/status-im/nim-style-guide/tree/main/interop) folder in the style guide repository.
+For examples and detailed instructions on how to adapt them for your use case, head to the [nim-c-library-guide](https://github.com/logos-co/nim-c-library-guide) repository.
 
 ## Basics
 
@@ -242,7 +242,7 @@ proc reader(queue: ptr Queue[pointer]):
 
 When `chronos` is used, execution is typically controlled by the `chronos` per-thread dispatcher - passing data to `chronos` is done either via a pipe / socket or by polling a thread-safe queue.
 
-See [the async example](https://github.com/status-im/nim-style-guide/tree/main/interop/async/).
+See async usage in the [nim-library-template](https://github.com/logos-co/nim-library-template/blob/59a7a9d8a501219a397ae0860e38d4ec69cecde2/library/clock_thread/clock_thread.nim#L42-L66).
 
 ## Resources
 
