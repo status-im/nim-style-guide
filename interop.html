@@ -1,0 +1,420 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Interop with other languages - The Status Nim style guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="open-in.css">
+        <link rel="stylesheet" href="./mdbook-admonish.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Status Nim style guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/status-im/nim-style-guide/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="interop-with-other-languages-ffi"><a class="header" href="#interop-with-other-languages-ffi">Interop with other languages (FFI)</a></h1>
+<p>Nim comes with powerful interoperability options, both when integrating Nim code in other languages and vice versa.</p>
+<p>Acting as a complement to the <a href="https://nim-lang.org/docs/manual.html#foreign-function-interface">manual</a>, this section of the book covers interoperability / <a href="https://en.wikipedia.org/wiki/Foreign_function_interface">FFI</a>: how to integrate Nim into other languages and how to use libraries from other languages in Nim.</p>
+<p>While it is possible to automate many things related to FFI, this guide focuses on core functionality - while tooling, macros and helpers can simplify the process, they remain a cosmetic layer on top of the fundamentals presented here.</p>
+<p>The focus of this guide is on pragmatic solutions available for the currently supported versions of Nim - 1.6 at the time of writing - the recommendations may change as new libraries and Nim versions become available.</p>
+<p>For examples and detailed instructions on how to adapt them for your use case, head to the <a href="https://github.com/logos-co/nim-c-library-guide">nim-c-library-guide</a> repository.</p>
+<h2 id="basics"><a class="header" href="#basics">Basics</a></h2>
+<p>In interop, we rely on a lowest common denominator of features between languages - for compiled languages, this is typically the mutually overlapping part of the <a href="https://en.wikipedia.org/wiki/Application_binary_interface">ABI</a>.</p>
+<p>Nim is unique in that it also allows interoperability at the API level with C/C++ - however, this guide focuses on interoperability via ABI since this is more general and broadly useful.</p>
+<p>Most languages define their FFI in terms of a simplified version of the C ABI - thus, the process of using code from one language in another typically consists of two steps:</p>
+<ul>
+<li>exporting the source library functions and types as "simple C"</li>
+<li>importing the "simple C" functions and types in the target language</li>
+</ul>
+<p>We'll refer to this part of the process as ABI wrapping.</p>
+<p>Since libraries tend to use the full feature set of their native language, we can see two additional steps:</p>
+<ul>
+<li>exposing the native library code in a "simple C" variant via a wrapper</li>
+<li>adding a wrapper around the "simple C" variant to make the foreign library feel "native"</li>
+</ul>
+<p>We'll call this API wrapping - the API wrapper takes care of:</p>
+<ul>
+<li>conversions to/from Nim integer types</li>
+<li>introducing Nim idioms such as generics</li>
+<li>adapting the <a href="./errors.html">error handling</a> model</li>
+</ul>
+<p>The C ABI serves as the "lingua franca" of interop - the <a href="./interop.c.html">C guide</a> in particular can be studied for topics not covered in the other language-specific sections.</p>
+<h2 id="calling-nim-code-from-other-languages"><a class="header" href="#calling-nim-code-from-other-languages">Calling Nim code from other languages</a></h2>
+<p>Nim code can be compiled both as shared and static libraries and thus used from other languages.</p>
+<h3 id="exporting-nim-functions-to-other-languages"><a class="header" href="#exporting-nim-functions-to-other-languages">Exporting Nim functions to other languages</a></h3>
+<p>To export functions to other languages, the function must be marked as <code>exportc, dynlib</code> - in addition, the function should not raise exceptions and use the <code>cdecl</code> calling convention typically.</p>
+<p>We can declare a helper <code>pragma</code> to set all the options at once:</p>
+<pre><code class="language-nim">{.pragma: exported, exportc, cdecl, raises: [].}
+</code></pre>
+<h3 id="importing-other-language-functions-to-nim"><a class="header" href="#importing-other-language-functions-to-nim">Importing other language functions to Nim</a></h3>
+<p>Similar to when exporting functions, imported functions need to be annotated with several pragmas to ensure they are imported correctly. Since imported functions don't interact with Nim exceptions or the garbage collector, they should be marked with <code>raises[], gcsafe</code>.</p>
+<pre><code class="language-nim">{.pragma: imported, importc, cdecl, raises: [], gcsafe.}
+</code></pre>
+<h3 id="runtime-library-initialization"><a class="header" href="#runtime-library-initialization">Runtime library initialization</a></h3>
+<p>When calling Nim from other languages, the Nim runtime must first be initialized. Additionally, if using garbage collected types, the garbage collector must also be initialized once per thread.</p>
+<p>Runtime initialization is done by calling the <code>NimMain</code> function. It can be called either separately from the host language or guarded by a boolean from every exported function.</p>
+<p>Garbage collector initialization is a two-step process:</p>
+<ul>
+<li>the garbage collector itself must be inititialized with a call to <code>setupForeignThreadGc</code></li>
+<li><code>nimGC_setStackBottom</code> must be called to establish the starting point of the stack
+<ul>
+<li>this function must be called in all places where it is possible that the exported function is being called from a "shorter" stack frame</li>
+</ul>
+</li>
+</ul>
+<p>Typically, this is solved with a "library initialization" call that users of the library should call near the beginning of every thread (ie in their <code>main</code> or thread entry point function):</p>
+<pre><code class="language-nim">proc NimMain() {.importc.} # This function is generated by the Nim compiler
+
+var initialized: Atomic[bool]
+
+proc initializeMyLibrary() {.exported.} =
+  if not initialized.exchange(true):
+    NimMain() # Every Nim library needs to call `NimMain` once exactly
+  when declared(setupForeignThreadGc): setupForeignThreadGc()
+  when declared(nimGC_setStackBottom):
+    var locals {.volatile, noinit.}: pointer
+    locals = addr(locals)
+    nimGC_setStackBottom(locals)
+
+proc exportedFunction {.exported.} =
+  assert initialized, "You forgot to call `initializeMyLibrary"
+
+  echo "Hello from Nim
+</code></pre>
+<p>When creating a Nim library, it should be compiled with the flag <code>--nimMainPrefix:your_prefix</code>. This changes the generated <code>NimMain()</code> function to <code>your_prefixNimMain()</code>, ensuring that its runtime initialization won’t conflict with other Nim libraries or applications.
+Then, proceed to use <code>your_prefixNimMain()</code> intead of <code>NimMain()</code> to initialize your library's Nim runtime.</p>
+<p>In languages such as <a href="./interop.go.html">Go</a>, it is hard to anticipate which thread code will be called from - in such cases, you can safely initialize the garbage collector in every exported function instead:</p>
+<pre><code class="language-nim">proc exportedFunction {.exported.} =
+  initializeMyLibrary() # Initialize the library on behalf of the user - this is usually more convenient
+  echo "Hello from Nim
+</code></pre>
+<p>The garbage collector can be avoided using <a href="#manual-memory-management">manual memory management</a> techniques, thus removing the requirement to initialize it in each thread - the runtime must always be initialized.</p>
+<p>See also the <a href="https://nim-lang.org/docs/backends.html#interfacing-backend-code-calling-nim">Nim documentation</a> on this topic.</p>
+<h3 id="globals-and-top-level-code"><a class="header" href="#globals-and-top-level-code">Globals and top-level code</a></h3>
+<p>Code written outside of a <code>proc</code> / <code>func</code> is executed as part of <code>import</code>:ing the module, or, in the case of the "main" module of the program, as part of executing the module itself similar to the <code>main</code> function in C.</p>
+<p>This code will be run as part of calling <code>NimMain</code> as noted above!</p>
+<h2 id="exceptions"><a class="header" href="#exceptions">Exceptions</a></h2>
+<p>You must ensure that no exceptions pass to the foreign language - instead, catch all exceptions and covert them to a different <a href="./errors.html">error handling mechanism</a>, annotating the exported function with <code>{.raises: [].}</code>.</p>
+<h2 id="memory"><a class="header" href="#memory">Memory</a></h2>
+<p>Nim is generally a GC-first language meaning that memory is typically managed via a thread-local garbage collector.</p>
+<p>Nim also supports manual memory management - this is most commonly used for threading and FFI.</p>
+<h3 id="garbage-collected-types"><a class="header" href="#garbage-collected-types">Garbage-collected types</a></h3>
+<p>Garbage-collection applies to the following types which are allocated from a thread-local heap:</p>
+<ul>
+<li><code>string</code> and <code>seq</code> - these are value types that underneath use the GC heap for the payload
+<ul>
+<li>the <code>string</code> uses a dedicated length field but <em>also</em> ensures NULL-termination which makes it easy to pass to C</li>
+<li><code>seq</code> uses a similar in-memory layout without the NULL termination</li>
+<li>addresses to elements are stable as long as as elements are not added</li>
+</ul>
+</li>
+<li><code>ref</code> types
+<ul>
+<li>types that are declared as <code>ref object</code></li>
+<li>non-ref types that are allocated on the heap with <code>new</code> (and thus become <code>ref T</code>)</li>
+</ul>
+</li>
+</ul>
+<h3 id="ref-types-and-pointers"><a class="header" href="#ref-types-and-pointers"><code>ref</code> types and pointers</a></h3>
+<p>The lifetime of garbage-collected types is undefined - the garbage collector generally runs during memory allocation but this should not be relied upon - instead, lifetime can be extended by calling <code>GC_ref</code> and <code>GC_unref</code>.</p>
+<p><code>ref</code> types have a stable memory address - to pass the address of a <code>ref</code> instance via FFI, care must be taken to extend the lifetime of the instance so that it is not garbage-collected</p>
+<pre><code class="language-nim">proc register(v: ptr cint) {.importc.}
+proc unregister(v: ptr cint) {.importc.}
+
+# Allocate a `ref cint` instance
+let number = new cint
+# Let the garbage collector know we'll be creating a long-lived pointer for FFI
+GC_ref(number)
+# Pass the address of the instance to the FFI function
+register(addr number[])
+
+# ... later, in reverse order:
+
+# Stop using the instance in FFI - address is guaranteed to be stable
+unregister(addr number[])
+# Let the garbage collector know we're done
+GC_unref(number)
+</code></pre>
+<h3 id="manual-memory-management"><a class="header" href="#manual-memory-management">Manual memory management</a></h3>
+<p>Manual memory management is done with <a href="https://nim-lang.org/docs/system.html#create%2Ctypedesc"><code>create</code></a> (by type), <a href="https://nim-lang.org/docs/system.html#alloc.t%2CNatural"><code>alloc</code></a> (by size) and <a href="https://nim-lang.org/docs/system.html#dealloc%2Cpointer"><code>dealloc</code></a>:</p>
+<pre><code class="language-nim">proc register(v: ptr cint) {.importc.}
+proc unregister(v: ptr cint) {.importc.}
+
+# Allocate a `ptr cint` instance
+let number = create cint
+# Pass the address of the instance to the FFI function
+register(number)
+
+# ... later, in reverse order:
+
+# Stop using the instance in FFI - address is guaranteed to be stable
+unregister(number)
+# Free the instance
+dealloc(number)
+</code></pre>
+<p>To allocate memory for cross-thread usage, ie allocating in one thread and deallocating in the other, use <code>createShared</code> / <code>allocShared</code> and <code>deallocShared</code> instead.</p>
+<h2 id="threads"><a class="header" href="#threads">Threads</a></h2>
+<p>Threads in Nim are created with <a href="https://nim-lang.org/docs/threads.html"><code>createThread</code></a> which creates the thread and prepares the garbage collector for use on that thread.</p>
+<p>See <a href="#calling-nim-code-from-other-languages">above</a> for how to initialize the garbage collector when calling Nim from threads created in other languages.</p>
+<h3 id="passing-data-between-threads"><a class="header" href="#passing-data-between-threads">Passing data between threads</a></h3>
+<p>The primary method of passing data between threads is to encode the data into a shared memory section then transfer ownership of the memory section to the receiving thread either via a thread-safe queue, channel, socket or pipe.</p>
+<p>The queue itself can be passed to thread either at creation or via a global variable, though we generally seek to avoid global variables.</p>
+<pre><code class="language-nim"># TODO pick a queue
+
+type ReadStatus = enum
+  Empty
+  Ok
+  Done
+
+proc read(queue: ptr Queue[pointer], var data: seq[byte]): ReadStatus =
+  var p: pointer
+  if queue.read(p):
+    if isNil(p):
+      ReadStatus.Done
+    else:
+      var len: int
+      copyMem(addr len, p, sizeof(len))
+      data = newSeqUninitalized[byte](len)
+      copyMem(addr data[0], cast[pointer](cast[uint](data) + sizeof(len)), len)
+    ReadStatus.Ok
+  else:
+    ReadStatus.Empty
+
+proc write(queue: ptr Queue[pointer], data: openArray[byte]) =
+  # Copy data to a shared length-prefixed buffer
+  let
+    copy = allocShared(int(len) + sizeof(len))
+  copyMem(copy, addr len, sizeof(len))
+  copyMem(cast[pointer](cast[uint](copy) + sizeof(len)), v, len)
+
+  # Put the data on a thread-safe queue / list
+  queue.add(copy)
+
+proc reader(queue: ptr Queue[pointer]):
+  var data: seq[byte]
+  while true:
+    case queue.read(data)
+    of Done: return
+    of Ok: process(data)
+    of Empty:
+      # Polling should usually be replaced with an appropriate "wake-up" mechanism
+      sleep(100)
+</code></pre>
+<h3 id="async--await"><a class="header" href="#async--await">async / await</a></h3>
+<p>When <code>chronos</code> is used, execution is typically controlled by the <code>chronos</code> per-thread dispatcher - passing data to <code>chronos</code> is done either via a pipe / socket or by polling a thread-safe queue.</p>
+<p>See async usage in the <a href="https://github.com/logos-co/nim-library-template/blob/59a7a9d8a501219a397ae0860e38d4ec69cecde2/library/clock_thread/clock_thread.nim#L42-L66">nim-library-template</a>.</p>
+<h2 id="resources"><a class="header" href="#resources">Resources</a></h2>
+<ul>
+<li><a href="https://nim-lang.org/1.6.0/backends.html">Nim backends documentation</a></li>
+</ul>
+<footer id="open-on-gh">Found a bug? <a href="https://github.com/status-im/nim-style-guide//edit/main/src/interop.md">Edit this page on GitHub.</a></footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="tooling.tricks.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="interop.c.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="tooling.tricks.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="interop.c.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
