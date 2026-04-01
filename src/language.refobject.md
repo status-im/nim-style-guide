@@ -14,7 +14,8 @@ Prefer explicit `ref MyType` where reference semantics are needed, allowing the 
 func f(v: ref Xxx) = discard
 let x: ref Xxx = new Xxx
 
-# Consider using Hungarian naming convention with `ref object` - this makes it clear at usage sites that the type follows the unusual `ref` semantics
+# Consider using Hungarian naming convention with `ref object` - this makes it
+# clear at usage sites that the type follows the unusual `ref` semantics
 type XxxRef = ref object
   # ...
 ```

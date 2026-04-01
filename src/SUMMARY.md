@@ -17,6 +17,7 @@
   - [Methods](language.methods.md)
   - [`proc` types](language.proctypes.md)
   - [`result` return](language.result.md)
+  - [`return` keyword](language.return.md)
   - [`inline`](language.inline.md)
   - [Converters](language.converters.md)
   - [Finalizers](language.finalizers.md)
