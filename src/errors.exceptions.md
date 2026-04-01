@@ -101,9 +101,9 @@ Frameworks may catch `CatchableError` to forward exceptions through layers. Doin
 
 ### `except:`
 
-`except:`, following a [changed semantics](https://github.com/nim-lang/RFCs/issues/557) is similar in behavior to `catch CatchableError` and should be used judiciously.
+`except:`, following a [changed semantics](https://github.com/nim-lang/RFCs/issues/557) is similar in behavior to `except CatchableError` and should be used judiciously.
 
-The change is available from Nim [v2.2.4](https://github.com/nim-lang/Nim/pull/24821) - portable code should prefer `catch CatchableError`.
+The change is available from Nim [v2.2.4](https://github.com/nim-lang/Nim/pull/24821) - portable code should prefer `except CatchableError`.
 
 ### Open questions
 
