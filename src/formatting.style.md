@@ -25,7 +25,7 @@ func someLongFunctinName(
 
 ### Practical notes
 
-* We do not use `nimpretty` - as of writing (Nim 2.0), it is not stable enough for daily use
+* We do not use `nimpretty` - as of writing (Nim 2.2), it is not stable enough for daily use
   * Use [nph](./formatting.md) instead!
 * We do not make use of Nim's "flexible" identifier names - all uses of an identifier should match the declaration in capitalization and underscores
     * Enable `--styleCheck:usages` and, where feasible, `--styleCheck:error`
