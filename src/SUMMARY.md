@@ -37,6 +37,7 @@
   - [`stew`](libraries.stew.md)
 - [Tooling](tooling.md)
   - [Nim version](tooling.nim.md)
+  - [Nim Compiler](tooling.compiler.md)
   - [Build](tooling.build.md)
   - [Dependencies](tooling.deps.md)
   - [Editors](tooling.editors.md)
