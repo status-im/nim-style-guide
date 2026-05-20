@@ -6,7 +6,7 @@
 Use `config.nims` to harden your build by promoting selected warnings (and hints) to errors, forcing safer, cleaner code to pass compilation.
 
 
-Below is `config.nims` is snippet which can be reliably copy/pasted; it converts compile time warnings and hints to errors.
+Below is `config.nims` snippet which can be reliably copy/pasted; it converts compile time warnings and hints to errors.
 
 ```nim
 # turn warnings into compile errors
