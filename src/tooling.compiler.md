@@ -27,7 +27,7 @@ switch("hintAsError", "DuplicateModuleImport:on")
 switch("hintAsError", "XCannotRaiseY:on")
 ```
 
-Note that if some of above does not work for your project, such as `XCannotRaiseY`, feel free to leave it out.
+Some of these hints or warnings, such as` XCannotRaiseY`, might prove situationally impractical to enforce as errors; these can be omitted as required.
 
 ### Scope of config.nims
 
