@@ -2,7 +2,7 @@
 
 Avoid using `result` for returning values.
 
-Use expression-based return or explicit `return` keyword with a value
+Prefer expression-based return or in some cases, explicit [`return`](./language.return.md)
 
 ### Pros
 
@@ -32,11 +32,11 @@ Of the three:
 
 * "expression" returns guarantee that all code branches produce one (and only one) value to be returned
   * Used mainly when exit points are balanced and not deeply nested
-* Explict `return` with a value make explicit what value is being returned in each branch
+* Explicit `return` can simplify conditional expressions
   * Used to avoid deep nesting and early exit, above all when returning early due to errors
 * `result` is used to accumulate / build up return value, allowing it to take on invalid values in the interim
+* the usage of `result` is sometimes necessary to aid the compiler in Return-Value-Optimization analysis - if this is the case, use `result` but report a bug
 
 Multiple security issues, `nil` reference crashes and wrong-init-order issues have been linked to the use of `result` and lack of assignment in branches.
 
-In general, the use of accumulation-style initialization is discouraged unless made necessary by the data type - see [Variable initialization](language.varinit.md)
-
+In general, the use of accumulation-style initialization is discouraged unless made necessary by the data type - see [Variable initialization](language.varinit.md) - this also applies to the implict `result` variable.
