@@ -10,6 +10,14 @@ paths:
 ## When to Use
 
 Use this skill when writing functions that may fail, designing error types, or refactoring error handling.
+## Judicious Application
+
+These rules are strong defaults, not absolute mandates. Apply them with judgment:
+
+- If a rule produces compiler errors requiring complex workarounds, do not follow it. Write the more readable code instead.
+- If following a rule significantly hurts readability, prefer readability.
+- If a rule conflicts with the specific requirements of a function or module, the local context wins.
+- If a deviation is necessary, add a brief comment explaining why the rule was bent.
 
 ## Core Rules
 

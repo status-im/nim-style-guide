@@ -31,6 +31,10 @@ paths:
 
 <one or two sentences on when to activate this skill>
 
+## Judicious Application
+
+<judgment notes — see below>
+
 ## <Section 1>
 ...
 
@@ -58,22 +62,38 @@ Transform the guide's prose into:
 
 Every skill must have:
 1. A `## When to Use` header
-2. Thematic sections (e.g. `### Return Values`, `### Variable Declaration`)
-3. Code examples where the guide provides them
-4. An `## Avoid` section for features to skip
-5. An `## Verification` section for commands (nim-code skill only)
+2. A `## Judicious Application` section
+3. Thematic sections (e.g. `### Return Values`, `### Variable Declaration`)
+4. Code examples where the guide provides them
+5. An `## Avoid` section for features to skip
+6. An `## Verification` section for commands (nim-code skill only)
 
-### 4. Deduplicate cross-cutting concerns
+### 4. Include the judicious application principle
+
+Every skill must include a section noting that these rules are defaults, not absolute mandates. Add this block right after the "When to Use" section:
+
+```markdown
+## Judicious Application
+
+These rules are strong defaults, not absolute mandates. Apply them with judgment:
+
+- If a rule produces compiler errors requiring complex workarounds, do not follow it. Write the more readable code instead.
+- If following a rule significantly hurts readability, prefer readability.
+- If a rule conflicts with the specific requirements of a function or module, the local context wins.
+- If a deviation is necessary, add a brief comment explaining why the rule was bent.
+```
+
+### 5. Deduplicate cross-cutting concerns
 
 Some topics appear in multiple skills. Deduplicate:
 - **Formatting** (nph, 2-space indent, naming conventions) appears in both nim-code and nim-tooling. Put the **coding conventions** (indent, naming, line length) in nim-code. Put the **tooling** (how to run nph, CI config, editor setup) in nim-tooling.
 - **Callbacks/proc types** appears in nim-code (annotation pragmas) and nim-interop (callbacks across FFI boundaries). Keep FFI-specific callback patterns in nim-interop, general proc-type annotation in nim-code.
 
-### 5. Write the SKILL.md
+### 6. Write the SKILL.md
 
 Create (or overwrite) `skills/<name>/SKILL.md` with the generated content. Follow the exact frontmatter format. Use `*` for bullet points. Use ` ```nim ` for code blocks.
 
-### 6. Validate
+### 7. Validate
 
 - The skill file parses as valid markdown.
 - No sections reference guide-specific prose like "this section discusses" — the skill stands alone.
@@ -95,5 +115,5 @@ If a new topical area emerges that needs its own skill:
 1. Determine which guide chapters feed into it.
 2. Add the mapping entry to the table above.
 3. Create the directory: `skills/<new-name>/`
-4. Create `SKILL.md` following the format.
+4. Create `SKILL.md` following the format, including the judicious application section.
 5. Update this mapping table.
