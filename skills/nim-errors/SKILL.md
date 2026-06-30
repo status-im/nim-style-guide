@@ -10,6 +10,7 @@ paths:
 ## When to Use
 
 Use this skill when writing functions that may fail, designing error types, or refactoring error handling.
+
 ## Judicious Application
 
 These rules are strong defaults, not absolute mandates. Apply them with judgment:

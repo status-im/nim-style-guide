@@ -12,6 +12,7 @@ paths:
 ## When to Use
 
 Use this skill when writing FFI wrappers, exporting Nim to foreign code, or importing foreign libraries.
+
 ## Judicious Application
 
 These rules are strong defaults, not absolute mandates. Apply them with judgment:

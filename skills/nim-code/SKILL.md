@@ -11,6 +11,7 @@ paths:
 ## When to Use
 
 Use this skill when writing, reviewing, or refactoring Nim source code.
+
 ## Judicious Application
 
 These rules are strong defaults, not absolute mandates. Apply them with judgment:

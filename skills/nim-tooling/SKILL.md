@@ -12,6 +12,7 @@ paths:
 ## When to Use
 
 Use this skill when setting up Nim build configurations, adding compiler flags, debugging, or profiling.
+
 ## Judicious Application
 
 These rules are strong defaults, not absolute mandates. Apply them with judgment:
