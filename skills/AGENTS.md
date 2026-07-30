@@ -1,6 +1,16 @@
-# Regenerating Nim Skills from the Style Guide
+# Skill Authoring — Nim Style Guide Skills
 
-This document describes how to regenerate the skills in this directory from the source style guide chapters.
+This document describes the skills in this directory and how to maintain them from the source style guide chapters.
+
+## Skill Authoring Best Practices
+
+When writing or updating skills, follow Anthropic's [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices). Key points:
+
+- **Concise is key** — every token competes with conversation history
+- **Use progressive disclosure** — keep SKILL.md body under 500 lines, split into separate files when needed
+- **Avoid deeply nested references** — all references should be one level deep from SKILL.md
+- **Write effective descriptions** — include both what the skill does and when to use it
+- **No time-sensitive information** — put legacy patterns in `<details>` sections
 
 ## Skill-to-Guide Mapping
 
@@ -8,10 +18,8 @@ Each skill corresponds to a specific set of guide chapters:
 
 | Skill | Guide Source Files |
 |-------|-------------------|
-| `nim-code` | `src/formatting.md`, `src/formatting.style.md`, `src/formatting.naming.md`, `src/language.proc.md`, `src/language.result.md`, `src/language.vardecl.md`, `src/language.varinit.md`, `src/language.objconstr.md`, `src/language.memory.md`, `src/language.refobject.md`, `src/language.converters.md`, `src/language.finalizers.md`, `src/language.integers.md`, `src/language.binary.md`, `src/language.string.md`, `src/language.macros.md`, `src/language.inline.md`, `src/language.range.md`, `src/language.methods.md`, `src/language.proctypes.md`, `src/libraries.hex.md` |
-| `nim-errors` | `src/errors.md`, `src/errors.result.md`, `src/errors.exceptions.md`, `src/errors.status.md`, `src/libraries.results.md` |
+| `nim-style-guide` | `src/formatting.md`, `src/formatting.style.md`, `src/formatting.naming.md`, `src/language.proc.md`, `src/language.result.md`, `src/language.vardecl.md`, `src/language.varinit.md`, `src/language.objconstr.md`, `src/language.memory.md`, `src/language.refobject.md`, `src/language.converters.md`, `src/language.finalizers.md`, `src/language.integers.md`, `src/language.binary.md`, `src/language.string.md`, `src/language.macros.md`, `src/language.inline.md`, `src/language.range.md`, `src/language.methods.md`, `src/language.proctypes.md`, `src/libraries.hex.md`, `src/errors.md`, `src/errors.result.md`, `src/errors.exceptions.md`, `src/errors.status.md`, `src/libraries.results.md`, `src/tooling.md`, `src/tooling.nim.md`, `src/tooling.compiler.md`, `src/tooling.build.md`, `src/tooling.deps.md`, `src/tooling.debugging.md`, `src/tooling.profiling.md`, `src/tooling.editors.md`, `src/tooling.tricks.md` |
 | `nim-interop` | `src/interop.md`, `src/interop.c.md`, `src/interop.go.md`, `src/interop.rust.md` |
-| `nim-tooling` | `src/tooling.md`, `src/tooling.nim.md`, `src/tooling.compiler.md`, `src/tooling.build.md`, `src/tooling.deps.md`, `src/tooling.debugging.md`, `src/tooling.profiling.md`, `src/tooling.editors.md`, `src/tooling.tricks.md`, `src/formatting.md` |
 
 ## Skill File Format
 
@@ -66,7 +74,7 @@ Every skill must have:
 3. Thematic sections (e.g. `### Return Values`, `### Variable Declaration`)
 4. Code examples where the guide provides them
 5. An `## Avoid` section for features to skip
-6. An `## Verification` section for commands (nim-code skill only)
+6. An `## Verification` section for commands
 
 ### 4. Include the judicious application principle
 
@@ -86,8 +94,7 @@ These rules are strong defaults, not absolute mandates. Apply them with judgment
 ### 5. Deduplicate cross-cutting concerns
 
 Some topics appear in multiple skills. Deduplicate:
-- **Formatting** (nph, 2-space indent, naming conventions) appears in both nim-code and nim-tooling. Put the **coding conventions** (indent, naming, line length) in nim-code. Put the **tooling** (how to run nph, CI config, editor setup) in nim-tooling.
-- **Callbacks/proc types** appears in nim-code (annotation pragmas) and nim-interop (callbacks across FFI boundaries). Keep FFI-specific callback patterns in nim-interop, general proc-type annotation in nim-code.
+- **Callbacks/proc types** appears in the `nim-style-guide` skill (general annotation pragmas) and `nim-interop` (callbacks across FFI boundaries). Keep FFI-specific callback patterns in nim-interop, general proc-type annotation in the nim-style-guide skill.
 
 ### 6. Write the SKILL.md
 

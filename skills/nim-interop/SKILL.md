@@ -1,17 +1,19 @@
 ---
 name: nim-interop
 description: FFI and interop patterns for Nim — C, Rust, Go, and general ABI wrapping
-paths:
-  - "*.nim"
-  - "*.c"
-  - "*.h"
 ---
 
 # Nim Interop / FFI Skill
 
 ## When to Use
 
-Use this skill when writing FFI wrappers, exporting Nim to foreign code, or importing foreign libraries.
+Use this skill when working on FFI wrappers, exporting Nim to foreign code, or importing foreign libraries (C, Rust, Go). Activate for scenarios involving:
+- Importing C libraries or headers (`*.h`, `*.c`)
+- Exporting Nim symbols for foreign callers
+- Writing ABI-compatible glue layers between Nim and other languages
+- Setting up callbacks across FFI boundaries
+- Managing GC initialization for foreign threads
+- Handling memory management across process/language boundaries
 
 ## Judicious Application
 
@@ -40,7 +42,8 @@ Two layers:
 ### Function Import
 
 ```nim
-proc function(arg: int64): cint {.imported.}
+proc function(arg: int64): cint {.imported.} =
+  ## The proc body is empty for imports — it's filled by the compiler.
 ```
 
 ### Build Process
@@ -146,13 +149,13 @@ dealloc(number)
 - ABI modules: suffix or prefix `abi` (e.g., `xxx_abi.nim`).
 - Types: `cint`, `csize_t`, `int64`, `cchar` for C interop.
 
-## Resources
-
-- `c2nim` — translate C headers to Nim.
-- `nbindgen` — generate Nim ABI from Rust exports.
-
 ## Rust and Go
 
 - Both use C ABI — same patterns as C interop.
 - Rust: use `Box`/`Rc`/`Arc` for ownership; Nim side uses `GC_ref`/`GC_unref`.
 - Go: use `createShared` for thread-safe queues; avoid GC types in shared globals.
+
+## Resources
+
+- `c2nim` — translate C headers to Nim.
+- `nbindgen` — generate Nim ABI from Rust exports.
