@@ -11,30 +11,32 @@ func f(v: ref Xxx): int =
     return 0
   ...
 
-  # However, if we're at the end of the function, prefer implicit return expressions
+  # Prefer implicit return expressions in most other cases
   if conditions:
-    v[].value # avoid `return` in complex control flow, like here where else exists
+    v[].value
   else:
     0
 
 func short(): int =
-  42 # avoid `return` for last expression
+  42 # simple expressions also qualify
 ```
 
 ### Pros
 
-* Explicitly shows where return happens
 * Can simplify complex conditions and nesting
+* Explicitly shows where return control flow hapens
 
 ### Cons
 
-* Brittle during refactoring since it's easy to indent into an early return and leave the end of the function dangling
-* When nested deeply in control flow, can make conditions for early return difficult to understand
+* Brittle due to lack of compile-time enforcement of exhaustiveness of control flow and initialization
+* When nested deeply, can make conditions for early return difficult to understand
+* Surprising semantics in templates and macros
 
 ### Practical notes
 
 * beware of `return` in `template`s since the `return` happens after template expansion!
   * ...especially when changing a `proc` _to_ a `template`
 * `return` deep inside a complex set of conditionals indicates that the function likely needs refactoring
-* `return` of a `var` risks returning instances that have not been fully initialized - this in particular applies to the implicit [`result`](./language.result.md) variable.
-* expression style forces each branch of control-flow statements to end in a value, proving a compiler-enforced safety net increasing robustness during refactoring
+* `return` of a `var` risks returning instances that have not been fully initialized
+  * this in particular applies to the implicit [`result`](./language.result.md) variable.
+* `return expr` is shorthand for `result = expr; return result` - this reduces to `return result` when there is no expression
