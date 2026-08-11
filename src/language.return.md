@@ -2,7 +2,7 @@
 
 Use `return` for returning early from a function, for example to reduce nesting.
 
-In other cases, prefer implicit expressions.
+In other cases, prefer implicit return expressions.
 
 ```nim
 func f(v: ref Xxx): int =
@@ -11,7 +11,7 @@ func f(v: ref Xxx): int =
     return 0
   ...
 
-  # However, if we're at the end of the function, prefer implicit expressions
+  # However, if we're at the end of the function, prefer implicit return expressions
   if conditions:
     v[].value # avoid `return` in complex control flow, like here where else exists
   else:
@@ -28,7 +28,7 @@ func short(): int =
 
 ### Cons
 
-* Can be confused with an early return, when used at the end of a function
+* Brittle during refactoring since it's easy to indent into an early return and leave the end of the function dangling
 * When nested deeply in control flow, can make conditions for early return difficult to understand
 
 ### Practical notes
