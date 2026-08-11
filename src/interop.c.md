@@ -66,7 +66,7 @@ Having created a separate module for the type, create definitions for each funct
 # * No Nim exceptions
 # * No GC interation
 
-{.pragma imported, importc, cdecl, raises: [], gcsafe.}
+{.pragma: imported, importc, cdecl, raises: [], gcsafe.}
 
 proc function(arg: int64): cint {.imported.}
 ```
