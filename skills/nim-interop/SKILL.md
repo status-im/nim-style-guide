@@ -36,7 +36,7 @@ Two layers:
 ### Pragma
 
 ```nim
-{.pragma imported, importc, cdecl, raises: [], gcsafe.}
+{.pragma: imported, importc, cdecl, raises: [], gcsafe.}
 ```
 
 ### Function Import
