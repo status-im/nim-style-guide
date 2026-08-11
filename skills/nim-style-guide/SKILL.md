@@ -147,7 +147,7 @@ Every module starts with:
 
 Public functions annotate explicitly:
 ```nim
-func f() {.raises: [MySpecificError]} = discard
+func f() {.raises: [MySpecificError].} = discard
 ```
 
 ### Raising Errors

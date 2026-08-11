@@ -28,7 +28,7 @@ type MySpecificError = object of MyLibraryError
 
 # Explicitly annotate functions with raises - this replaces the more strict
 # module-level push declaration on top
-func f() {.raises: [MySpecificError]} = discard
+func f() {.raises: [MySpecificError].} = discard
 
 # Isolate code that may generate exceptions using expression-based try:
 let x =
