@@ -149,6 +149,13 @@ dealloc(number)
 - ABI modules: suffix or prefix `abi` (e.g., `xxx_abi.nim`).
 - Types: `cint`, `csize_t`, `int64`, `cchar` for C interop.
 
+## Avoid
+
+- Shared libraries and `dynlib` — ABI/version mismatches, no `ldd` visibility.
+- Letting exceptions escape callbacks — crashes foreign code.
+- Using Nim GC types across threads without GC initialization.
+- Passing `string` for binary data across FFI boundaries.
+
 ## Rust and Go
 
 - Both use C ABI — same patterns as C interop.
@@ -159,3 +166,9 @@ dealloc(number)
 
 - `c2nim` — translate C headers to Nim.
 - `nbindgen` — generate Nim ABI from Rust exports.
+
+## Verification
+
+- Compile check ABI wrapper: `nim c -c xxx_abi.nim`
+- Verify exported symbols with `nm` or `objdump`
+- Test callbacks with foreign test harness ensuring no exceptions escape

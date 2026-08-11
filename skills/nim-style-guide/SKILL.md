@@ -45,7 +45,7 @@ These rules are strong defaults, not absolute mandates. Apply them with judgment
     if s.len == 0: return err "empty"
     ...
   ```
-- **Avoid `result`** — no compiler diagnostics for missing branches.
+- **Avoid `result`** — no compiler diagnostics for missing branches; use only if needed for RVO, and report bug.
 
 ### Variable Declaration
 
@@ -72,7 +72,7 @@ These rules are strong defaults, not absolute mandates. Apply them with judgment
 
 ### Types to Avoid
 
-- `ref object` — prefer explicit `ref Xxx` unless for handles, shared ownership, reference structures, or FFI.
+- `ref object` — prefer explicit `ref Xxx` with explicit dereferencing via `[]` unless for handles, shared ownership, reference structures, or FFI.
 - Converters — cause ambiguous overload resolution.
 - `range` types — design issues, implicit conversions raise `Defect`.
 - Finalizers — buggy, cause GC crashes.
@@ -202,6 +202,7 @@ except Defect as exc:
 
 - Match declaration casing/underscores exactly. Enable `--styleCheck:usages`.
 - `XxxRef` for `ref object` types.
+- `XxxObj` may be used for the non-`ref` version of a `ref object` type.
 - `XxxError` for `CatchableError` exceptions.
 - `XxxDefect` for `Defect` exceptions.
 
