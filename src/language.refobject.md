@@ -7,14 +7,14 @@ Avoid `ref object` types, except:
 * in reference-based data structures (trees, linked lists)
 * where a stable pointer is needed for 3rd-party compatibility
 
-Prefer explicit `ref MyType` where reference semantics are needed, allowing the caller to choose where possible.
+Prefer explicit `ref MyType` where reference semantics are needed locally and explicitly dereference with `[]`.
 
 ```nim
 # prefer explicit ref modifiers at usage site
 func f(v: ref Xxx) = discard
 let x: ref Xxx = new Xxx
 
-# Consider using Hungarian naming convention with `ref object` - this makes it clear at usage sites that the type follows the unusual `ref` semantics
+# Use a `Ref` suffix in the type name to convey `ref object` semantics
 type XxxRef = ref object
   # ...
 ```
@@ -39,3 +39,5 @@ type XxxRef = ref object
 ### Notes
 
 `XxxRef = ref object` is a syntactic shortcut that hides the more explicit `ref Xxx` where the type is used - by explicitly spelling out `ref`, readers of the code become aware of the alternative reference / shared ownership semantics, which generally allows a deeper understanding of the code without having to look up the type declaration.
+
+`XxxObj` is sometimes used to refer to the non-`ref` version of a `ref object` type, specially when that type has no `Ref` suffix.
