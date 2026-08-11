@@ -37,4 +37,4 @@ func short(): int =
   * ...specially when changing a `proc` _to_ a `template`
 * `return` deep inside a complex set of conditionals indicates that the function likely needs refactoring
 * `return` of a `var` risks returning instances that have not been fully initialized - this in particular applies to the implicit [`result`](./language.result.md) variable.
-* expression style forces each branch of control-flow statements to end in a value, proving a compiler-enforced safety net that typically results in better error messages than `return`, specially when maintaining existing code
+* expression style forces each branch of control-flow statements to end in a value, proving a compiler-enforced safety net increasing robustness during refactoring
